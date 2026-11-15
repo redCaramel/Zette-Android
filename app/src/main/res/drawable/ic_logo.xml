@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 제때 로고 심볼 (Figma Logo / 제때 105:3258). green_accent가 라이트 #00754A / 다크 #3DBF8E로 Figma Light·Dark 변형과 일치 -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="56dp"
+    android:height="56dp"
+    android:viewportWidth="26"
+    android:viewportHeight="26">
+    <path
+        android:fillColor="@color/green_accent"
+        android:pathData="M3.78481,25.8354C5.42069,25.8354 6.74684,24.5093 6.74684,22.8734C6.74684,21.2375 5.42069,19.9114 3.78481,19.9114C2.14893,19.9114 0.822785,21.2375 0.822785,22.8734C0.822785,24.5093 2.14893,25.8354 3.78481,25.8354Z" />
+    <path
+        android:strokeColor="@color/green_accent"
+        android:strokeWidth="2.63291"
+        android:strokeLineCap="round"
+        android:pathData="M3.78481,22.8734H12.3418C13.3892,22.8734 14.3937,22.4573 15.1344,21.7167C15.875,20.976 16.2911,19.9715 16.2911,18.9241V17.6076" />
+    <path
+        android:strokeColor="@color/green_accent"
+        android:strokeWidth="2.63291"
+        android:pathData="M23.5316,9.05063C23.5316,13.0495 20.29,16.2911 16.2911,16.2911C12.2923,16.2911 9.05063,13.0495 9.05063,9.05063C9.05063,5.05181 12.2923,1.81013 16.2911,1.81013C20.29,1.81013 23.5316,5.05181 23.5316,9.05063Z" />
+    <path
+        android:strokeColor="@color/green_accent"
+        android:strokeWidth="1.97468"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M16.2911,5.10127V9.37975H19.5823" />
+</vector>
