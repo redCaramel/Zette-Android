@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Extended FAB 눌림 모션 (Figma: Pressed = Default의 95% 축소, 그림자 약해짐 / Disabled = 그림자 없음) -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_enabled="false">
         <set>
