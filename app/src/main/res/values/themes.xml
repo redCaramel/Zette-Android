@@ -70,4 +70,9 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">@dimen/radius_lg</item>
     </style>
+
+    <style name="Widget.Zette.BottomNav.ActiveIndicator"
+        parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@color/green_mint</item>
+    </style>
 </resources>

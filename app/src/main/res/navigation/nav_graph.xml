@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- destination id는 menu/bottom_nav_menu.xml의 item id와 같아야 BottomNavigationView와 연결된다. -->
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="kr.ac.ssu.zette.ui.HomeFragment"
+        android:label="홈"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/calendarFragment"
+        android:name="kr.ac.ssu.zette.ui.CalendarFragment"
+        android:label="캘린더"
+        tools:layout="@layout/fragment_calendar" />
+
+    <fragment
+        android:id="@+id/routineFragment"
+        android:name="kr.ac.ssu.zette.ui.RoutineFragment"
+        android:label="루틴"
+        tools:layout="@layout/fragment_routine" />
+
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="kr.ac.ssu.zette.ui.SettingFragment"
+        android:label="설정"
+        tools:layout="@layout/fragment_setting" />
+</navigation>
