@@ -75,4 +75,27 @@
         parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
         <item name="android:color">@color/green_mint</item>
     </style>
+
+    <style name="Widget.Zette.ExtendedFab" parent="Widget.Material3.ExtendedFloatingActionButton.Icon.Primary">
+        <item name="android:minHeight">@dimen/space_8</item>
+        <item name="android:minWidth">@dimen/space_7</item>
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingEnd">20dp</item>
+        <item name="icon">@drawable/ic_add</item>
+        <item name="iconSize">24dp</item>
+        <item name="iconPadding">@dimen/space_2</item>
+        <item name="iconTint">@color/fab_extended_content</item>
+        <item name="android:textColor">@color/fab_extended_content</item>
+        <item name="android:textAppearance">@style/TextAppearance.Zette.Button</item>
+        <item name="backgroundTint">@color/fab_extended_background</item>
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearance.Zette.Full</item>
+        <item name="android:elevation">@dimen/fab_elevation</item>
+        <item name="android:stateListAnimator">@animator/floating_button_press_animator</item>
+        <item name="rippleColor">@android:color/transparent</item>
+    </style>
+
+    <style name="ShapeAppearance.Zette.Full" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
 </resources>

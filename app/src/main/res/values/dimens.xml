@@ -31,4 +31,8 @@
     <dimen name="text_label_sm">11sp</dimen>
     <dimen name="text_button">16sp</dimen>
     <dimen name="text_button_sm">14sp</dimen>
+
+    <!-- Elevation -->
+    <dimen name="fab_elevation">6dp</dimen>
+    <dimen name="fab_elevation_pressed">4dp</dimen>
 </resources>

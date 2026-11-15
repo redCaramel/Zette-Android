@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Extended FAB 배경: 기본 green/accent, 비활성 state/disabled-fill -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/state_disabled_fill" android:state_enabled="false" />
+    <item android:color="@color/green_accent" />
+</selector>
