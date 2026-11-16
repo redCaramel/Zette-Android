@@ -10,6 +10,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.transition.platform.MaterialFadeThrough;
+
 import kr.ac.ssu.zette.R;
 import kr.ac.ssu.zette.databinding.ActivityMainBinding;
 
@@ -65,7 +67,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void replaceFragment(@NonNull Fragment fragment) {
+        Fragment current = getSupportFragmentManager().findFragmentById(R.id.main_fragment_container);
+        if (current != null) {
+            current.setExitTransition(new MaterialFadeThrough());
+        }
+        fragment.setEnterTransition(new MaterialFadeThrough());
+
         getSupportFragmentManager().beginTransaction()
+                .setReorderingAllowed(true)
                 .replace(R.id.main_fragment_container, fragment)
                 .commit();
     }
