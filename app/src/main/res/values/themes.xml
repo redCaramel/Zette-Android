@@ -38,8 +38,7 @@
         <item name="android:windowLightStatusBar">@bool/light_system_bars</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="27">@bool/light_system_bars</item>
 
-        <item name="fontFamily">@font/pretendard</item>
-        <item name="android:fontFamily">@font/pretendard</item>
+        <item name="android:textViewStyle">@style/Widget.Zette.TextView</item>
 
         <item name="textAppearanceDisplaySmall">@style/TextAppearance.Zette.Display</item>
         <item name="textAppearanceHeadlineSmall">@style/TextAppearance.Zette.H1</item>
@@ -56,6 +55,10 @@
         <item name="shapeAppearanceCornerSmall">@style/ShapeAppearance.Zette.Small</item>
         <item name="shapeAppearanceCornerMedium">@style/ShapeAppearance.Zette.Medium</item>
         <item name="shapeAppearanceCornerLarge">@style/ShapeAppearance.Zette.Large</item>
+    </style>
+
+    <style name="Widget.Zette.TextView" parent="Widget.AppCompat.TextView">
+        <item name="android:textAppearance">@style/TextAppearance.Zette.Body</item>
     </style>
 
     <style name="ShapeAppearance.Zette.Small" parent="">

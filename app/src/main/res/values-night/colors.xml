@@ -49,6 +49,9 @@
     <color name="static_accent">#00754A</color>
     <color name="static_mint">#D4E9E2</color>
 
+    <!-- logo -->
+    <color name="logo_wordmark">#FFFFFF</color>
+
     <!-- transit -->
     <color name="transit_bus">#7AA7F5</color>
     <color name="transit_subway">#B397EC</color>
