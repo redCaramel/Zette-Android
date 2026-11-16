@@ -30,6 +30,14 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
+
+
+        // TODO - This is sample input. Apply Background Module.
+        binding.tvHeroTitle.setText("오후 3시 00분에\n팀 프로젝트 회의가 있어요!");
+        binding.tvHeroLeftTime.setText("1시간 20분");
+        binding.tvHeroPlace.setText("숭실대학교 정보과학관");
+        binding.tvHeroDeparture.setText("출발 오후 2:15");
+
         return binding.getRoot();
     }
 
