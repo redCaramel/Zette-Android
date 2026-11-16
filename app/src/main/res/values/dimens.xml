@@ -31,4 +31,6 @@
 
     <dimen name="fab_elevation">6dp</dimen>
     <dimen name="fab_elevation_pressed">4dp</dimen>
+
+    <dimen name="schedule_badge_padding_end_toggle">10dp</dimen>
 </resources>

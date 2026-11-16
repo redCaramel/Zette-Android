@@ -3,13 +3,12 @@ package kr.ac.ssu.zette.ui;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.NavigationUI;
+import androidx.fragment.app.Fragment;
 
 import kr.ac.ssu.zette.R;
 import kr.ac.ssu.zette.databinding.ActivityMainBinding;
@@ -31,9 +30,43 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.nav_host_fragment);
-        NavController navController = navHostFragment.getNavController();
-        NavigationUI.setupWithNavController(binding.bottomNav, navController);
+        if (savedInstanceState == null) {
+            replaceFragment(new HomeFragment());
+        }
+
+        // BottomNavigationView를 눌렀을 때 Fragment 변경하기
+        binding.bottomNav.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+
+            if (itemId == R.id.homeFragment) {
+                replaceFragment(new HomeFragment());
+                return true;
+            }
+
+            if (itemId == R.id.calendarFragment) {
+                replaceFragment(new CalendarFragment());
+                return true;
+            }
+
+            if (itemId == R.id.routineFragment) {
+                replaceFragment(new RoutineFragment());
+                return true;
+            }
+
+            if (itemId == R.id.settingFragment) {
+                replaceFragment(new SettingFragment());
+                return true;
+            }
+
+            return false;
+        });
+
+        binding.bottomNav.setOnItemReselectedListener(item -> { });
+    }
+
+    private void replaceFragment(@NonNull Fragment fragment) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.main_fragment_container, fragment)
+                .commit();
     }
 }

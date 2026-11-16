@@ -7,4 +7,25 @@
     <string name="fab_new_schedule">새 일정</string>
 
     <string name="schedule_complete_action">완료 처리</string>
+
+    <string name="schedule_status_done">완료</string>
+    <string name="schedule_status_moving">이동 중</string>
+    <string name="schedule_status_late">지각 예상</string>
+    <string name="schedule_status_scheduled">예약됨</string>
+    <string name="schedule_status_unreserved">미예약</string>
+    <string name="schedule_status_missed">시간 경과</string>
+
+    <string name="schedule_message_done">제때 도착했어요 · %1$s 도착</string>
+    <string name="schedule_message_moving">이동 중 · %1$s 도착 예정</string>
+    <string name="schedule_message_late">지각이 예상돼요.</string>
+    <string name="schedule_message_scheduled">출발 알림 %1$s</string>
+    <string name="schedule_message_unreserved">알림이 예약되지 않았어요</string>
+    <string name="schedule_message_missed">출발 알림 시각이 지났어요</string>
+
+    <string name="schedule_meta_travel">이동 %1$d분</string>
+    <string name="schedule_meta_boarding">%1$s 탑승</string>
+
+    <string name="schedule_time_today">오늘 %1$s</string>
+    <string name="schedule_time_tomorrow">내일 %1$s</string>
+    <string name="schedule_time_date">%1$s %2$s</string>
 </resources>
