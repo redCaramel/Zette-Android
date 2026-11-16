@@ -53,6 +53,7 @@ public class SplashActivity extends AppCompatActivity {
 
         binding.textLoading.setOnClickListener(view -> { // remove after writing Loading Script
             startActivity(new Intent(SplashActivity.this, MainActivity.class));
+            finish();
         });
 
     }

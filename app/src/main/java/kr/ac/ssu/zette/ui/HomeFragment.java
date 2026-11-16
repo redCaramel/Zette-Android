@@ -72,7 +72,7 @@ public class HomeFragment extends Fragment {
         scheduleAdapter.submitList(items);
     }
 
-    // TODO - 로컬 + 백그라운드 모듈 연결 (당일 일정)
+    // TODO - 로컬 + 백그라운드 모듈 연결 (당일 일정) / 아래 sample 코드는 삭제할 것
     @NonNull
     private static List<ScheduleCardItem> insertSampleItems() {
         LocalDate today = LocalDate.now();
