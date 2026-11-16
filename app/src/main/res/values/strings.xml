@@ -2,11 +2,9 @@
     <string name="app_name">Zette</string>
     <string name="logo_wordmark">제때</string>
 
-    <!-- 홈 -->
     <string name="home_until_departure">출발까지</string>
     <string name="home_remaining">남았어요</string>
     <string name="fab_new_schedule">새 일정</string>
 
-    <!-- Schedule Card -->
     <string name="schedule_complete_action">완료 처리</string>
 </resources>

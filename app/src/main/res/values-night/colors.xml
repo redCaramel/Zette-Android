@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 제때 디자인 토큰: 색상 (다크 모드 — 같은 이름, 다른 값). Figma "Color" 변수와 이름을 맞춤 (green/brand → green_brand). -->
 <resources>
 
     <!-- green -->
