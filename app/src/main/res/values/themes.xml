@@ -101,4 +101,10 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
+
+    <style name="Widget.Zette.Switch" parent="Widget.Material3.CompoundButton.MaterialSwitch">
+        <item name="trackTint">@color/switch_track</item>
+        <item name="trackDecorationTint">@color/switch_track_decoration</item>
+        <item name="thumbTint">@color/switch_thumb</item>
+    </style>
 </resources>

@@ -28,4 +28,16 @@
     <string name="schedule_time_today">오늘 %1$s</string>
     <string name="schedule_time_tomorrow">내일 %1$s</string>
     <string name="schedule_time_date">%1$s %2$s</string>
+
+    <string name="calendar_today">오늘</string>
+    <string name="calendar_month">%1$d월</string>
+    <string name="calendar_year_month">%1$d년 %2$d월</string>
+    <string name="calendar_event_count">일정 %1$d개</string>
+    <string name="calendar_departure">출발 %1$s</string>
+    <string name="calendar_routine_added">루틴에 의해 추가</string>
+    <string name="calendar_toggle_month">월 달력 펼치기/접기</string>
+    <string name="calendar_prev_month">이전 달</string>
+    <string name="calendar_next_month">다음 달</string>
+    <string name="calendar_edit_event">일정 수정</string>
+    <string name="calendar_delete_event">일정 삭제</string>
 </resources>
