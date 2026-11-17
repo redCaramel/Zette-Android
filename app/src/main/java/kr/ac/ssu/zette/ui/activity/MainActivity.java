@@ -1,5 +1,8 @@
 package kr.ac.ssu.zette.ui.activity;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -75,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
 
         setRoutineFabMode(getSupportFragmentManager()
                 .findFragmentById(R.id.main_fragment_container) instanceof RoutineFragment);
+        hideFab(getSupportFragmentManager()
+                .findFragmentById(R.id.main_fragment_container) instanceof SettingFragment);
         binding.btnNewSchedule.setOnClickListener(v -> {
             if (routineFabMode) {
                 onNewRoutineClick();
@@ -87,6 +92,12 @@ public class MainActivity extends AppCompatActivity {
     private void setRoutineFabMode(boolean routine) {
         routineFabMode = routine;
         binding.btnNewSchedule.setText(routine ? R.string.fab_new_routine : R.string.fab_new_schedule);
+    }
+    private void hideFab(boolean gone) {
+        if (gone)
+            binding.btnNewSchedule.setVisibility(GONE);
+        else
+            binding.btnNewSchedule.setVisibility(VISIBLE);
     }
 
     private void onNewScheduleClick() {

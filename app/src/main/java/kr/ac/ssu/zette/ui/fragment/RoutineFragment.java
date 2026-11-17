@@ -62,6 +62,7 @@ public class RoutineFragment extends Fragment {
         binding.tvRoutineCount.setText(getString(R.string.routine_count, samples.size()));
     }
 
+    // TODO - sample 데이터 삭제, 백그라운드 로직 연결
     @NonNull
     private static List<RoutineItem> createSampleRoutines() {
         return Arrays.asList(

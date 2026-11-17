@@ -49,7 +49,7 @@ public class SplashActivity extends AppCompatActivity {
         int selectedIndex = (int) (Math.random() * 5);
         binding.textSplash.setText(splashText[selectedIndex]);
 
-        // Script for Loading APP...
+        // TODO - Script for Loading APP...
 
         binding.textLoading.setOnClickListener(view -> { // remove after writing Loading Script
             startActivity(new Intent(SplashActivity.this, MainActivity.class));
