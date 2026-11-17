@@ -22,6 +22,7 @@ import kr.ac.ssu.zette.ui.fragment.SettingFragment;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
+    private boolean routineFabMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         ViewCompat.setOnApplyWindowInsetsListener(binding.main, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            // 하단 inset은 BottomNavigationView가 직접 처리하므로 루트에서는 제외 (이중 padding 방지)
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0);
             return insets;
         });
@@ -46,21 +46,25 @@ public class MainActivity extends AppCompatActivity {
 
             if (itemId == R.id.homeFragment) {
                 replaceFragment(new HomeFragment());
+                setRoutineFabMode(false);
                 return true;
             }
 
             if (itemId == R.id.calendarFragment) {
                 replaceFragment(new CalendarFragment());
+                setRoutineFabMode(false);
                 return true;
             }
 
             if (itemId == R.id.routineFragment) {
                 replaceFragment(new RoutineFragment());
+                setRoutineFabMode(true);
                 return true;
             }
 
             if (itemId == R.id.settingFragment) {
                 replaceFragment(new SettingFragment());
+                setRoutineFabMode(false);
                 return true;
             }
 
@@ -68,6 +72,29 @@ public class MainActivity extends AppCompatActivity {
         });
 
         binding.bottomNav.setOnItemReselectedListener(item -> { });
+
+        setRoutineFabMode(getSupportFragmentManager()
+                .findFragmentById(R.id.main_fragment_container) instanceof RoutineFragment);
+        binding.btnNewSchedule.setOnClickListener(v -> {
+            if (routineFabMode) {
+                onNewRoutineClick();
+            } else {
+                onNewScheduleClick();
+            }
+        });
+    }
+
+    private void setRoutineFabMode(boolean routine) {
+        routineFabMode = routine;
+        binding.btnNewSchedule.setText(routine ? R.string.fab_new_routine : R.string.fab_new_schedule);
+    }
+
+    private void onNewScheduleClick() {
+        // TODO - 새 일정 버튼 클릭 로직
+    }
+
+    private void onNewRoutineClick() {
+        // TODO - 새 루틴 버튼 클릭 로직
     }
 
     private void replaceFragment(@NonNull Fragment fragment) {
