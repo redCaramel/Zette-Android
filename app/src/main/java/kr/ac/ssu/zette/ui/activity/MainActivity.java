@@ -1,4 +1,4 @@
-package kr.ac.ssu.zette.ui;
+package kr.ac.ssu.zette.ui.activity;
 
 import android.os.Bundle;
 
@@ -14,6 +14,10 @@ import com.google.android.material.transition.platform.MaterialFadeThrough;
 
 import kr.ac.ssu.zette.R;
 import kr.ac.ssu.zette.databinding.ActivityMainBinding;
+import kr.ac.ssu.zette.ui.fragment.CalendarFragment;
+import kr.ac.ssu.zette.ui.fragment.HomeFragment;
+import kr.ac.ssu.zette.ui.fragment.RoutineFragment;
+import kr.ac.ssu.zette.ui.fragment.SettingFragment;
 
 public class MainActivity extends AppCompatActivity {
 

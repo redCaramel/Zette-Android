@@ -1,4 +1,4 @@
-package kr.ac.ssu.zette.ui;
+package kr.ac.ssu.zette.ui.adapter;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -26,6 +26,7 @@ import java.util.Locale;
 import kr.ac.ssu.zette.R;
 import kr.ac.ssu.zette.databinding.ItemScheduleCardBinding;
 import kr.ac.ssu.zette.dto.Schedule;
+import kr.ac.ssu.zette.ui.item.ScheduleCardItem;
 
 public class ScheduleAdapter extends ListAdapter<ScheduleCardItem, ScheduleAdapter.ViewHolder> {
 

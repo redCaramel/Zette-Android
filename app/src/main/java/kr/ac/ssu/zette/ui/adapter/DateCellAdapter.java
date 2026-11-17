@@ -1,4 +1,4 @@
-package kr.ac.ssu.zette.ui;
+package kr.ac.ssu.zette.ui.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

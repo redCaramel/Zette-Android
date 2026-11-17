@@ -1,4 +1,4 @@
-package kr.ac.ssu.zette.ui;
+package kr.ac.ssu.zette.ui.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,6 +19,8 @@ import java.util.List;
 import kr.ac.ssu.zette.databinding.FragmentHomeBinding;
 import kr.ac.ssu.zette.dto.Place;
 import kr.ac.ssu.zette.dto.Schedule;
+import kr.ac.ssu.zette.ui.adapter.ScheduleAdapter;
+import kr.ac.ssu.zette.ui.item.ScheduleCardItem;
 
 public class HomeFragment extends Fragment {
 

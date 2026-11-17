@@ -1,4 +1,4 @@
-package kr.ac.ssu.zette.ui;
+package kr.ac.ssu.zette.ui.item;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

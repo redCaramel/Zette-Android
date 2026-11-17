@@ -1,4 +1,4 @@
-package kr.ac.ssu.zette.ui;
+package kr.ac.ssu.zette.ui.fragment;
 
 import android.os.Bundle;
 import android.transition.AutoTransition;
@@ -28,6 +28,9 @@ import java.util.Locale;
 
 import kr.ac.ssu.zette.R;
 import kr.ac.ssu.zette.databinding.FragmentCalendarBinding;
+import kr.ac.ssu.zette.ui.adapter.CalendarEventAdapter;
+import kr.ac.ssu.zette.ui.adapter.DateCellAdapter;
+import kr.ac.ssu.zette.ui.item.CalendarEventItem;
 
 public class CalendarFragment extends Fragment {
 

@@ -1,4 +1,4 @@
-package kr.ac.ssu.zette.ui;
+package kr.ac.ssu.zette.ui.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,17 +9,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import kr.ac.ssu.zette.databinding.FragmentSettingBinding;
+import kr.ac.ssu.zette.databinding.FragmentRoutineBinding;
 
-public class SettingFragment extends Fragment {
+public class RoutineFragment extends Fragment {
 
-    private FragmentSettingBinding binding;
+    private FragmentRoutineBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        binding = FragmentSettingBinding.inflate(inflater, container, false);
+        binding = FragmentRoutineBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 

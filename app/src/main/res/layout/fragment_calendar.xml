@@ -7,7 +7,7 @@
     android:background="@color/surface_canvas"
     android:clipToPadding="false"
     android:paddingBottom="88dp"
-    tools:context=".ui.CalendarFragment">
+    tools:context=".ui.fragment.CalendarFragment">
 
     <LinearLayout
         android:id="@+id/layout_calendar_content"

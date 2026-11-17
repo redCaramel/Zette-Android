@@ -1,4 +1,4 @@
-package kr.ac.ssu.zette.ui;
+package kr.ac.ssu.zette.ui.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -16,6 +16,7 @@ import java.util.Locale;
 
 import kr.ac.ssu.zette.R;
 import kr.ac.ssu.zette.databinding.ItemCalendarEventBinding;
+import kr.ac.ssu.zette.ui.item.CalendarEventItem;
 
 public class CalendarEventAdapter extends ListAdapter<CalendarEventItem, CalendarEventAdapter.ViewHolder> {
 
