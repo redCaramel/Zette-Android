@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/view_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="@dimen/space_3"
+        android:background="@color/border_hairline" />
+
+    <LinearLayout
+        android:id="@+id/layout_place_row"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:background="?attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/space_3"
+        android:paddingEnd="@dimen/space_3">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:importantForAccessibility="no"
+            app:srcCompat="@drawable/ic_place"
+            app:tint="@color/text_secondary" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_3"
+            android:layout_marginEnd="@dimen/space_3"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_place_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textAppearance="@style/TextAppearance.Zette.Subtitle"
+                android:textColor="@color/text_primary"
+                tools:text="강남역 2번 출구" />
+
+            <TextView
+                android:id="@+id/tv_place_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textAppearance="@style/TextAppearance.Zette.Body"
+                android:textColor="@color/text_secondary"
+                tools:text="서울 강남구 강남대로 지하 396" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_place_distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.Zette.Caption"
+            android:textColor="@color/text_secondary"
+            tools:text="50m" />
+
+        <TextView
+            android:id="@+id/tv_place_selected"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:background="@drawable/bg_round_full"
+            android:backgroundTint="@color/green_mint"
+            android:gravity="center"
+            android:paddingStart="@dimen/space_2"
+            android:paddingEnd="@dimen/space_2"
+            android:text="@string/new_schedule_place_selected_badge"
+            android:textAppearance="@style/TextAppearance.Zette.Label"
+            android:textColor="@color/green_brand"
+            android:visibility="gone" />
+    </LinearLayout>
+</LinearLayout>

@@ -3,6 +3,7 @@ package kr.ac.ssu.zette.ui.activity;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -100,8 +101,8 @@ public class MainActivity extends AppCompatActivity {
             binding.btnNewSchedule.setVisibility(VISIBLE);
     }
 
-    private void onNewScheduleClick() {
-        // TODO - 새 일정 버튼 클릭 로직
+        private void onNewScheduleClick() {
+        startActivity(new Intent(this, NewScheduleActivity.class));
     }
 
     private void onNewRoutineClick() {

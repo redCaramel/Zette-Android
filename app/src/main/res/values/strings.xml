@@ -75,4 +75,35 @@
     <string name="theme_mode_system">시스템</string>
     <string name="theme_preview_description">라이트·다크 화면 미리보기</string>
     <string name="action_back">뒤로 가기</string>
+
+    <string name="new_schedule_title">새 일정</string>
+    <string name="new_schedule_info_section">일정 정보</string>
+    <string name="new_schedule_name_label">일정명</string>
+    <string name="new_schedule_name_helper">최대 30자</string>
+    <string name="new_schedule_date_label">날짜</string>
+    <string name="new_schedule_time_label">도착 시각</string>
+    <string name="new_schedule_place_section">도착 장소</string>
+    <string name="new_schedule_selected_place">선택된 장소</string>
+    <string name="new_schedule_selected_place_empty">도착 장소를 선택해주세요.</string>
+    <string name="new_schedule_search_hint">검색어를 입력하세요</string>
+    <string name="new_schedule_search_clear">검색어 지우기</string>
+    <string name="new_schedule_search_loading">불러오는 중…</string>
+    <string name="new_schedule_place_selected_badge">선택됨</string>
+    <string name="new_schedule_distance_m">%1$dm</string>
+    <string name="new_schedule_distance_km">%1$.1fkm</string>
+    <string name="new_schedule_nonsupport_heading">이 지역은 실시간 버스 도착 정보를\n지원하지 않아요.</string>
+    <string name="new_schedule_nonsupport_body">예상 이동 시간 기준으로 출발 알림을 보내드려요.</string>
+    <string name="new_schedule_route_section">경로 설정</string>
+    <string name="new_schedule_route_type">경로 기준</string>
+    <string name="new_schedule_route_min_time">최소 시간</string>
+    <string name="new_schedule_route_min_walk">최소 도보</string>
+    <string name="new_schedule_route_min_transfer">최소 환승</string>
+    <string name="new_schedule_arrival_buffer">도착 여유</string>
+    <string name="new_schedule_buffer_none">없음</string>
+    <string name="new_schedule_buffer_minutes">%1$d분</string>
+    <string name="new_schedule_estimate_label">지금 위치에서 출발한다면...</string>
+    <string name="new_schedule_estimate_label_reference">지금 위치에서 출발한다면 (참고)</string>
+    <string name="new_schedule_estimate_value">약 %1$d분이 소요돼요</string>
+    <string name="new_schedule_route_note">출발 시각은 위치에 따라 실시간으로 조정돼요.</string>
+    <string name="new_schedule_save">저장하기</string>
 </resources>
