@@ -16,6 +16,7 @@ public class Routine {
     public Place place;
     public RouteType routeType; // 최소 시간 / 최소 도보 / 최소 환승
     public int arrivalBuffer; // 도착 여유 (분)
+    public boolean activated;
 
     // 요일 반복
     public boolean[] weekdays = new boolean[7];
@@ -36,6 +37,7 @@ public class Routine {
             this.weekdays = weekdays;
         }
         this.repeatDate = repeatDate;
+        activated = true;
     }
 
     public enum RouteType { // 최소 시간 / 최소 도보 / 최소 환승

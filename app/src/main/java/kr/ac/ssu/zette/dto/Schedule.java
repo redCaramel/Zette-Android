@@ -12,7 +12,7 @@ public class Schedule {
     public Place place;
     public RouteType routeType; // 최소 시간 / 최소 도보 / 최소 환승
     public int arrivalBuffer; // 도착 여유 (분)
-
+    public boolean activated;
     public Schedule() {}
 
     public Schedule(long id, String name, LocalDate date, LocalTime arrivalTime, Place place,
@@ -24,6 +24,7 @@ public class Schedule {
         this.place = place;
         this.routeType = routeType;
         this.arrivalBuffer = arrivalBuffer;
+        activated = true;
     }
 
     public enum RouteType { // 최소 시간 / 최소 도보 / 최소 환승
