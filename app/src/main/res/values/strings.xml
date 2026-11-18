@@ -106,4 +106,10 @@
     <string name="new_schedule_estimate_value">약 %1$d분이 소요돼요</string>
     <string name="new_schedule_route_note">출발 시각은 위치에 따라 실시간으로 조정돼요.</string>
     <string name="new_schedule_save">저장하기</string>
+
+    <string name="picker_date_title">날짜</string>
+    <string name="picker_time_title">도착 시각</string>
+    <string name="picker_time_helper">이 시각까지 도착하도록 출발 알림을 계산해요</string>
+    <string name="picker_cancel">취소</string>
+    <string name="picker_ok">확인</string>
 </resources>

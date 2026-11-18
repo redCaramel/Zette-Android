@@ -1,12 +1,14 @@
 package kr.ac.ssu.zette.ui.activity;
 
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextWatcher;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.TextAppearanceSpan;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -18,9 +20,17 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.datepicker.CalendarConstraints;
+import com.google.android.material.datepicker.DateValidatorPointForward;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.timepicker.MaterialTimePicker;
+import com.google.android.material.timepicker.TimeFormat;
+
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
@@ -41,6 +51,9 @@ public class NewScheduleActivity extends AppCompatActivity {
     private static final long SEARCH_DELAY_MS = 1000;
     private static final int MAX_SEARCH_RESULTS = 3;
     private static final int SAMPLE_TRAVEL_MINUTES = 40;
+
+    private static final String TAG_DATE_PICKER = "date_picker";
+    private static final String TAG_TIME_PICKER = "time_picker";
 
     private static final DateTimeFormatter DATE_FORMAT =
             DateTimeFormatter.ofPattern("M월 d일 (E)", Locale.KOREAN);
@@ -104,23 +117,68 @@ public class NewScheduleActivity extends AppCompatActivity {
         arrivalTime = nextHour.toLocalTime();
         renderDateTime();
 
-        View.OnClickListener openDatePicker = v -> new DatePickerDialog(this,
-                (picker, year, month, day) -> {
-                    date = LocalDate.of(year, month + 1, day);
-                    renderDateTime();
-                },
-                date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth()).show();
-        View.OnClickListener openTimePicker = v -> new TimePickerDialog(this,
-                (picker, hour, minute) -> {
-                    arrivalTime = LocalTime.of(hour, minute);
-                    renderDateTime();
-                },
-                arrivalTime.getHour(), arrivalTime.getMinute(), false).show();
+        View.OnClickListener openDatePicker = v -> showDatePicker();
+        View.OnClickListener openTimePicker = v -> showTimePicker();
 
         binding.etDate.setOnClickListener(openDatePicker);
         binding.tilDate.setEndIconOnClickListener(openDatePicker);
         binding.etTime.setOnClickListener(openTimePicker);
         binding.tilTime.setEndIconOnClickListener(openTimePicker);
+    }
+
+    private void showDatePicker() {
+        if (getSupportFragmentManager().findFragmentByTag(TAG_DATE_PICKER) != null) return;
+
+        long todayUtc = LocalDate.now().atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli();
+        long selectionUtc = date.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli();
+        CalendarConstraints constraints = new CalendarConstraints.Builder()
+                .setStart(todayUtc)
+                .setOpenAt(selectionUtc)
+                .setValidator(DateValidatorPointForward.from(todayUtc))
+                .build();
+
+        MaterialDatePicker<Long> picker = MaterialDatePicker.Builder.datePicker()
+                .setTheme(R.style.ThemeOverlay_Zette_DatePicker)
+                .setTitleText(R.string.picker_date_title)
+                .setSelection(selectionUtc)
+                .setCalendarConstraints(constraints)
+                .setPositiveButtonText(R.string.picker_ok)
+                .setNegativeButtonText(R.string.picker_cancel)
+                .build();
+        picker.addOnPositiveButtonClickListener(selection -> {
+            date = Instant.ofEpochMilli(selection).atZone(ZoneOffset.UTC).toLocalDate();
+            renderDateTime();
+        });
+        picker.getViewLifecycleOwnerLiveData().observe(this, owner -> {
+            if (owner == null) return;
+            View toggle = picker.requireView().findViewById(
+                    com.google.android.material.R.id.mtrl_picker_header_toggle);
+            if (toggle != null) toggle.setVisibility(View.GONE);
+        });
+        picker.show(getSupportFragmentManager(), TAG_DATE_PICKER);
+    }
+
+    private void showTimePicker() {
+        if (getSupportFragmentManager().findFragmentByTag(TAG_TIME_PICKER) != null) return;
+
+        SpannableStringBuilder title = new SpannableStringBuilder(getString(R.string.picker_time_title));
+        int helperStart = title.length() + 1;
+
+        MaterialTimePicker picker = new MaterialTimePicker.Builder()
+                .setTheme(R.style.ThemeOverlay_Zette_TimePicker)
+                .setTimeFormat(TimeFormat.CLOCK_12H)
+                .setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
+                .setHour(arrivalTime.getHour())
+                .setMinute(arrivalTime.getMinute())
+                .setTitleText(title)
+                .setPositiveButtonText(R.string.picker_ok)
+                .setNegativeButtonText(R.string.picker_cancel)
+                .build();
+        picker.addOnPositiveButtonClickListener(v -> {
+            arrivalTime = LocalTime.of(picker.getHour(), picker.getMinute());
+            renderDateTime();
+        });
+        picker.show(getSupportFragmentManager(), TAG_TIME_PICKER);
     }
 
     private void renderDateTime() {
