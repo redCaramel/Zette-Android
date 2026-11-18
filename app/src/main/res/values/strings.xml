@@ -67,4 +67,12 @@
     <string name="setting_permission_sample">위치 항상 허용 · 알림 꺼짐 · 정확한 알람 허용</string>
     <string name="setting_theme">화면 모드</string>
     <string name="setting_theme_light">라이트</string>
+
+    <string name="theme_title">화면 모드</string>
+    <string name="theme_select_title">화면 모드 선택</string>
+    <string name="theme_mode_light">라이트</string>
+    <string name="theme_mode_dark">다크</string>
+    <string name="theme_mode_system">시스템</string>
+    <string name="theme_preview_description">라이트·다크 화면 미리보기</string>
+    <string name="action_back">뒤로 가기</string>
 </resources>

@@ -1,5 +1,6 @@
 package kr.ac.ssu.zette.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +11,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import kr.ac.ssu.zette.R;
+import kr.ac.ssu.zette.data.local.ThemePreferences;
 import kr.ac.ssu.zette.databinding.FragmentSettingBinding;
+import kr.ac.ssu.zette.ui.activity.ThemeSettingActivity;
 
 public class SettingFragment extends Fragment {
 
@@ -45,9 +48,14 @@ public class SettingFragment extends Fragment {
         binding.gotoPermission.setOnClickListener(v -> {
             // TODO - 권한 상태 화면 이동
         });
-        binding.gotoTheme.setOnClickListener(v -> {
-            // TODO - 화면 모드 화면 이동
-        });
+        binding.gotoTheme.setOnClickListener(v ->
+                startActivity(new Intent(requireContext(), ThemeSettingActivity.class)));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        binding.tvThemeValue.setText(ThemePreferences.getThemeMode(requireContext()).labelRes);
     }
 
     @Override
