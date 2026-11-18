@@ -48,4 +48,23 @@
     <string name="routine_repeat_monthly">매월 %1$d일</string>
     <string name="routine_departure_alarm">출발 알림 %1$s</string>
     <string name="routine_travel">이동 %1$d분</string>
+
+    <string name="setting_alarm_title">알람 설정</string>
+    <string name="setting_alarm_method">알림 방식</string>
+    <string name="setting_vibration">진동 알림</string>
+    <string name="setting_vibration_desc">출발 알림 시각에 진동으로 알려요</string>
+    <string name="setting_screen">화면 알림</string>
+    <string name="setting_screen_desc">화면에 출발 알림을 띄워요</string>
+    <string name="setting_voice">음성 알림</string>
+    <string name="setting_voice_desc">출발·탑승·하차를 음성으로 알려요</string>
+    <string name="setting_schedule_default_title">일정 기본값</string>
+    <string name="setting_route_type">경로 기준</string>
+    <string name="setting_route_type_min_time">최소 시간</string>
+    <string name="setting_arrival_buffer">도착 여유</string>
+    <string name="setting_arrival_buffer_value">%1$d분 일찍 도착</string>
+    <string name="setting_app_title">앱 설정</string>
+    <string name="setting_permission">권한 상태</string>
+    <string name="setting_permission_sample">위치 항상 허용 · 알림 꺼짐 · 정확한 알람 허용</string>
+    <string name="setting_theme">화면 모드</string>
+    <string name="setting_theme_light">라이트</string>
 </resources>
