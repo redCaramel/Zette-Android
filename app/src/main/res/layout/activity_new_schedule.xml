@@ -28,6 +28,7 @@
             app:tint="@color/text_primary" />
 
         <TextView
+            android:id="@+id/tv_toolbar_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -52,6 +53,7 @@
             android:paddingBottom="@dimen/space_4">
 
             <TextView
+                android:id="@+id/tv_info_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/new_schedule_info_section"
@@ -86,6 +88,111 @@
                     android:textAppearance="@style/TextAppearance.Zette.BodyLarge"
                     android:textColor="@color/text_primary" />
             </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_repeat_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_5"
+                    android:text="@string/new_routine_repeat_section"
+                    android:textAppearance="@style/TextAppearance.Zette.H2"
+                    android:textColor="@color/text_primary" />
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tab_repeat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:background="@color/surface_container"
+                    app:tabIndicatorColor="@color/green_brand"
+                    app:tabIndicatorFullWidth="false"
+                    app:tabRippleColor="@android:color/transparent"
+                    app:tabSelectedTextColor="@color/green_brand"
+                    app:tabTextAppearance="@style/TextAppearance.Zette.Label"
+                    app:tabTextColor="@color/text_secondary">
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/new_routine_tab_weekly" />
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/new_routine_tab_monthly" />
+                </com.google.android.material.tabs.TabLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_weekly_repeat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="@string/new_routine_weekdays_label"
+                        android:textAppearance="@style/TextAppearance.Zette.Label"
+                        android:textColor="@color/text_secondary" />
+
+                    <LinearLayout
+                        android:id="@+id/layout_weekday_toggles"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_2"
+                        android:orientation="horizontal" />
+                </LinearLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_repeat_day"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:hint="@string/new_routine_repeat_day_label"
+                    android:visibility="gone"
+                    app:boxBackgroundColor="@color/surface_container"
+                    app:boxCornerRadiusBottomEnd="@dimen/radius_sm"
+                    app:boxCornerRadiusBottomStart="@dimen/radius_sm"
+                    app:boxCornerRadiusTopEnd="@dimen/radius_sm"
+                    app:boxCornerRadiusTopStart="@dimen/radius_sm"
+                    app:boxStrokeColor="@color/green_accent"
+                    app:endIconDrawable="@drawable/ic_expand_more"
+                    app:endIconMode="custom"
+                    app:endIconTint="@color/text_secondary"
+                    app:helperText="@string/new_routine_repeat_day_helper"
+                    app:helperTextTextColor="@color/text_secondary"
+                    app:hintTextColor="@color/text_secondary">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_repeat_day"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:inputType="none"
+                        android:maxLines="1"
+                        android:textAppearance="@style/TextAppearance.Zette.BodyLarge"
+                        android:textColor="@color/text_primary"
+                        tools:text="매월 15일" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_5"
+                    android:text="@string/new_routine_time_section"
+                    android:textAppearance="@style/TextAppearance.Zette.H2"
+                    android:textColor="@color/text_primary" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -508,6 +615,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <TextView
+                android:id="@+id/tv_route_note"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"

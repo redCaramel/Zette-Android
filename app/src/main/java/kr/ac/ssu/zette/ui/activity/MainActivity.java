@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onNewRoutineClick() {
-        // TODO - 새 루틴 버튼 클릭 로직
+        startActivity(new Intent(this, NewRoutineActivity.class));
     }
 
     private void replaceFragment(@NonNull Fragment fragment) {

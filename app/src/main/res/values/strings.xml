@@ -120,4 +120,21 @@
     <string name="picker_ok">확인</string>
 
     <string name="splash_load_error">데이터를 불러오지 못했어요. 앱을 다시 실행해주세요.</string>
+
+    <string name="new_routine_title">새 루틴</string>
+    <string name="new_routine_info_section">루틴 정보</string>
+    <string name="new_routine_name_label">루틴 이름</string>
+    <string name="new_routine_name_required">루틴 이름을 입력해주세요</string>
+    <string name="new_routine_repeat_section">반복</string>
+    <string name="new_routine_tab_weekly">요일 반복</string>
+    <string name="new_routine_tab_monthly">매월 반복</string>
+    <string name="new_routine_weekdays_label">반복 요일</string>
+    <string name="new_routine_weekdays_required">반복 요일을 선택해주세요</string>
+    <string name="new_routine_repeat_day_label">반복 일</string>
+    <string name="new_routine_repeat_day_value">매월 %1$d일</string>
+    <string name="new_routine_repeat_day_helper">1일 ~ 31일 중 선택</string>
+    <string name="new_routine_time_section">도착 시각</string>
+    <string name="new_routine_time_helper">이 시각까지 도착하도록 알려요</string>
+    <string name="new_routine_default_note">설정의 기본값(%1$s · %2$s)을 따르고 있어요. 이 루틴만 다르게 고를 수 있어요.</string>
+    <string name="new_routine_save">루틴 저장</string>
 </resources>

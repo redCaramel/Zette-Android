@@ -1,5 +1,6 @@
 package kr.ac.ssu.zette.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -38,6 +39,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Consumer;
 
 import kr.ac.ssu.zette.R;
 import kr.ac.ssu.zette.data.local.Settings;
@@ -72,16 +74,16 @@ public class NewScheduleActivity extends AppCompatActivity {
             new Place("sample-4", "강남역 10번 출구", "서울 강남구 역삼동 821", 37.4990, 127.0289, 350)
     );
 
-    private ActivityNewScheduleBinding binding;
+    protected ActivityNewScheduleBinding binding;
     private PlaceSearchAdapter searchAdapter;
     private final Handler searchHandler = new Handler(Looper.getMainLooper());
     @Nullable
     private Runnable pendingSearch;
 
     private LocalDate date;
-    private LocalTime arrivalTime;
+    protected LocalTime arrivalTime;
     @Nullable
-    private Place selectedPlace;
+    protected Place selectedPlace;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +106,16 @@ public class NewScheduleActivity extends AppCompatActivity {
         setupRouteSettings();
         setupNonSupportBand();
 
-        binding.btnSave.setOnClickListener(v -> saveSchedule());
+        onSetupMode();
+        binding.btnSave.setOnClickListener(v -> save());
+    }
+
+    // 하위 화면(새 루틴)이 같은 폼을 자기 모드로 바꾸는 자리
+    protected void onSetupMode() {
+    }
+
+    protected void save() {
+        saveSchedule();
     }
 
     @Override
@@ -129,15 +140,26 @@ public class NewScheduleActivity extends AppCompatActivity {
     }
 
     private void showDatePicker() {
+        showDatePicker(date, true, picked -> {
+            date = picked;
+            renderDateTime();
+        });
+    }
+
+    // futureOnly: 오늘 이전 날짜를 막는다 (일정 날짜). 루틴의 반복 일은 날짜만 고르므로 false.
+    // 입력 모드 토글 id는 Material의 private 리소스라 R로 참조할 수 없어 이름으로 찾는다. 버전업 때 사라지면 0이라 토글만 다시 보인다.
+    @SuppressLint("DiscouragedApi")
+    protected void showDatePicker(@NonNull LocalDate initial, boolean futureOnly,
+                                  @NonNull Consumer<LocalDate> onPicked) {
         if (getSupportFragmentManager().findFragmentByTag(TAG_DATE_PICKER) != null) return;
 
         long todayUtc = LocalDate.now().atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli();
-        long selectionUtc = date.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli();
-        CalendarConstraints constraints = new CalendarConstraints.Builder()
-                .setStart(todayUtc)
-                .setOpenAt(selectionUtc)
-                .setValidator(DateValidatorPointForward.from(todayUtc))
-                .build();
+        long selectionUtc = initial.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli();
+        CalendarConstraints.Builder constraintsBuilder = new CalendarConstraints.Builder().setOpenAt(selectionUtc);
+        if (futureOnly) {
+            constraintsBuilder.setStart(todayUtc).setValidator(DateValidatorPointForward.from(todayUtc));
+        }
+        CalendarConstraints constraints = constraintsBuilder.build();
 
         MaterialDatePicker<Long> picker = MaterialDatePicker.Builder.datePicker()
                 .setTheme(R.style.ThemeOverlay_Zette_DatePicker)
@@ -147,14 +169,12 @@ public class NewScheduleActivity extends AppCompatActivity {
                 .setPositiveButtonText(R.string.picker_ok)
                 .setNegativeButtonText(R.string.picker_cancel)
                 .build();
-        picker.addOnPositiveButtonClickListener(selection -> {
-            date = Instant.ofEpochMilli(selection).atZone(ZoneOffset.UTC).toLocalDate();
-            renderDateTime();
-        });
+        picker.addOnPositiveButtonClickListener(selection ->
+                onPicked.accept(Instant.ofEpochMilli(selection).atZone(ZoneOffset.UTC).toLocalDate()));
         picker.getViewLifecycleOwnerLiveData().observe(this, owner -> {
             if (owner == null) return;
-            View toggle = picker.requireView().findViewById(
-                    com.google.android.material.R.id.mtrl_picker_header_toggle);
+            int toggleId = getResources().getIdentifier("mtrl_picker_header_toggle", "id", getPackageName());
+            View toggle = toggleId == 0 ? null : picker.requireView().findViewById(toggleId);
             if (toggle != null) toggle.setVisibility(View.GONE);
         });
         picker.show(getSupportFragmentManager(), TAG_DATE_PICKER);
@@ -323,21 +343,36 @@ public class NewScheduleActivity extends AppCompatActivity {
         }
     }
 
-    private void saveSchedule() {
+    // 비어 있으면 입력칸에 오류를 띄우고 null
+    @Nullable
+    protected String requireName(int errorRes) {
         CharSequence nameText = binding.etName.getText();
         String name = nameText == null ? "" : nameText.toString().trim();
         if (name.isEmpty()) {
-            binding.tilName.setError(getString(R.string.new_schedule_name_required));
-            return;
+            binding.tilName.setError(getString(errorRes));
+            return null;
         }
         binding.tilName.setError(null);
+        return name;
+    }
+
+    // 선택 안 했으면 안내하고 null. 검색 화면용 거리 값은 저장하지 않는다.
+    @Nullable
+    protected Place requirePlace() {
         if (selectedPlace == null) {
             Toast.makeText(this, R.string.new_schedule_place_required, Toast.LENGTH_SHORT).show();
-            return;
+            return null;
         }
-
-        Place place = new Place(selectedPlace.id, selectedPlace.name, selectedPlace.address,
+        return new Place(selectedPlace.id, selectedPlace.name, selectedPlace.address,
                 selectedPlace.lat, selectedPlace.lng, null);
+    }
+
+    private void saveSchedule() {
+        String name = requireName(R.string.new_schedule_name_required);
+        if (name == null) return;
+        Place place = requirePlace();
+        if (place == null) return;
+
         Schedule schedule = new Schedule(0, name, date, arrivalTime, place,
                 getSelectedRouteType(), getSelectedArrivalBuffer());
 
