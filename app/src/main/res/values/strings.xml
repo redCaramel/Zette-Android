@@ -45,7 +45,7 @@
     <string name="routine_section_title">나의 루틴</string>
     <string name="routine_count">루틴 %1$d개</string>
     <string name="routine_repeat_weekly">매주 %1$s</string>
-    <string name="routine_repeat_monthly">매월 %1$d일</string>
+    <string name="routine_repeat_monthly">매월 %1$s일</string>
     <string name="routine_departure_alarm">출발 알림 %1$s</string>
     <string name="routine_travel">이동 %1$d분</string>
 
@@ -60,8 +60,11 @@
     <string name="setting_schedule_default_title">일정 기본값</string>
     <string name="setting_route_type">경로 기준</string>
     <string name="setting_route_type_min_time">최소 시간</string>
+    <string name="setting_route_type_min_walk">최소 도보</string>
+    <string name="setting_route_type_min_transfer">최소 환승</string>
     <string name="setting_arrival_buffer">도착 여유</string>
     <string name="setting_arrival_buffer_value">%1$d분 일찍 도착</string>
+    <string name="setting_arrival_buffer_none">여유 없음</string>
     <string name="setting_app_title">앱 설정</string>
     <string name="setting_permission">권한 상태</string>
     <string name="setting_permission_sample">위치 항상 허용 · 알림 꺼짐 · 정확한 알람 허용</string>
@@ -106,10 +109,15 @@
     <string name="new_schedule_estimate_value">약 %1$d분이 소요돼요</string>
     <string name="new_schedule_route_note">출발 시각은 위치에 따라 실시간으로 조정돼요.</string>
     <string name="new_schedule_save">저장하기</string>
+    <string name="new_schedule_name_required">일정명을 입력해주세요</string>
+    <string name="new_schedule_place_required">도착 장소를 선택해주세요</string>
+    <string name="new_schedule_save_failed">저장하지 못했어요. 다시 시도해주세요.</string>
 
     <string name="picker_date_title">날짜</string>
     <string name="picker_time_title">도착 시각</string>
     <string name="picker_time_helper">이 시각까지 도착하도록 출발 알림을 계산해요</string>
     <string name="picker_cancel">취소</string>
     <string name="picker_ok">확인</string>
+
+    <string name="splash_load_error">데이터를 불러오지 못했어요. 앱을 다시 실행해주세요.</string>
 </resources>

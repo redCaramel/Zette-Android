@@ -10,8 +10,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import kr.ac.ssu.zette.data.local.ThemePreferences;
-import kr.ac.ssu.zette.data.local.ThemePreferences.ThemeMode;
+import kr.ac.ssu.zette.data.local.SettingsStore;
+import kr.ac.ssu.zette.data.local.ThemeMode;
 import kr.ac.ssu.zette.databinding.ActivityThemeSettingBinding;
 
 public class ThemeSettingActivity extends AppCompatActivity {
@@ -41,13 +41,13 @@ public class ThemeSettingActivity extends AppCompatActivity {
         binding.optionDark.setOnClickListener(v -> selectMode(ThemeMode.DARK));
         binding.optionSystem.setOnClickListener(v -> selectMode(ThemeMode.SYSTEM));
 
-        render(ThemePreferences.getThemeMode(this));
+        render(SettingsStore.getInstance(this).getThemeMode());
     }
 
     private void selectMode(@NonNull ThemeMode mode) {
-        if (mode == ThemePreferences.getThemeMode(this)) return;
+        if (mode == SettingsStore.getInstance(this).getThemeMode()) return;
         render(mode);
-        ThemePreferences.setThemeMode(this, mode);
+        SettingsStore.getInstance(this).setThemeMode(mode);
     }
 
     private void render(@NonNull ThemeMode mode) {

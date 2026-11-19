@@ -3,10 +3,13 @@ package kr.ac.ssu.zette.ui.item;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 import kr.ac.ssu.zette.dto.Schedule;
+import kr.ac.ssu.zette.dto.ScheduleKey;
 
 public class ScheduleCardItem {
 
@@ -40,8 +43,60 @@ public class ScheduleCardItem {
         this.boardingRoute = boardingRoute;
     }
 
-    public ScheduleCardItem withStatus(@NonNull Status newStatus) {
-        return new ScheduleCardItem(schedule, newStatus, statusTime, travelMinutes, boardingRoute);
+    // 저장소의 일정 → 홈 카드
+    @NonNull
+    public static ScheduleCardItem from(@NonNull Schedule s) {
+        Status status = toCardStatus(s);
+        LocalTime statusTime = null;
+        String boardingRoute = null;
+        switch (status) {
+            case DONE:
+                statusTime = timeOf(s.completedAt);
+                break;
+            case MOVING:
+                statusTime = timeOf(s.expectedArrival);
+                boardingRoute = s.computed != null ? s.computed.routeSummary : null;
+                break;
+            case SCHEDULED:
+                statusTime = s.computed != null ? timeOf(s.computed.expectedDeparture) : null;
+                break;
+            default:
+                break;
+        }
+        Integer travelMinutes = s.computed != null ? s.computed.travelMinutes : null;
+        return new ScheduleCardItem(s, status, statusTime, travelMinutes, boardingRoute);
+    }
+
+    @NonNull
+    public ScheduleKey key() {
+        return schedule.key();
+    }
+
+    @NonNull
+    private static Status toCardStatus(@NonNull Schedule s) {
+        if (s.status == null) {
+            return s.activated ? Status.SCHEDULED : Status.UNRESERVED;
+        }
+        switch (s.status) {
+            case DONE:
+                return Status.DONE;
+            case MOVING:
+                return Status.MOVING;
+            case LATE:
+                return Status.LATE;
+            case MISSED:
+                return Status.MISSED;
+            case UNRESERVED:
+                return Status.UNRESERVED;
+            case RESERVED:
+            default:
+                return s.activated ? Status.SCHEDULED : Status.UNRESERVED;
+        }
+    }
+
+    @Nullable
+    private static LocalTime timeOf(@Nullable LocalDateTime dateTime) {
+        return dateTime == null ? null : dateTime.toLocalTime().truncatedTo(ChronoUnit.MINUTES);
     }
 
     @Override
@@ -49,7 +104,7 @@ public class ScheduleCardItem {
         if (this == o) return true;
         if (!(o instanceof ScheduleCardItem)) return false;
         ScheduleCardItem that = (ScheduleCardItem) o;
-        return schedule.id == that.schedule.id
+        return key().equals(that.key())
                 && Objects.equals(schedule.name, that.schedule.name)
                 && Objects.equals(schedule.date, that.schedule.date)
                 && Objects.equals(schedule.arrivalTime, that.schedule.arrivalTime)
@@ -62,7 +117,7 @@ public class ScheduleCardItem {
 
     @Override
     public int hashCode() {
-        return Objects.hash(schedule.id, schedule.name, schedule.date, schedule.arrivalTime,
+        return Objects.hash(key(), schedule.name, schedule.date, schedule.arrivalTime,
                 placeName(schedule), status, statusTime, travelMinutes, boardingRoute);
     }
 

@@ -185,4 +185,6 @@
         <item name="buttonBarNegativeButtonStyle">@style/Widget.Zette.Button.Dialog.Negative</item>
         <item name="buttonBarPositiveButtonStyle">@style/Widget.Zette.Button.Dialog.Positive</item>
     </style>
+
+    <style name="Theme.Zette.Splash" parent="Theme.Zette" />
 </resources>

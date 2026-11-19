@@ -223,7 +223,7 @@ public class ScheduleAdapter extends ListAdapter<ScheduleCardItem, ScheduleAdapt
                 @Override
                 public boolean areItemsTheSame(@NonNull ScheduleCardItem oldItem,
                                                @NonNull ScheduleCardItem newItem) {
-                    return oldItem.schedule.id == newItem.schedule.id;
+                    return oldItem.key().equals(newItem.key());
                 }
 
                 @Override

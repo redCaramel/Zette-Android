@@ -43,6 +43,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(libs.ext.junit)
+    androidTestImplementation(libs.androidx.arch.core.testing)
 
     // LifeCycle
     implementation(libs.androidx.lifecycle.viewmodel)

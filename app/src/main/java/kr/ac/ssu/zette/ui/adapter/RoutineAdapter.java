@@ -100,7 +100,11 @@ public class RoutineAdapter extends ListAdapter<RoutineItem, RoutineAdapter.View
         @NonNull
         private static String formatRepeat(@NonNull Context context, @NonNull RoutineItem item) {
             if (item.repeatType == RoutineItem.RepeatType.MONTHLY) {
-                return context.getString(R.string.routine_repeat_monthly, item.monthDay);
+                List<String> monthDays = new ArrayList<>();
+                for (Integer day : item.monthDays) {
+                    monthDays.add(String.valueOf(day));
+                }
+                return context.getString(R.string.routine_repeat_monthly, String.join(DAY_SEPARATOR, monthDays));
             }
             List<String> days = new ArrayList<>();
             for (DayOfWeek day : item.weekDays) {

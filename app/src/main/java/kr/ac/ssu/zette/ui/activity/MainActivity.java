@@ -51,24 +51,28 @@ public class MainActivity extends AppCompatActivity {
             if (itemId == R.id.homeFragment) {
                 replaceFragment(new HomeFragment());
                 setRoutineFabMode(false);
+                binding.btnNewSchedule.setVisibility(VISIBLE);
                 return true;
             }
 
             if (itemId == R.id.calendarFragment) {
                 replaceFragment(new CalendarFragment());
                 setRoutineFabMode(false);
+                binding.btnNewSchedule.setVisibility(VISIBLE);
                 return true;
             }
 
             if (itemId == R.id.routineFragment) {
                 replaceFragment(new RoutineFragment());
                 setRoutineFabMode(true);
+                binding.btnNewSchedule.setVisibility(VISIBLE);
                 return true;
             }
 
             if (itemId == R.id.settingFragment) {
                 replaceFragment(new SettingFragment());
                 setRoutineFabMode(false);
+                binding.btnNewSchedule.setVisibility(GONE);
                 return true;
             }
 

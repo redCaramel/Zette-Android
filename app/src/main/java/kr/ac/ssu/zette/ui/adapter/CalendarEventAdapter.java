@@ -107,7 +107,7 @@ public class CalendarEventAdapter extends ListAdapter<CalendarEventItem, Calenda
                 @Override
                 public boolean areItemsTheSame(@NonNull CalendarEventItem oldItem,
                                                @NonNull CalendarEventItem newItem) {
-                    return oldItem.id == newItem.id;
+                    return oldItem.key.equals(newItem.key);
                 }
 
                 @Override

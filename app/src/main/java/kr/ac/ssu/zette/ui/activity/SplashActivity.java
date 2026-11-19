@@ -4,6 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.SystemClock;
+import android.util.Log;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
@@ -16,16 +20,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kr.ac.ssu.zette.R;
+import kr.ac.ssu.zette.data.local.SettingsStore;
+import kr.ac.ssu.zette.data.local.ZetteData;
+import kr.ac.ssu.zette.data.local.ZetteDatabase;
 import kr.ac.ssu.zette.databinding.ActivitySplashBinding;
 
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends AppCompatActivity {
+
+    private static final String TAG = "SplashActivity";
+    private static final long MIN_SHOW_MS = 2000;
+    private static final long MAX_WAIT_MS = 3000;
+
+    private final Handler handler = new Handler(Looper.getMainLooper());
+    private boolean navigated;
 
     String[] splashText = new String[5];
     ActivitySplashBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // 첫 화면부터 맞는 테마로 그리기 위해 super.onCreate 전에 적용
+        SettingsStore.getInstance(this).applySavedThemeMode();
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
 
@@ -49,12 +65,43 @@ public class SplashActivity extends AppCompatActivity {
         int selectedIndex = (int) (Math.random() * 5);
         binding.textSplash.setText(splashText[selectedIndex]);
 
-        // TODO - Script for Loading APP...
+        loadData();
+    }
 
-        binding.textLoading.setOnClickListener(view -> { // remove after writing Loading Script
-            startActivity(new Intent(SplashActivity.this, MainActivity.class));
-            finish();
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacksAndMessages(null);
+    }
+
+    // DB 열기 + 오늘 목록 미리 계산. 최소 2초는 보여주고, 3초가 지나면 끝나지 않아도 넘어간다.
+    private void loadData() {
+        long startedAt = SystemClock.elapsedRealtime();
+        handler.postDelayed(this::goToMain, MAX_WAIT_MS);
+        ZetteDatabase.IO.execute(() -> {
+            try {
+                ZetteData.init(getApplicationContext()).warmUp();
+                long elapsed = SystemClock.elapsedRealtime() - startedAt;
+                handler.postDelayed(this::goToMain, Math.max(0, MIN_SHOW_MS - elapsed));
+            } catch (RuntimeException e) {
+                Log.e(TAG, "데이터 준비 실패", e);
+                handler.post(this::showLoadError);
+            }
         });
+    }
 
+    private void goToMain() {
+        if (navigated || isFinishing()) return;
+        navigated = true;
+        handler.removeCallbacksAndMessages(null);
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
+    }
+
+    private void showLoadError() {
+        if (navigated || isFinishing()) return;
+        handler.removeCallbacksAndMessages(null);
+        binding.loading.setVisibility(View.GONE);
+        binding.textLoading.setText(R.string.splash_load_error);
     }
 }

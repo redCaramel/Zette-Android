@@ -11,6 +11,7 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.TextAppearanceSpan;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -39,6 +40,9 @@ import java.util.List;
 import java.util.Locale;
 
 import kr.ac.ssu.zette.R;
+import kr.ac.ssu.zette.data.local.Settings;
+import kr.ac.ssu.zette.data.local.SettingsStore;
+import kr.ac.ssu.zette.data.local.ZetteData;
 import kr.ac.ssu.zette.databinding.ActivityNewScheduleBinding;
 import kr.ac.ssu.zette.dto.Place;
 import kr.ac.ssu.zette.dto.Schedule;
@@ -100,9 +104,7 @@ public class NewScheduleActivity extends AppCompatActivity {
         setupRouteSettings();
         setupNonSupportBand();
 
-        binding.btnSave.setOnClickListener(v -> {
-            // TODO - 저장 구현
-        });
+        binding.btnSave.setOnClickListener(v -> saveSchedule());
     }
 
     @Override
@@ -282,9 +284,9 @@ public class NewScheduleActivity extends AppCompatActivity {
         binding.chipBuffer10.setText(getString(R.string.new_schedule_buffer_minutes, 10));
         binding.chipBuffer15.setText(getString(R.string.new_schedule_buffer_minutes, 15));
 
-        // TODO - 로컬 설정값 적용
-        binding.chipGroupRouteType.check(R.id.chip_route_min_time);
-        binding.chipGroupArrivalBuffer.check(R.id.chip_buffer_5);
+        Settings settings = SettingsStore.getInstance(this).get();
+        binding.chipGroupRouteType.check(routeChipId(settings.defaultRouteType));
+        binding.chipGroupArrivalBuffer.check(bufferChipId(settings.defaultArrivalBufferMinutes));
     }
 
     @NonNull
@@ -293,6 +295,62 @@ public class NewScheduleActivity extends AppCompatActivity {
         if (checkedId == R.id.chip_route_min_walk) return Schedule.RouteType.MinWalk;
         if (checkedId == R.id.chip_route_min_transfer) return Schedule.RouteType.MinTransfer;
         return Schedule.RouteType.MinTime;
+    }
+
+    private static int routeChipId(@NonNull Schedule.RouteType routeType) {
+        switch (routeType) {
+            case MinWalk:
+                return R.id.chip_route_min_walk;
+            case MinTransfer:
+                return R.id.chip_route_min_transfer;
+            case MinTime:
+            default:
+                return R.id.chip_route_min_time;
+        }
+    }
+
+    private static int bufferChipId(int minutes) {
+        switch (minutes) {
+            case 0:
+                return R.id.chip_buffer_none;
+            case 10:
+                return R.id.chip_buffer_10;
+            case 15:
+                return R.id.chip_buffer_15;
+            case 5:
+            default:
+                return R.id.chip_buffer_5;
+        }
+    }
+
+    private void saveSchedule() {
+        CharSequence nameText = binding.etName.getText();
+        String name = nameText == null ? "" : nameText.toString().trim();
+        if (name.isEmpty()) {
+            binding.tilName.setError(getString(R.string.new_schedule_name_required));
+            return;
+        }
+        binding.tilName.setError(null);
+        if (selectedPlace == null) {
+            Toast.makeText(this, R.string.new_schedule_place_required, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Place place = new Place(selectedPlace.id, selectedPlace.name, selectedPlace.address,
+                selectedPlace.lat, selectedPlace.lng, null);
+        Schedule schedule = new Schedule(0, name, date, arrivalTime, place,
+                getSelectedRouteType(), getSelectedArrivalBuffer());
+
+        binding.btnSave.setEnabled(false);
+        ZetteData.get(this).schedules.addSchedule(schedule, key -> {
+            if (isFinishing() || isDestroyed()) return;
+            if (key == null) {
+                binding.btnSave.setEnabled(true);
+                Toast.makeText(this, R.string.new_schedule_save_failed, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            finish();
+        });
     }
 
     public int getSelectedArrivalBuffer() {

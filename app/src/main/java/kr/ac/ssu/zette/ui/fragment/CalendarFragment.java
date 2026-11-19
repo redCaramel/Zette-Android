@@ -13,21 +13,24 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import kr.ac.ssu.zette.R;
+import kr.ac.ssu.zette.data.local.ScheduleRepository;
+import kr.ac.ssu.zette.data.local.ZetteData;
 import kr.ac.ssu.zette.databinding.FragmentCalendarBinding;
+import kr.ac.ssu.zette.dto.Schedule;
 import kr.ac.ssu.zette.ui.adapter.CalendarEventAdapter;
 import kr.ac.ssu.zette.ui.adapter.DateCellAdapter;
 import kr.ac.ssu.zette.ui.item.CalendarEventItem;
@@ -56,6 +59,16 @@ public class CalendarFragment extends Fragment {
     private YearMonth displayedMonth = YearMonth.from(selectedDate);
     private boolean expanded = false;
 
+    private ScheduleRepository repository;
+    @Nullable
+    private LocalDate observedDay;
+    @Nullable
+    private YearMonth observedMonth;
+    @Nullable
+    private LiveData<List<Schedule>> daySchedules;
+    @Nullable
+    private LiveData<Set<LocalDate>> monthDates;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -73,6 +86,8 @@ public class CalendarFragment extends Fragment {
             displayedMonth = YearMonth.parse(savedInstanceState.getString(KEY_DISPLAYED_MONTH));
             expanded = savedInstanceState.getBoolean(KEY_EXPANDED);
         }
+
+        repository = ZetteData.get(requireContext()).schedules;
 
         setupWeekdayLabels();
         setupDateStrip();
@@ -124,29 +139,49 @@ public class CalendarFragment extends Fragment {
         eventAdapter = new CalendarEventAdapter(new CalendarEventAdapter.OnEventActionListener() {
             @Override
             public void onEditClick(@NonNull CalendarEventItem item) {
+                // TODO - 일정 수정 화면 이동 (회차면 "이 일정만 수정" / "루틴 전체 수정" 선택)
             }
 
             @Override
             public void onDeleteClick(@NonNull CalendarEventItem item) {
+                // TODO - 일정 삭제 확인 화면(24) 연결 후 repository.deleteSchedule(item.key, null) 호출
             }
 
             @Override
             public void onAlarmToggle(@NonNull CalendarEventItem item, boolean on) {
-                List<CalendarEventItem> items = new ArrayList<>(eventAdapter.getCurrentList());
-                for (int i = 0; i < items.size(); i++) {
-                    if (items.get(i).id == item.id) {
-                        items.set(i, item.withAlarm(on));
-                        break;
-                    }
-                }
-                eventAdapter.submitList(items);
+                repository.setScheduleActivated(item.key, on);
             }
         });
         binding.rvEvents.setAdapter(eventAdapter);
+    }
 
-        List<CalendarEventItem> samples = createSampleEvents();
-        eventAdapter.submitList(samples);
-        binding.tvEventCount.setText(getString(R.string.calendar_event_count, samples.size()));
+    private void observeSchedules() {
+        if (!selectedDate.equals(observedDay)) {
+            if (daySchedules != null) daySchedules.removeObservers(getViewLifecycleOwner());
+            observedDay = selectedDate;
+            daySchedules = repository.observeSchedulesOn(selectedDate);
+            daySchedules.observe(getViewLifecycleOwner(), this::renderEvents);
+        }
+
+        YearMonth month = expanded ? displayedMonth : YearMonth.from(selectedDate);
+        if (!month.equals(observedMonth)) {
+            if (monthDates != null) monthDates.removeObservers(getViewLifecycleOwner());
+            observedMonth = month;
+            monthDates = repository.observeDatesWithSchedules(month);
+            monthDates.observe(getViewLifecycleOwner(), dates -> {
+                if (dates != null) dateAdapter.setEventDates(dates);
+            });
+        }
+    }
+
+    private void renderEvents(@Nullable List<Schedule> schedules) {
+        List<CalendarEventItem> items = new ArrayList<>();
+        String routineLabel = getString(R.string.calendar_routine_added);
+        if (schedules != null) {
+            for (Schedule s : schedules) items.add(CalendarEventItem.from(s, routineLabel));
+        }
+        eventAdapter.submitList(items);
+        binding.tvEventCount.setText(getString(R.string.calendar_event_count, items.size()));
     }
 
     private void selectDate(@NonNull LocalDate date) {
@@ -199,6 +234,7 @@ public class CalendarFragment extends Fragment {
         }
 
         binding.tvSelectedDate.setText(selectedDate.format(SELECTED_DATE_FORMAT));
+        observeSchedules();
     }
 
     @NonNull
@@ -223,26 +259,15 @@ public class CalendarFragment extends Fragment {
         }
         return dates;
     }
-    // TODO - 샘플 데이터 삭제, 백그라운드 연동
-    @NonNull
-    private List<CalendarEventItem> createSampleEvents() {
-        return Arrays.asList(
-                new CalendarEventItem(1, "출근 준비", LocalTime.of(8, 30), LocalTime.of(7, 50),
-                        "서울대입구역 3번 출구", true, getString(R.string.calendar_routine_added)),
-                new CalendarEventItem(2, "스터디 카페 모임", LocalTime.of(9, 30), LocalTime.of(8, 50),
-                        "합정역 4번 출구", true, null),
-                new CalendarEventItem(3, "점심 약속", LocalTime.of(12, 30), LocalTime.of(11, 40),
-                        "성수역 3번 출구", true, null),
-                new CalendarEventItem(4, "독서 모임", LocalTime.of(18, 30), LocalTime.of(17, 55),
-                        "종로3가역 5번 출구", false, null)
-        );
-    }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
         dateAdapter = null;
         eventAdapter = null;
+        observedDay = null;
+        observedMonth = null;
+        daySchedules = null;
+        monthDates = null;
     }
 }
