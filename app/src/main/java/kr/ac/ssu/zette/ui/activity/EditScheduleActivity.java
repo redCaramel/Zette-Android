@@ -8,7 +8,6 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import kr.ac.ssu.zette.R;
 import kr.ac.ssu.zette.data.local.ScheduleRepository;
@@ -16,6 +15,7 @@ import kr.ac.ssu.zette.data.local.ZetteData;
 import kr.ac.ssu.zette.dto.Place;
 import kr.ac.ssu.zette.dto.Schedule;
 import kr.ac.ssu.zette.dto.ScheduleKey;
+import kr.ac.ssu.zette.ui.OccurrenceChoiceDialog;
 
 // 새 일정 폼을 기존 일정 값으로 채워 수정한다. 루틴 회차면 그날만 바뀐다 (editOccurrence)
 public class EditScheduleActivity extends NewScheduleActivity {
@@ -37,14 +37,9 @@ public class EditScheduleActivity extends NewScheduleActivity {
             context.startActivity(intent(context, key));
             return;
         }
-        String[] choices = {context.getString(R.string.edit_occurrence_only), context.getString(R.string.edit_routine_all)};
-        new MaterialAlertDialogBuilder(context)
-                .setTitle(R.string.edit_occurrence_choice_title)
-                .setItems(choices, (dialog, which) -> context.startActivity(which == 0
-                        ? intent(context, key)
-                        : EditRoutineActivity.intent(context, key.routineId)))
-                .setNegativeButton(R.string.picker_cancel, null)
-                .show();
+        OccurrenceChoiceDialog.show(context, key, false, wholeRoutine -> context.startActivity(wholeRoutine
+                ? EditRoutineActivity.intent(context, key.routineId)
+                : intent(context, key)));
     }
 
     @Override

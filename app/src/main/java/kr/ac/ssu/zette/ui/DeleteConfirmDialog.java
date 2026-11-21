@@ -12,6 +12,7 @@ import androidx.appcompat.app.AlertDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import kr.ac.ssu.zette.R;
+import kr.ac.ssu.zette.data.local.ScheduleRepository;
 import kr.ac.ssu.zette.data.local.ZetteData;
 import kr.ac.ssu.zette.databinding.DialogDeleteConfirmBinding;
 import kr.ac.ssu.zette.dto.ScheduleKey;
@@ -22,11 +23,21 @@ public final class DeleteConfirmDialog {
     private DeleteConfirmDialog() {
     }
 
-    // 일정 삭제. 루틴 회차면 그날만 지워지고 루틴은 남는다 (repository.deleteSchedule)
+    // 일정 삭제. 루틴 회차면 "이 일정만 삭제"(그날만) / "루틴 전체 삭제"를 고르는 창(24-1)을 띄운다
     public static void confirmSchedule(@NonNull Context context, @NonNull ScheduleKey key) {
-        show(context, R.string.delete_schedule_title,
-                key.isOccurrence() ? R.string.delete_occurrence_message : R.string.delete_schedule_message,
-                () -> ZetteData.get(context).schedules.deleteSchedule(key, null));
+        ScheduleRepository repository = ZetteData.get(context).schedules;
+        if (key.isOccurrence()) {
+            OccurrenceChoiceDialog.show(context, key, true, wholeRoutine -> {
+                if (wholeRoutine) {
+                    repository.deleteRoutine(key.routineId, null);
+                } else {
+                    repository.deleteSchedule(key, null);
+                }
+            });
+            return;
+        }
+        show(context, R.string.delete_schedule_title, R.string.delete_schedule_message,
+                () -> repository.deleteSchedule(key, null));
     }
 
     public static void show(@NonNull Context context, @StringRes int title, @StringRes int message,

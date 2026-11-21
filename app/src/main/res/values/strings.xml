@@ -144,13 +144,22 @@
 
     <string name="edit_schedule_title">일정 수정</string>
     <string name="edit_routine_title">루틴 수정</string>
-    <string name="edit_occurrence_choice_title">반복 일정 수정</string>
-    <string name="edit_occurrence_only">이 일정만 수정</string>
-    <string name="edit_routine_all">루틴 전체 수정</string>
+    <string name="choice_message">‘%1$s’%2$s %3$s에\n반복되는 루틴 일정이에요.</string>
+    <string name="choice_next">다음</string>
+    <string name="choice_delete">삭제</string>
+    <string name="choice_edit_title">반복 일정을 수정할까요?</string>
+    <string name="choice_edit_this">이 일정만 수정</string>
+    <string name="choice_edit_this_desc">%1$s 일정만 바꿔요.\n다른 날의 일정은 그대로예요.</string>
+    <string name="choice_edit_all">루틴 전체 수정</string>
+    <string name="choice_edit_all_desc">오늘 이후의 모든 일정에 적용돼요.\n지난 기록은 바뀌지 않아요.</string>
+    <string name="choice_delete_title">반복 일정을 삭제할까요?</string>
+    <string name="choice_delete_this">이 일정만 삭제</string>
+    <string name="choice_delete_this_desc">%1$s 하루만 지워요.\n다른 날의 일정은 그대로예요.</string>
+    <string name="choice_delete_all">루틴 전체 삭제</string>
+    <string name="choice_delete_all_desc">앞으로의 일정이 모두 사라져요.\n지난 기록은 남아요.</string>
 
     <string name="delete_schedule_title">일정을 삭제할까요?</string>
     <string name="delete_schedule_message">삭제하면 예약된 출발 알림도 함께 취소돼요.</string>
-    <string name="delete_occurrence_message">이 날의 일정만 삭제되고 루틴은 그대로 남아요. 예약된 출발 알림도 함께 취소돼요.</string>
     <string name="delete_routine_title">루틴을 삭제할까요?</string>
     <string name="delete_routine_message">‘%1$s’의 앞으로의 일정이 모두 사라져요.\n지난 기록은 그대로 남아요.</string>
     <string name="routine_delete">루틴 삭제</string>

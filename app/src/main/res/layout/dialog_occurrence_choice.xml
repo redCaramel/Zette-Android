@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_round_lg"
+    android:backgroundTint="@color/surface_raised"
+    android:orientation="vertical"
+    android:padding="@dimen/space_4">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.Zette.Title"
+        android:textColor="@color/text_primary"
+        tools:text="반복 일정을 삭제할까요?" />
+
+    <TextView
+        android:id="@+id/tv_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_3"
+        android:textAppearance="@style/TextAppearance.Zette.BodyLarge"
+        android:textColor="@color/text_primary"
+        tools:text="‘출근 준비’는 매주 월·수·금에\n반복되는 루틴 일정이에요." />
+
+    <LinearLayout
+        android:id="@+id/option_this"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_3"
+        android:background="@drawable/bg_choice_option"
+        android:orientation="horizontal"
+        android:padding="12dp">
+
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/radio_this"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:clickable="false"
+            android:focusable="false"
+            android:importantForAccessibility="no"
+            app:buttonTint="@color/choice_radio_tint" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_this_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.Zette.Subtitle"
+                android:textColor="@color/text_primary"
+                tools:text="이 일정만 삭제" />
+
+            <TextView
+                android:id="@+id/tv_this_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textAppearance="@style/TextAppearance.Zette.Caption"
+                android:textColor="@color/text_secondary"
+                tools:text="11월 20일(금) 하루만 지워요.\n다른 날의 일정은 그대로예요." />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/option_all"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_2"
+        android:background="@drawable/bg_choice_option"
+        android:orientation="horizontal"
+        android:padding="12dp">
+
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/radio_all"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:clickable="false"
+            android:focusable="false"
+            android:importantForAccessibility="no"
+            app:buttonTint="@color/choice_radio_tint" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_all_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.Zette.Subtitle"
+                android:textColor="@color/text_primary"
+                tools:text="루틴 전체 삭제" />
+
+            <TextView
+                android:id="@+id/tv_all_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textAppearance="@style/TextAppearance.Zette.Caption"
+                android:textColor="@color/text_secondary"
+                tools:text="앞으로의 일정이 모두 사라져요.\n지난 기록은 남아요." />
+        </LinearLayout>
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_next"
+        style="@style/Widget.Zette.Button.Primary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_3"
+        android:text="@string/choice_next"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_delete"
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_3"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:minHeight="48dp"
+        android:text="@string/choice_delete"
+        android:textAppearance="@style/TextAppearance.Zette.ButtonSecondary"
+        android:textColor="@color/semantic_error"
+        android:visibility="gone"
+        app:cornerRadius="@dimen/radius_full"
+        app:strokeColor="@color/semantic_error" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_cancel"
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_2"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:minHeight="48dp"
+        android:text="@string/picker_cancel"
+        android:textAppearance="@style/TextAppearance.Zette.ButtonSecondary"
+        android:textColor="@color/green_accent"
+        app:cornerRadius="@dimen/radius_full"
+        app:strokeColor="@color/green_accent" />
+</LinearLayout>
