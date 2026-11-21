@@ -4,6 +4,10 @@
 
     <string name="home_until_departure">출발까지</string>
     <string name="home_remaining">남았어요</string>
+    <string name="home_hero_title">%1$s에\n%2$s%3$s 있어요!</string>
+    <string name="home_left_hours_minutes">%1$d시간 %2$d분</string>
+    <string name="home_left_minutes">%1$d분</string>
+    <string name="home_sample_left_time">1시간 20분</string>
     <string name="fab_new_schedule">새 일정</string>
     <string name="fab_new_routine">새 루틴</string>
 
@@ -137,4 +141,43 @@
     <string name="new_routine_time_helper">이 시각까지 도착하도록 알려요</string>
     <string name="new_routine_default_note">설정의 기본값(%1$s · %2$s)을 따르고 있어요. 이 루틴만 다르게 고를 수 있어요.</string>
     <string name="new_routine_save">루틴 저장</string>
+
+    <string name="edit_schedule_title">일정 수정</string>
+    <string name="edit_routine_title">루틴 수정</string>
+    <string name="edit_occurrence_choice_title">반복 일정 수정</string>
+    <string name="edit_occurrence_only">이 일정만 수정</string>
+    <string name="edit_routine_all">루틴 전체 수정</string>
+
+    <string name="delete_schedule_title">일정을 삭제할까요?</string>
+    <string name="delete_schedule_message">삭제하면 예약된 출발 알림도 함께 취소돼요.</string>
+    <string name="delete_occurrence_message">이 날의 일정만 삭제되고 루틴은 그대로 남아요. 예약된 출발 알림도 함께 취소돼요.</string>
+    <string name="delete_routine_title">루틴을 삭제할까요?</string>
+    <string name="delete_routine_message">‘%1$s’의 앞으로의 일정이 모두 사라져요.\n지난 기록은 그대로 남아요.</string>
+    <string name="routine_delete">루틴 삭제</string>
+
+    <string name="detail_title">일정 상세</string>
+    <string name="detail_more">더보기</string>
+    <string name="detail_name_label">일정명</string>
+    <string name="detail_arrival_label">도착 시각</string>
+    <string name="detail_arrival_value">%1$s %2$s까지</string>
+    <string name="detail_day_today">오늘(%1$s)</string>
+    <string name="detail_day_tomorrow">내일(%1$s)</string>
+    <string name="detail_place_label">도착 장소</string>
+    <string name="detail_travel_label">예상 이동 시간 (지금 위치 기준)</string>
+    <string name="detail_travel_value">약 %1$d분 · %2$s</string>
+    <string name="detail_travel_minutes">약 %1$d분</string>
+    <string name="detail_route_label">경로 설정</string>
+    <string name="detail_route_value">%1$s · %2$s</string>
+    <string name="detail_departure_label">출발 알림 (예상)</string>
+    <string name="detail_open_kakao_map">카카오맵에서 경로 보기</string>
+    <string name="detail_edit">수정하기</string>
+    <string name="detail_delete">삭제하기</string>
+
+    <string name="detail_sample_travel">약 40분 · 버스 472·152·753 → 지하철 2호선</string>
+    <string name="detail_sample_departure">오후 2:15</string>
+    <string name="detail_sample_bus_number">472</string>
+    <string name="detail_sample_boarding_stop">강남역 정류장 승차</string>
+    <string name="detail_sample_boarding_meta">472·152·753번 · 도보 4분</string>
+    <string name="detail_sample_arrival_in">8분 후</string>
+    <string name="detail_sample_arrival_bus">472번 도착 예정</string>
 </resources>

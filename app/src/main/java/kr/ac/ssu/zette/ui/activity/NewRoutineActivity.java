@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.material.tabs.TabLayout;
@@ -69,32 +70,63 @@ public class NewRoutineActivity extends NewScheduleActivity {
 
     @Override
     protected void save() {
+        Routine routine = buildRoutine();
+        if (routine == null) return;
+
+        binding.btnSave.setEnabled(false);
+        ZetteData.get(this).schedules.addRoutine(routine, id -> onSaved(id != null));
+    }
+
+    // 폼 값을 검사해 루틴을 만든다. 빠진 값이 있으면 안내하고 null (id 는 0)
+    @Nullable
+    protected Routine buildRoutine() {
         String name = requireName(R.string.new_routine_name_required);
-        if (name == null) return;
+        if (name == null) return null;
         boolean weekly = binding.tabRepeat.getSelectedTabPosition() == TAB_WEEKLY;
         if (weekly && !anySelected(weekdays)) {
             Toast.makeText(this, R.string.new_routine_weekdays_required, Toast.LENGTH_SHORT).show();
-            return;
+            return null;
         }
         Place place = requirePlace();
-        if (place == null) return;
+        if (place == null) return null;
 
-        Routine routine = new Routine(0, name,
+        return new Routine(0, name,
                 weekly ? Routine.RepeatType.WEEKLY : Routine.RepeatType.MONTHLY,
                 arrivalTime, place, getSelectedRouteType(), getSelectedArrivalBuffer(),
                 weekly ? weekdays.clone() : null,
                 weekly ? null : Collections.singletonList(monthDay));
+    }
 
-        binding.btnSave.setEnabled(false);
-        ZetteData.get(this).schedules.addRoutine(routine, id -> {
-            if (isFinishing() || isDestroyed()) return;
-            if (id == null) {
-                binding.btnSave.setEnabled(true);
-                Toast.makeText(this, R.string.new_schedule_save_failed, Toast.LENGTH_SHORT).show();
-                return;
+    // 저장 결과: 성공이면 닫고, 실패면 다시 누를 수 있게 한다
+    protected void onSaved(boolean success) {
+        if (isFinishing() || isDestroyed()) return;
+        if (!success) {
+            binding.btnSave.setEnabled(true);
+            Toast.makeText(this, R.string.new_schedule_save_failed, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        finish();
+    }
+
+    // 수정 화면이 기존 루틴으로 폼을 채운다
+    protected void fillRoutine(@NonNull Routine r) {
+        fillForm(r.name, null, r.arrivalTime, r.place, r.routeType, r.arrivalBuffer);
+
+        boolean weekly = r.repeatType != Routine.RepeatType.MONTHLY;
+        if (weekly) {
+            for (int i = 0; i < weekdays.length; i++) {
+                weekdays[i] = r.weekdays != null && i < r.weekdays.length && r.weekdays[i];
             }
-            finish();
-        });
+        } else if (r.repeatDate != null && !r.repeatDate.isEmpty()) {
+            monthDay = r.repeatDate.get(0);   // 화면은 하루만 고른다
+        }
+        for (int i = 0; i < DISPLAY_ORDER.length; i++) {
+            View toggle = ((ViewGroup) binding.layoutWeekdayToggles.getChildAt(i)).getChildAt(0);
+            toggle.setSelected(weekdays[DISPLAY_ORDER[i].getValue() - 1]);
+        }
+        renderRepeatDay();
+        TabLayout.Tab tab = binding.tabRepeat.getTabAt(weekly ? TAB_WEEKLY : TAB_WEEKLY + 1);
+        if (tab != null) tab.select();
     }
 
     private void setupWeekdayToggles() {

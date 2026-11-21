@@ -31,12 +31,36 @@
                 android:textColor="@color/text_primary"
                 tools:text="출근 준비" />
 
+            <ImageButton
+                android:id="@+id/btn_edit"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="@dimen/space_1"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/edit_routine_title"
+                android:padding="9dp"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/ic_edit"
+                app:tint="@color/text_secondary" />
+
+            <ImageButton
+                android:id="@+id/btn_delete"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="@dimen/space_1"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/routine_delete"
+                android:padding="9dp"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/ic_delete"
+                app:tint="@color/text_secondary" />
+
             <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/switch_routine"
                 style="@style/Widget.Zette.Switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/space_2"
+                android:layout_marginStart="@dimen/space_1"
                 tools:checked="true" />
         </LinearLayout>
 

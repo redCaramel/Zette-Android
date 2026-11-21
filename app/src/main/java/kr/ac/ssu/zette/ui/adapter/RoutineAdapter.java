@@ -25,7 +25,9 @@ import kr.ac.ssu.zette.ui.item.RoutineItem;
 public class RoutineAdapter extends ListAdapter<RoutineItem, RoutineAdapter.ViewHolder> {
 
     public interface OnRoutineActionListener {
-        void onRoutineClick(@NonNull RoutineItem item);
+        void onEditClick(@NonNull RoutineItem item);
+
+        void onDeleteClick(@NonNull RoutineItem item);
 
         void onRoutineToggle(@NonNull RoutineItem item, boolean enabled);
     }
@@ -89,10 +91,12 @@ public class RoutineAdapter extends ListAdapter<RoutineItem, RoutineAdapter.View
             binding.switchRoutine.setChecked(item.enabled);
 
             if (listener == null) {
-                binding.getRoot().setOnClickListener(null);
+                binding.btnEdit.setOnClickListener(null);
+                binding.btnDelete.setOnClickListener(null);
                 return;
             }
-            binding.getRoot().setOnClickListener(v -> listener.onRoutineClick(item));
+            binding.btnEdit.setOnClickListener(v -> listener.onEditClick(item));
+            binding.btnDelete.setOnClickListener(v -> listener.onDeleteClick(item));
             binding.switchRoutine.setOnCheckedChangeListener(
                     (button, checked) -> listener.onRoutineToggle(item, checked));
         }

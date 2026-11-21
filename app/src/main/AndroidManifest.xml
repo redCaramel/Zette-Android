@@ -49,6 +49,20 @@
             android:windowSoftInputMode="adjustResize" />
 
         <activity
+            android:name=".ui.activity.EditRoutineActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".ui.activity.EditScheduleActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".ui.activity.ScheduleDetailActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".ui.activity.ThemeSettingActivity"
             android:exported="false" />
 

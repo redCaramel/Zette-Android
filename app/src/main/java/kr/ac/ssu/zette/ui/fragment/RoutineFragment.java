@@ -17,6 +17,8 @@ import kr.ac.ssu.zette.data.local.ScheduleRepository;
 import kr.ac.ssu.zette.data.local.ZetteData;
 import kr.ac.ssu.zette.databinding.FragmentRoutineBinding;
 import kr.ac.ssu.zette.dto.Routine;
+import kr.ac.ssu.zette.ui.DeleteConfirmDialog;
+import kr.ac.ssu.zette.ui.activity.EditRoutineActivity;
 import kr.ac.ssu.zette.ui.adapter.RoutineAdapter;
 import kr.ac.ssu.zette.ui.item.RoutineItem;
 
@@ -41,8 +43,15 @@ public class RoutineFragment extends Fragment {
 
         routineAdapter = new RoutineAdapter(new RoutineAdapter.OnRoutineActionListener() {
             @Override
-            public void onRoutineClick(@NonNull RoutineItem item) {
-                // TODO - 루틴 수정 화면 이동
+            public void onEditClick(@NonNull RoutineItem item) {
+                startActivity(EditRoutineActivity.intent(requireContext(), item.id));
+            }
+
+            @Override
+            public void onDeleteClick(@NonNull RoutineItem item) {
+                DeleteConfirmDialog.show(requireContext(), getString(R.string.delete_routine_title),
+                        getString(R.string.delete_routine_message, item.name),
+                        () -> repository.deleteRoutine(item.id, null));
             }
 
             @Override

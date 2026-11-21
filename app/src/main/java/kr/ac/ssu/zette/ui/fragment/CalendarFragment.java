@@ -31,6 +31,8 @@ import kr.ac.ssu.zette.data.local.ScheduleRepository;
 import kr.ac.ssu.zette.data.local.ZetteData;
 import kr.ac.ssu.zette.databinding.FragmentCalendarBinding;
 import kr.ac.ssu.zette.dto.Schedule;
+import kr.ac.ssu.zette.ui.DeleteConfirmDialog;
+import kr.ac.ssu.zette.ui.activity.EditScheduleActivity;
 import kr.ac.ssu.zette.ui.adapter.CalendarEventAdapter;
 import kr.ac.ssu.zette.ui.adapter.DateCellAdapter;
 import kr.ac.ssu.zette.ui.item.CalendarEventItem;
@@ -139,12 +141,12 @@ public class CalendarFragment extends Fragment {
         eventAdapter = new CalendarEventAdapter(new CalendarEventAdapter.OnEventActionListener() {
             @Override
             public void onEditClick(@NonNull CalendarEventItem item) {
-                // TODO - 일정 수정 화면 이동 (회차면 "이 일정만 수정" / "루틴 전체 수정" 선택)
+                EditScheduleActivity.open(requireContext(), item.key);
             }
 
             @Override
             public void onDeleteClick(@NonNull CalendarEventItem item) {
-                // TODO - 일정 삭제 확인 화면(24) 연결 후 repository.deleteSchedule(item.key, null) 호출
+                DeleteConfirmDialog.confirmSchedule(requireContext(), item.key);
             }
 
             @Override
@@ -154,7 +156,6 @@ public class CalendarFragment extends Fragment {
         });
         binding.rvEvents.setAdapter(eventAdapter);
     }
-
     private void observeSchedules() {
         if (!selectedDate.equals(observedDay)) {
             if (daySchedules != null) daySchedules.removeObservers(getViewLifecycleOwner());

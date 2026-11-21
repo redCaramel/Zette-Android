@@ -80,7 +80,7 @@ public class NewScheduleActivity extends AppCompatActivity {
     @Nullable
     private Runnable pendingSearch;
 
-    private LocalDate date;
+    protected LocalDate date;
     protected LocalTime arrivalTime;
     @Nullable
     protected Place selectedPlace;
@@ -116,6 +116,24 @@ public class NewScheduleActivity extends AppCompatActivity {
 
     protected void save() {
         saveSchedule();
+    }
+
+    // 수정 화면이 기존 값으로 폼을 채운다. date 가 null 이면 날짜는 그대로 둔다 (루틴)
+    protected void fillForm(@Nullable String name, @Nullable LocalDate date, @NonNull LocalTime time,
+                            @Nullable Place place, @Nullable Schedule.RouteType routeType, int arrivalBuffer) {
+        binding.etName.setText(name);
+        if (date != null) this.date = date;
+        arrivalTime = time;
+        renderDateTime();
+
+        if (place != null) {
+            selectedPlace = place;
+            searchAdapter.setSelectedPlaceId(place.id);
+            renderSelectedPlace();
+            setEstimatedRoute(SAMPLE_TRAVEL_MINUTES);
+        }
+        if (routeType != null) binding.chipGroupRouteType.check(routeChipId(routeType));
+        binding.chipGroupArrivalBuffer.check(bufferChipId(arrivalBuffer));
     }
 
     @Override
