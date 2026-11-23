@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.ColorRes;
@@ -28,6 +29,7 @@ import kr.ac.ssu.zette.dto.Schedule;
 import kr.ac.ssu.zette.dto.ScheduleKey;
 import kr.ac.ssu.zette.ui.DeleteConfirmDialog;
 import kr.ac.ssu.zette.ui.KakaoMap;
+import kr.ac.ssu.zette.ui.Loading;
 import kr.ac.ssu.zette.ui.item.ScheduleCardItem;
 
 // 일정 상세 (Figma 06). 승차 정보 카드와 경로가 계산되지 않은 값은 아직 샘플로 보여준다
@@ -43,6 +45,17 @@ public class ScheduleDetailActivity extends AppCompatActivity {
             DateTimeFormatter.ofPattern("M월 d일(E)", Locale.KOREAN);
 
     private ActivityScheduleDetailBinding binding;
+    // 06-L: 경로 계산이 끝나기 전엔 이동 시간·출발 알림 "계산 중…", 승차 정보·지도는 스피너
+    private boolean routeLoading = true;
+    @Nullable
+    private Schedule lastSchedule;
+    private final Runnable routeLoaded = () -> {
+        routeLoading = false;
+        binding.layoutBoardingLoading.getRoot().setVisibility(View.GONE);
+        binding.layoutBoarding.setVisibility(View.VISIBLE);
+        binding.pbMap.setVisibility(View.GONE);
+        if (lastSchedule != null) bind(lastSchedule);
+    };
 
     @NonNull
     public static Intent intent(@NonNull Context context, @NonNull ScheduleKey key) {
@@ -69,6 +82,11 @@ public class ScheduleDetailActivity extends AppCompatActivity {
         ScheduleKey key = ScheduleKey.decode(encodedKey);
 
         binding.btnBack.setOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
+
+        binding.layoutBoardingLoading.tvLoading.setText(R.string.detail_boarding_loading);
+        // TODO - api연결 구현: 경로·승차 정보 응답 대신 3초 대기. 승차 카드 높이는 invisible 로 유지
+        binding.getRoot().postDelayed(routeLoaded, Loading.FAKE_DELAY_MS);
+
         binding.btnEdit.setOnClickListener(v -> EditScheduleActivity.open(this, key));
         // 삭제되면 아래 observeSchedule 이 null 을 받아 화면을 닫는다
         binding.btnDelete.setOnClickListener(v -> DeleteConfirmDialog.confirmSchedule(this, key));
@@ -83,22 +101,34 @@ public class ScheduleDetailActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (binding != null) binding.getRoot().removeCallbacks(routeLoaded);
+    }
+
     private void bind(@NonNull Schedule s) {
+        lastSchedule = s;
         binding.tvName.setText(s.name);
         binding.tvArrival.setText(getString(R.string.detail_arrival_value,
                 formatDay(s.date), s.arrivalTime.format(TIME_FORMAT)));
         binding.tvPlace.setText(s.place != null ? s.place.name : null);
         binding.btnOpenMap.setEnabled(KakaoMap.canRoute(s.place));
         binding.btnOpenMap.setOnClickListener(v -> KakaoMap.openRoute(this, s.place));
-        binding.tvTravel.setText(formatTravel(s));
         binding.tvRoute.setText(getString(R.string.detail_route_value,
                 getString(routeTypeLabel(s.routeType)), formatBuffer(s.arrivalBuffer)));
+        bindStatus(ScheduleCardItem.from(s).status);
 
+        if (routeLoading) {
+            binding.tvTravel.setText(R.string.detail_calculating);
+            binding.tvDeparture.setText(R.string.detail_calculating);
+            return;
+        }
+        binding.tvTravel.setText(formatTravel(s));
         LocalDateTime departure = s.computed != null ? s.computed.expectedDeparture : null;
         binding.tvDeparture.setText(departure != null
                 ? departure.toLocalTime().format(TIME_FORMAT)
                 : getString(R.string.detail_sample_departure));
-        bindStatus(ScheduleCardItem.from(s).status);
     }
 
     @NonNull

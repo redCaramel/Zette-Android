@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 
@@ -24,6 +25,7 @@ import kr.ac.ssu.zette.data.local.ZetteData;
 import kr.ac.ssu.zette.databinding.FragmentHomeBinding;
 import kr.ac.ssu.zette.dto.Schedule;
 import kr.ac.ssu.zette.dto.ScheduleStatus;
+import kr.ac.ssu.zette.ui.Loading;
 import kr.ac.ssu.zette.ui.activity.RealtimeArrivalActivity;
 import kr.ac.ssu.zette.ui.activity.ScheduleDetailActivity;
 import kr.ac.ssu.zette.ui.adapter.ScheduleAdapter;
@@ -43,6 +45,14 @@ public class HomeFragment extends Fragment {
     private List<Schedule> latestSchedules;
     @Nullable
     private Schedule heroSchedule;
+    // 02-L1: 오늘 일정을 처음 불러오는 동안 Hero·일정 카드 스켈레톤
+    private Loading.Gate firstLoad;
+    // 02-L2: 출발 시각을 서버에서 받아오는 동안 Hero 남은 시간 자리에 "출발 시각 계산 중…"
+    private boolean heroLoading;
+    private final Runnable heroLoaded = () -> {
+        heroLoading = false;
+        if (binding != null) renderHero(latestSchedules);
+    };
 
     private static final DateTimeFormatter HERO_TIME_FORMAT =
             DateTimeFormatter.ofPattern("a h시 mm분", Locale.KOREAN);
@@ -85,6 +95,16 @@ public class HomeFragment extends Fragment {
                 startActivity(RealtimeArrivalActivity.intent(requireContext(), heroSchedule.key()));
             }
         });
+
+        firstLoad = new Loading.Gate(binding.heroSkeleton.getRoot(), binding.layoutScheduleSkeleton);
+        firstLoad.start();
+
+        binding.layoutHeroCalculating.tvLoading.setText(R.string.home_hero_calculating);
+        binding.layoutHeroCalculating.tvLoading.setTextColor(
+                ContextCompat.getColor(requireContext(), R.color.text_on_dark_soft));
+        // TODO - api연결 구현: 출발 시각 계산 응답 대신 3초 대기
+        heroLoading = true;
+        binding.getRoot().postDelayed(heroLoaded, Loading.FAKE_DELAY_MS);
     }
 
     @Override
@@ -104,7 +124,7 @@ public class HomeFragment extends Fragment {
         }
         observedDate = date;
         todaySchedules = repository.observeSchedulesOn(date);
-        todaySchedules.observe(getViewLifecycleOwner(), this::render);
+        todaySchedules.observe(getViewLifecycleOwner(), list -> firstLoad.finish(() -> render(list)));
     }
 
     private void render(@Nullable List<Schedule> schedules) {
@@ -131,6 +151,13 @@ public class HomeFragment extends Fragment {
         binding.tvHeroTitle.setText(getString(R.string.home_hero_title,
                 s.arrivalTime.format(HERO_TIME_FORMAT), s.name, subjectParticle(s.name)));
         binding.tvHeroPlace.setText(s.place != null ? s.place.name : null);
+
+        binding.layoutHeroCountdown.setVisibility(heroLoading ? View.GONE : View.VISIBLE);
+        binding.layoutHeroCalculating.getRoot().setVisibility(heroLoading ? View.VISIBLE : View.GONE);
+        if (heroLoading) {
+            binding.tvHeroDeparture.setText(R.string.home_hero_departure_calculating);
+            return;
+        }
 
         // TODO - 출발 시각은 백그라운드 경로 계산 결과. 아직 없으면 샘플을 보여준다
         LocalDateTime departure = s.computed != null ? s.computed.expectedDeparture : null;
@@ -182,6 +209,9 @@ public class HomeFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        binding.getRoot().removeCallbacks(heroLoaded);
+        firstLoad.cancel();
+        heroLoading = false;
         binding = null;
         scheduleAdapter = null;
         observedDate = null;

@@ -18,6 +18,7 @@ import kr.ac.ssu.zette.data.local.ZetteData;
 import kr.ac.ssu.zette.databinding.FragmentRoutineBinding;
 import kr.ac.ssu.zette.dto.Routine;
 import kr.ac.ssu.zette.ui.DeleteConfirmDialog;
+import kr.ac.ssu.zette.ui.Loading;
 import kr.ac.ssu.zette.ui.activity.EditRoutineActivity;
 import kr.ac.ssu.zette.ui.adapter.RoutineAdapter;
 import kr.ac.ssu.zette.ui.item.RoutineItem;
@@ -26,6 +27,7 @@ public class RoutineFragment extends Fragment {
 
     private FragmentRoutineBinding binding;
     private RoutineAdapter routineAdapter;
+    private Loading.Gate firstLoad;
     private ScheduleRepository repository;
 
     @Nullable
@@ -61,7 +63,10 @@ public class RoutineFragment extends Fragment {
         });
         binding.rvRoutines.setAdapter(routineAdapter);
 
-        repository.observeRoutines().observe(getViewLifecycleOwner(), this::render);
+        // 14-L: 첫 루틴 목록을 불러오는 동안 스켈레톤 (300ms 안에 끝나면 안 보임)
+        firstLoad = new Loading.Gate(binding.layoutSkeleton);
+        firstLoad.start();
+        repository.observeRoutines().observe(getViewLifecycleOwner(), list -> firstLoad.finish(() -> render(list)));
     }
 
     private void render(@Nullable List<Routine> routines) {
@@ -76,6 +81,7 @@ public class RoutineFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        firstLoad.cancel();
         binding = null;
         routineAdapter = null;
     }

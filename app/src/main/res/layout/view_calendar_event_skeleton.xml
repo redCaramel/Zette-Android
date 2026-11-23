@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:importantForAccessibility="noHideDescendants"
+    android:orientation="horizontal"
+    android:padding="@dimen/space_3">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="56dp"
+            android:layout_height="16dp"
+            android:background="@drawable/bg_skeleton_bone"
+            android:backgroundTint="@color/state_disabled_fill" />
+
+        <View
+            android:layout_width="40dp"
+            android:layout_height="12dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/bg_skeleton_bone"
+            android:backgroundTint="@color/state_disabled_fill" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="4dp"
+        android:layout_height="72dp"
+        android:layout_marginStart="12dp"
+        android:background="@color/state_disabled_fill" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="150dp"
+            android:layout_height="18dp"
+            android:background="@drawable/bg_skeleton_bone"
+            android:backgroundTint="@color/state_disabled_fill" />
+
+        <View
+            android:layout_width="190dp"
+            android:layout_height="14dp"
+            android:layout_marginTop="@dimen/space_2"
+            android:background="@drawable/bg_skeleton_bone"
+            android:backgroundTint="@color/state_disabled_fill" />
+
+        <View
+            android:layout_width="110dp"
+            android:layout_height="14dp"
+            android:layout_marginTop="@dimen/space_2"
+            android:background="@drawable/bg_skeleton_bone"
+            android:backgroundTint="@color/state_disabled_fill" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="52dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="12dp"
+        android:background="@drawable/bg_round_full"
+        android:backgroundTint="@color/state_disabled_fill" />
+</LinearLayout>

@@ -32,6 +32,7 @@ import kr.ac.ssu.zette.data.local.ZetteData;
 import kr.ac.ssu.zette.databinding.FragmentCalendarBinding;
 import kr.ac.ssu.zette.dto.Schedule;
 import kr.ac.ssu.zette.ui.DeleteConfirmDialog;
+import kr.ac.ssu.zette.ui.Loading;
 import kr.ac.ssu.zette.ui.activity.EditScheduleActivity;
 import kr.ac.ssu.zette.ui.adapter.CalendarEventAdapter;
 import kr.ac.ssu.zette.ui.adapter.DateCellAdapter;
@@ -68,6 +69,8 @@ public class CalendarFragment extends Fragment {
     private YearMonth observedMonth;
     @Nullable
     private LiveData<List<Schedule>> daySchedules;
+    // 12-L: 첫 일정 목록을 불러오는 동안 스켈레톤 (300ms 안에 끝나면 안 보임)
+    private Loading.Gate firstLoad;
     @Nullable
     private LiveData<Set<LocalDate>> monthDates;
 
@@ -94,6 +97,8 @@ public class CalendarFragment extends Fragment {
         setupWeekdayLabels();
         setupDateStrip();
         setupEventList();
+        firstLoad = new Loading.Gate(binding.layoutSkeleton);
+        firstLoad.start();
         renderCalendar();
     }
 
@@ -161,7 +166,7 @@ public class CalendarFragment extends Fragment {
             if (daySchedules != null) daySchedules.removeObservers(getViewLifecycleOwner());
             observedDay = selectedDate;
             daySchedules = repository.observeSchedulesOn(selectedDate);
-            daySchedules.observe(getViewLifecycleOwner(), this::renderEvents);
+            daySchedules.observe(getViewLifecycleOwner(), list -> firstLoad.finish(() -> renderEvents(list)));
         }
 
         YearMonth month = expanded ? displayedMonth : YearMonth.from(selectedDate);
@@ -263,6 +268,7 @@ public class CalendarFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        firstLoad.cancel();
         binding = null;
         dateAdapter = null;
         eventAdapter = null;

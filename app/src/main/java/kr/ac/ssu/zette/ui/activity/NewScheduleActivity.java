@@ -50,13 +50,15 @@ import kr.ac.ssu.zette.databinding.ActivityNewScheduleBinding;
 import kr.ac.ssu.zette.dto.Place;
 import kr.ac.ssu.zette.dto.Schedule;
 import kr.ac.ssu.zette.ui.BufferDialogs;
+import kr.ac.ssu.zette.ui.Loading;
 import kr.ac.ssu.zette.ui.adapter.PlaceSearchAdapter;
 
 public class NewScheduleActivity extends AppCompatActivity {
 
     private static final boolean DEBUG_IS_NONSUPPORT = false;
 
-    private static final long SEARCH_DELAY_MS = 1000;
+    // TODO - api연결 구현: 장소 검색 응답 대신 3초 대기
+    private static final long SEARCH_DELAY_MS = Loading.FAKE_DELAY_MS;
     private static final int MAX_SEARCH_RESULTS = 3;
     private static final int SAMPLE_TRAVEL_MINUTES = 40;
 
@@ -81,6 +83,7 @@ public class NewScheduleActivity extends AppCompatActivity {
     private final Handler searchHandler = new Handler(Looper.getMainLooper());
     @Nullable
     private Runnable pendingSearch;
+    private final Runnable estimatedRouteLoaded = () -> setEstimatedRoute(SAMPLE_TRAVEL_MINUTES);
 
     protected LocalDate date;
     protected LocalTime arrivalTime;
@@ -136,7 +139,7 @@ public class NewScheduleActivity extends AppCompatActivity {
             selectedPlace = place;
             searchAdapter.setSelectedPlaceId(place.id);
             renderSelectedPlace();
-            setEstimatedRoute(SAMPLE_TRAVEL_MINUTES);
+            loadEstimatedRoute();
         }
         if (routeType != null) binding.chipGroupRouteType.check(routeChipId(routeType));
         renderBuffer(arrivalBuffer);
@@ -146,6 +149,7 @@ public class NewScheduleActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         cancelPendingSearch();
+        searchHandler.removeCallbacks(estimatedRouteLoaded);
     }
 
     private void setupDateTime() {
@@ -267,6 +271,7 @@ public class NewScheduleActivity extends AppCompatActivity {
 
         binding.cardSearchResults.setVisibility(View.VISIBLE);
         binding.layoutSearchLoading.setVisibility(View.VISIBLE);
+        Loading.pulse(binding.layoutSearchLoading);
         binding.rvSearchResults.setVisibility(View.GONE);
 
         pendingSearch = () -> {
@@ -274,6 +279,7 @@ public class NewScheduleActivity extends AppCompatActivity {
             List<Place> results = searchPlaces(query);
             searchAdapter.submitList(results);
             binding.layoutSearchLoading.setVisibility(View.GONE);
+            Loading.stopPulse(binding.layoutSearchLoading);
             binding.rvSearchResults.setVisibility(View.VISIBLE);
         };
         searchHandler.postDelayed(pendingSearch, SEARCH_DELAY_MS);
@@ -290,6 +296,7 @@ public class NewScheduleActivity extends AppCompatActivity {
             searchHandler.removeCallbacks(pendingSearch);
             pendingSearch = null;
         }
+        Loading.stopPulse(binding.layoutSearchLoading);
     }
 
     private void selectPlace(@NonNull Place place) {
@@ -297,7 +304,7 @@ public class NewScheduleActivity extends AppCompatActivity {
         searchAdapter.setSelectedPlaceId(place.id);
         renderSelectedPlace();
         hideKeyboard();
-        setEstimatedRoute(SAMPLE_TRAVEL_MINUTES);
+        loadEstimatedRoute();
     }
 
     private void renderSelectedPlace() {
@@ -454,7 +461,20 @@ public class NewScheduleActivity extends AppCompatActivity {
                 : R.string.new_schedule_estimate_label);
     }
 
+    // 예상 경로 카드에 "불러오는 중…"을 띄우고 소요 시간을 받아온다
+    protected void loadEstimatedRoute() {
+        searchHandler.removeCallbacks(estimatedRouteLoaded);
+        binding.tvEstimatedValue.setVisibility(View.GONE);
+        binding.layoutEstimatedLoading.getRoot().setVisibility(View.VISIBLE);
+        binding.cardEstimatedRoute.setVisibility(View.VISIBLE);
+        // TODO - api연결 구현: 경로 계산 응답 대신 3초 뒤 샘플 소요 시간
+        searchHandler.postDelayed(estimatedRouteLoaded, Loading.FAKE_DELAY_MS);
+    }
+
     public void setEstimatedRoute(@Nullable Integer travelMinutes) {
+        searchHandler.removeCallbacks(estimatedRouteLoaded);
+        binding.layoutEstimatedLoading.getRoot().setVisibility(View.GONE);
+        binding.tvEstimatedValue.setVisibility(View.VISIBLE);
         if (travelMinutes == null) {
             binding.cardEstimatedRoute.setVisibility(View.GONE);
             return;

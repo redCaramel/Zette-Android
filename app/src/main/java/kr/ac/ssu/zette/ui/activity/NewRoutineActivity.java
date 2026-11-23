@@ -69,6 +69,10 @@ public class NewRoutineActivity extends NewScheduleActivity {
 
     // 루틴 화면(15·16)에는 예상 경로 카드가 없다
     @Override
+    protected void loadEstimatedRoute() {
+    }
+
+    @Override
     public void setEstimatedRoute(@Nullable Integer travelMinutes) {
         binding.cardEstimatedRoute.setVisibility(View.GONE);
     }

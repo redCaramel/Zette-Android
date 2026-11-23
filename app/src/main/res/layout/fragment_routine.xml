@@ -50,5 +50,32 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="3"
             tools:listitem="@layout/item_routine_card" />
+
+        <LinearLayout
+            android:id="@+id/layout_skeleton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_3"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <include
+                layout="@layout/view_routine_card_skeleton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/space_3" />
+
+            <include
+                layout="@layout/view_routine_card_skeleton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/space_3" />
+
+            <include
+                layout="@layout/view_routine_card_skeleton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/space_3" />
+        </LinearLayout>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

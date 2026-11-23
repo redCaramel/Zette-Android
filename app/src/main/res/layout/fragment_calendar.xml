@@ -160,5 +160,28 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="4"
             tools:listitem="@layout/item_calendar_event" />
+
+        <LinearLayout
+            android:id="@+id/layout_skeleton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <include
+                layout="@layout/view_calendar_event_skeleton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                layout="@layout/view_calendar_event_skeleton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                layout="@layout/view_calendar_event_skeleton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
