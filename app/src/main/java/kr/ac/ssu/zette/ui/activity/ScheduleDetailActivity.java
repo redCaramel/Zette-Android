@@ -27,6 +27,7 @@ import kr.ac.ssu.zette.databinding.ActivityScheduleDetailBinding;
 import kr.ac.ssu.zette.dto.Schedule;
 import kr.ac.ssu.zette.dto.ScheduleKey;
 import kr.ac.ssu.zette.ui.DeleteConfirmDialog;
+import kr.ac.ssu.zette.ui.KakaoMap;
 import kr.ac.ssu.zette.ui.item.ScheduleCardItem;
 
 // 일정 상세 (Figma 06). 승차 정보 카드와 경로가 계산되지 않은 값은 아직 샘플로 보여준다
@@ -68,10 +69,6 @@ public class ScheduleDetailActivity extends AppCompatActivity {
         ScheduleKey key = ScheduleKey.decode(encodedKey);
 
         binding.btnBack.setOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
-
-        binding.btnOpenMap.setOnClickListener(v -> {
-            // TODO - 카카오맵 앱으로 경로 보기 연결
-        });
         binding.btnEdit.setOnClickListener(v -> EditScheduleActivity.open(this, key));
         // 삭제되면 아래 observeSchedule 이 null 을 받아 화면을 닫는다
         binding.btnDelete.setOnClickListener(v -> DeleteConfirmDialog.confirmSchedule(this, key));
@@ -91,6 +88,8 @@ public class ScheduleDetailActivity extends AppCompatActivity {
         binding.tvArrival.setText(getString(R.string.detail_arrival_value,
                 formatDay(s.date), s.arrivalTime.format(TIME_FORMAT)));
         binding.tvPlace.setText(s.place != null ? s.place.name : null);
+        binding.btnOpenMap.setEnabled(KakaoMap.canRoute(s.place));
+        binding.btnOpenMap.setOnClickListener(v -> KakaoMap.openRoute(this, s.place));
         binding.tvTravel.setText(formatTravel(s));
         binding.tvRoute.setText(getString(R.string.detail_route_value,
                 getString(routeTypeLabel(s.routeType)), formatBuffer(s.arrivalBuffer)));

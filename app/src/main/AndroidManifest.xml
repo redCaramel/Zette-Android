@@ -19,6 +19,7 @@
         </intent>
 
         <package android:name="com.kakao.talk" />
+        <package android:name="net.daum.android.map" />
     </queries>
 
     <application
