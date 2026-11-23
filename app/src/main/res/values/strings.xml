@@ -50,8 +50,6 @@
     <string name="routine_count">루틴 %1$d개</string>
     <string name="routine_repeat_weekly">매주 %1$s</string>
     <string name="routine_repeat_monthly">매월 %1$s일</string>
-    <string name="routine_departure_alarm">출발 알림 %1$s</string>
-    <string name="routine_travel">이동 %1$d분</string>
 
     <string name="setting_alarm_title">알람 설정</string>
     <string name="setting_alarm_method">알림 방식</string>
@@ -234,4 +232,27 @@
     <string name="detail_sample_boarding_meta">472·152·753번 · 도보 4분</string>
     <string name="detail_sample_arrival_in">8분 후</string>
     <string name="detail_sample_arrival_bus">472번 도착 예정</string>
+
+    <string name="realtime_title">실시간 도착</string>
+    <string name="realtime_updated">%1$s 기준 · 실시간</string>
+    <string name="realtime_arrival_suffix">도착 예정</string>
+    <string name="realtime_bus_list_title">도착 예정 버스</string>
+    <string name="realtime_stop_label">승차 정류장</string>
+    <string name="realtime_walk_label">정류장까지 도보</string>
+    <string name="realtime_buses_label">탈 수 있는 버스</string>
+    <string name="realtime_departure_label">출발 알림 시각</string>
+    <string name="realtime_refresh">새로고침</string>
+    <string name="realtime_sample_stop">강남역 정류장</string>
+    <string name="realtime_sample_summary">남은 정류장 3개 · 다음 버스 152번 11분 후</string>
+    <string name="realtime_sample_walk">4분</string>
+    <string name="realtime_sample_buses">472 · 152 · 753번</string>
+    <string name="realtime_sample_bus_1_name">472번</string>
+    <string name="realtime_sample_bus_1_meta">3정거장 전 · 가장 먼저 도착</string>
+    <string name="realtime_sample_bus_1_eta">8분 후</string>
+    <string name="realtime_sample_bus_2_name">152번</string>
+    <string name="realtime_sample_bus_2_meta">5정거장 전</string>
+    <string name="realtime_sample_bus_2_eta">11분 후</string>
+    <string name="realtime_sample_bus_3_name">753번</string>
+    <string name="realtime_sample_bus_3_meta">8정거장 전</string>
+    <string name="realtime_sample_bus_3_eta">16분 후</string>
 </resources>

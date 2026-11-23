@@ -2,7 +2,6 @@ package kr.ac.ssu.zette.ui.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -73,19 +72,6 @@ public class RoutineAdapter extends ListAdapter<RoutineItem, RoutineAdapter.View
             binding.tvRoutineRepeat.setText(formatRepeat(context, item));
             binding.tvRoutineTime.setText(item.time.format(TIME_FORMAT));
             binding.tvRoutinePlace.setText(item.placeName);
-
-            if (item.departureAlarmTime != null) {
-                binding.tvRoutineDeparture.setText(context.getString(
-                        R.string.routine_departure_alarm, item.departureAlarmTime.format(TIME_FORMAT)));
-            } else {
-                binding.tvRoutineDeparture.setText(null);
-            }
-            if (item.travelMinutes != null) {
-                binding.tvRoutineTravel.setText(context.getString(R.string.routine_travel, item.travelMinutes));
-                binding.tvRoutineTravel.setVisibility(View.VISIBLE);
-            } else {
-                binding.tvRoutineTravel.setVisibility(View.GONE);
-            }
 
             binding.switchRoutine.setOnCheckedChangeListener(null);
             binding.switchRoutine.setChecked(item.enabled);

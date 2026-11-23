@@ -24,6 +24,7 @@ import kr.ac.ssu.zette.data.local.ZetteData;
 import kr.ac.ssu.zette.databinding.FragmentHomeBinding;
 import kr.ac.ssu.zette.dto.Schedule;
 import kr.ac.ssu.zette.dto.ScheduleStatus;
+import kr.ac.ssu.zette.ui.activity.RealtimeArrivalActivity;
 import kr.ac.ssu.zette.ui.activity.ScheduleDetailActivity;
 import kr.ac.ssu.zette.ui.adapter.ScheduleAdapter;
 import kr.ac.ssu.zette.ui.item.ScheduleCardItem;
@@ -81,7 +82,7 @@ public class HomeFragment extends Fragment {
 
         binding.nextDepartureHero.setOnClickListener(v -> {
             if (heroSchedule != null) {
-                startActivity(ScheduleDetailActivity.intent(requireContext(), heroSchedule.key()));
+                startActivity(RealtimeArrivalActivity.intent(requireContext(), heroSchedule.key()));
             }
         });
     }
