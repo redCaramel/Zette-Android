@@ -1,8 +1,6 @@
 package kr.ac.ssu.zette.ui;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -12,8 +10,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
-
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -94,13 +90,7 @@ public final class OccurrenceChoiceDialog {
         });
         render.run();
 
-        int inset = context.getResources().getDimensionPixelSize(R.dimen.space_4);
-        AlertDialog dialog = new MaterialAlertDialogBuilder(context)
-                .setView(b.getRoot())
-                .setBackground(new ColorDrawable(Color.TRANSPARENT))
-                .setBackgroundInsetStart(inset)
-                .setBackgroundInsetEnd(inset)
-                .create();
+        AlertDialog dialog = DeleteConfirmDialog.cardDialog(context, b.getRoot());
         b.btnCancel.setOnClickListener(v -> dialog.dismiss());
         confirm.setOnClickListener(v -> {
             dialog.dismiss();

@@ -59,6 +59,10 @@
             android:windowSoftInputMode="adjustResize" />
 
         <activity
+            android:name=".ui.activity.PermissionStatusActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".ui.activity.ScheduleDetailActivity"
             android:exported="false" />
 

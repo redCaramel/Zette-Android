@@ -142,8 +142,53 @@
     <string name="new_routine_default_note">설정의 기본값(%1$s · %2$s)을 따르고 있어요. 이 루틴만 다르게 고를 수 있어요.</string>
     <string name="new_routine_save">루틴 저장</string>
 
+    <string name="permission_title">권한 상태</string>
+    <string name="permission_footer">항목을 누르면 해당 설정 화면으로 이동해요.</string>
+    <string name="permission_location_title">위치 권한 (항상 허용)</string>
+    <string name="permission_location_on">앱을 닫아도 위치를 확인해요</string>
+    <string name="permission_location_foreground">앱을 쓰는 동안만 허용됨 · 눌러서 Android 설정으로 이동</string>
+    <string name="permission_notification_title">알림 권한</string>
+    <string name="permission_notification_on">출발·도착 알림을 보내요</string>
+    <string name="permission_alarm_title">정확한 알람 권한</string>
+    <string name="permission_alarm_on">정해진 시각에 정확히 알려요</string>
+    <string name="permission_off_desc">꺼져 있어요 · 눌러서 Android 설정으로 이동</string>
+    <string name="permission_badge_always">항상 허용</string>
+    <string name="permission_badge_foreground">사용 중에만</string>
+    <string name="permission_badge_on">허용됨</string>
+    <string name="permission_badge_off">꺼짐</string>
+    <string name="permission_summary_location_always">위치 항상 허용</string>
+    <string name="permission_summary_location_foreground">위치 사용 중에만 허용</string>
+    <string name="permission_summary_location_off">위치 꺼짐</string>
+    <string name="permission_summary_notification_on">알림 허용</string>
+    <string name="permission_summary_notification_off">알림 꺼짐</string>
+    <string name="permission_summary_alarm_on">정확한 알람 허용</string>
+    <string name="permission_summary_alarm_off">정확한 알람 꺼짐</string>
+    <string name="permission_summary">%1$s · %2$s · %3$s</string>
+
+    <string name="route_default_title">기본 경로 기준</string>
+    <string name="route_default_message">새 일정과 루틴은 이 기준으로 경로를 골라요.\n일정마다 따로 바꿀 수도 있어요.</string>
+    <string name="route_desc_min_time">가장 빨리 도착하는 경로</string>
+    <string name="route_desc_min_walk">걷는 거리가 가장 짧은 경로</string>
+    <string name="route_desc_min_transfer">갈아타는 횟수가 가장 적은 경로</string>
+
+    <string name="buffer_unit">분</string>
+    <string name="buffer_minus">1분 줄이기</string>
+    <string name="buffer_plus">1분 늘리기</string>
+    <string name="buffer_range_hint">1분부터 60분까지 정할 수 있어요</string>
+    <string name="buffer_custom_chip">직접 정하기</string>
+    <string name="buffer_custom_title">도착 여유 직접 정하기</string>
+    <string name="buffer_custom_message_schedule">도착 시각보다 몇 분 일찍 도착할지 정해 주세요.\n이 일정에만 적용돼요.</string>
+    <string name="buffer_custom_message_routine">도착 시각보다 몇 분 일찍 도착할지 정해 주세요.\n이 루틴에만 적용돼요.</string>
+    <string name="buffer_apply">적용</string>
+    <string name="buffer_default_title">기본 도착 여유</string>
+    <string name="buffer_default_message">도착 시각보다 이만큼 일찍 도착하도록\n출발 알림을 계산해요.</string>
+    <string name="buffer_custom_option">직접 정하기</string>
+    <string name="buffer_edit">도착 여유 다시 정하기</string>
+
     <string name="edit_schedule_title">일정 수정</string>
     <string name="edit_routine_title">루틴 수정</string>
+    <string name="edit_routine_banner">수정 내용은 오늘 이후의 일정에 적용돼요.\n지난 기록은 그대로 남아요.</string>
+    <string name="edit_routine_save">수정 완료</string>
     <string name="choice_message">‘%1$s’%2$s %3$s에\n반복되는 루틴 일정이에요.</string>
     <string name="choice_next">다음</string>
     <string name="choice_delete">삭제</string>

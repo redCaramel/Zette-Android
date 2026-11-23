@@ -18,6 +18,8 @@ import kr.ac.ssu.zette.data.local.Settings;
 import kr.ac.ssu.zette.data.local.SettingsStore;
 import kr.ac.ssu.zette.databinding.FragmentSettingBinding;
 import kr.ac.ssu.zette.dto.Schedule;
+import kr.ac.ssu.zette.ui.BufferDialogs;
+import kr.ac.ssu.zette.ui.activity.PermissionStatusActivity;
 import kr.ac.ssu.zette.ui.activity.ThemeSettingActivity;
 
 public class SettingFragment extends Fragment {
@@ -47,17 +49,21 @@ public class SettingFragment extends Fragment {
 
         settingsStore.observe().observe(getViewLifecycleOwner(), this::render);
 
-        binding.gotoRoute.setOnClickListener(v -> {
-            // TODO - 경로 기준 선택 화면 이동
-        });
-        binding.gotoBuffer.setOnClickListener(v -> {
-            // TODO - 도착 여유 선택 화면 이동
-        });
-        binding.gotoPermission.setOnClickListener(v -> {
-            // TODO - 권한 상태 화면 이동
-        });
+        binding.gotoRoute.setOnClickListener(v -> BufferDialogs.showRouteType(requireContext(),
+                settingsStore.defaultRoutePreference(), settingsStore::setDefaultRoutePreference));
+        binding.gotoBuffer.setOnClickListener(v -> BufferDialogs.showDefault(requireContext(),
+                settingsStore.defaultArrivalBufferMinutes(), settingsStore::setDefaultArrivalBufferMinutes));
+        binding.gotoPermission.setOnClickListener(v ->
+                startActivity(new Intent(requireContext(), PermissionStatusActivity.class)));
         binding.gotoTheme.setOnClickListener(v ->
                 startActivity(new Intent(requireContext(), ThemeSettingActivity.class)));
+    }
+
+    // 권한은 Android 설정에서 바뀌므로 화면에 돌아올 때마다 요약을 다시 읽는다
+    @Override
+    public void onResume() {
+        super.onResume();
+        binding.tvPermissionValue.setText(PermissionStatusActivity.summary(requireContext()));
     }
 
     private void render(@NonNull Settings settings) {

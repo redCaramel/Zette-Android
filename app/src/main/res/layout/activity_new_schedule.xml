@@ -52,6 +52,40 @@
             android:paddingEnd="@dimen/space_3"
             android:paddingBottom="@dimen/space_4">
 
+            <LinearLayout
+                android:id="@+id/layout_edit_banner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/space_4"
+                android:background="@drawable/bg_round_lg"
+                android:backgroundTint="@color/surface_cool"
+                android:orientation="horizontal"
+                android:paddingStart="@dimen/space_3"
+                android:paddingTop="12dp"
+                android:paddingEnd="@dimen/space_3"
+                android:paddingBottom="12dp"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="1dp"
+                    android:importantForAccessibility="no"
+                    app:srcCompat="@drawable/ic_info"
+                    app:tint="@color/green_accent" />
+
+                <TextView
+                    android:id="@+id/tv_edit_banner"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:textAppearance="@style/TextAppearance.Zette.Body"
+                    android:textColor="@color/text_primary"
+                    tools:text="수정 내용은 오늘 이후의 일정에 적용돼요.\n지난 기록은 그대로 남아요." />
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/tv_info_title"
                 android:layout_width="wrap_content"
@@ -552,11 +586,15 @@
                     tools:text="10분" />
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_buffer_15"
+                    android:id="@+id/chip_buffer_custom"
                     style="@style/Widget.Zette.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="15분" />
+                    android:text="@string/buffer_custom_chip"
+                    app:closeIcon="@drawable/ic_edit"
+                    app:closeIconSize="16dp"
+                    app:closeIconTint="@color/chip_filter_text"
+                    app:closeIconVisible="false" />
             </com.google.android.material.chip.ChipGroup>
 
             <com.google.android.material.card.MaterialCardView

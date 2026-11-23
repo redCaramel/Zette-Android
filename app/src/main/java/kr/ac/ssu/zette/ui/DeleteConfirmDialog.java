@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
@@ -52,14 +53,7 @@ public final class DeleteConfirmDialog {
         binding.tvTitle.setText(title);
         binding.tvMessage.setText(message);
 
-        // 카드 모양은 레이아웃이 그리므로 다이얼로그 배경은 비운다. 좌우 24dp 여백은 시안 그대로
-        int inset = context.getResources().getDimensionPixelSize(R.dimen.space_4);
-        AlertDialog dialog = new MaterialAlertDialogBuilder(context)
-                .setView(binding.getRoot())
-                .setBackground(new ColorDrawable(Color.TRANSPARENT))
-                .setBackgroundInsetStart(inset)
-                .setBackgroundInsetEnd(inset)
-                .create();
+        AlertDialog dialog = cardDialog(context, binding.getRoot());
 
         binding.btnCancel.setOnClickListener(v -> dialog.dismiss());
         binding.btnDelete.setOnClickListener(v -> {
@@ -67,5 +61,17 @@ public final class DeleteConfirmDialog {
             onDelete.run();
         });
         dialog.show();
+    }
+
+    // 카드 모양은 레이아웃이 그리므로 다이얼로그 배경은 비운다. 좌우 24dp 여백은 시안 그대로 (앱의 카드형 다이얼로그 공통)
+    @NonNull
+    static AlertDialog cardDialog(@NonNull Context context, @NonNull View content) {
+        int inset = context.getResources().getDimensionPixelSize(R.dimen.space_4);
+        return new MaterialAlertDialogBuilder(context)
+                .setView(content)
+                .setBackground(new ColorDrawable(Color.TRANSPARENT))
+                .setBackgroundInsetStart(inset)
+                .setBackgroundInsetEnd(inset)
+                .create();
     }
 }

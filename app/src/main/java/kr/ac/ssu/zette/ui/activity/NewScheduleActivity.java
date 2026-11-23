@@ -17,6 +17,7 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -48,6 +49,7 @@ import kr.ac.ssu.zette.data.local.ZetteData;
 import kr.ac.ssu.zette.databinding.ActivityNewScheduleBinding;
 import kr.ac.ssu.zette.dto.Place;
 import kr.ac.ssu.zette.dto.Schedule;
+import kr.ac.ssu.zette.ui.BufferDialogs;
 import kr.ac.ssu.zette.ui.adapter.PlaceSearchAdapter;
 
 public class NewScheduleActivity extends AppCompatActivity {
@@ -84,6 +86,10 @@ public class NewScheduleActivity extends AppCompatActivity {
     protected LocalTime arrivalTime;
     @Nullable
     protected Place selectedPlace;
+
+    private int appliedBuffer;           // 저장할 도착 여유 (분)
+    @Nullable
+    private Integer customBuffer;        // [직접 정하기]로 정한 값. 칩에 "N분"으로 남는다
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,7 +139,7 @@ public class NewScheduleActivity extends AppCompatActivity {
             setEstimatedRoute(SAMPLE_TRAVEL_MINUTES);
         }
         if (routeType != null) binding.chipGroupRouteType.check(routeChipId(routeType));
-        binding.chipGroupArrivalBuffer.check(bufferChipId(arrivalBuffer));
+        renderBuffer(arrivalBuffer);
     }
 
     @Override
@@ -320,11 +326,43 @@ public class NewScheduleActivity extends AppCompatActivity {
     private void setupRouteSettings() {
         binding.chipBuffer5.setText(getString(R.string.new_schedule_buffer_minutes, 5));
         binding.chipBuffer10.setText(getString(R.string.new_schedule_buffer_minutes, 10));
-        binding.chipBuffer15.setText(getString(R.string.new_schedule_buffer_minutes, 15));
+
+        // 없음/5/10 칩을 고르면 그 값이 적용값. [직접 정하기]는 다이얼로그에서 적용해야 바뀐다 (Figma 15-2·15-3)
+        binding.chipGroupArrivalBuffer.setOnCheckedStateChangeListener((group, ids) -> {
+            int checked = group.getCheckedChipId();
+            if (checked == R.id.chip_buffer_none) appliedBuffer = 0;
+            else if (checked == R.id.chip_buffer_5) appliedBuffer = 5;
+            else if (checked == R.id.chip_buffer_10) appliedBuffer = 10;
+        });
+        binding.chipBufferCustom.setCloseIconContentDescription(getString(R.string.buffer_edit));
+        binding.chipBufferCustom.setOnClickListener(v -> openCustomBuffer());
+        binding.chipBufferCustom.setOnCloseIconClickListener(v -> openCustomBuffer());
 
         Settings settings = SettingsStore.getInstance(this).get();
         binding.chipGroupRouteType.check(routeChipId(settings.defaultRouteType));
-        binding.chipGroupArrivalBuffer.check(bufferChipId(settings.defaultArrivalBufferMinutes));
+        renderBuffer(settings.defaultArrivalBufferMinutes);
+    }
+
+    // 직접 정하기 다이얼로그 안내 문구 ("이 일정에만" / 루틴 화면은 "이 루틴에만")
+    @StringRes
+    protected int customBufferMessage() {
+        return R.string.buffer_custom_message_schedule;
+    }
+
+    private void openCustomBuffer() {
+        BufferDialogs.showCustom(this, customBuffer != null ? customBuffer : BufferDialogs.CUSTOM_START,
+                customBufferMessage(), this::renderBuffer, () -> renderBuffer(appliedBuffer));
+    }
+
+    // 없음/5/10분은 그 칩을, 나머지 값은 [N분 ✎] 칩을 고른다
+    private void renderBuffer(int minutes) {
+        appliedBuffer = minutes;
+        if (minutes != 0 && minutes != 5 && minutes != 10) {
+            customBuffer = minutes;
+            binding.chipBufferCustom.setText(getString(R.string.new_schedule_buffer_minutes, minutes));
+            binding.chipBufferCustom.setCloseIconVisible(true);
+        }
+        binding.chipGroupArrivalBuffer.check(bufferChipId(minutes));
     }
 
     @NonNull
@@ -351,13 +389,12 @@ public class NewScheduleActivity extends AppCompatActivity {
         switch (minutes) {
             case 0:
                 return R.id.chip_buffer_none;
+            case 5:
+                return R.id.chip_buffer_5;
             case 10:
                 return R.id.chip_buffer_10;
-            case 15:
-                return R.id.chip_buffer_15;
-            case 5:
             default:
-                return R.id.chip_buffer_5;
+                return R.id.chip_buffer_custom;
         }
     }
 
@@ -407,11 +444,7 @@ public class NewScheduleActivity extends AppCompatActivity {
     }
 
     public int getSelectedArrivalBuffer() {
-        int checkedId = binding.chipGroupArrivalBuffer.getCheckedChipId();
-        if (checkedId == R.id.chip_buffer_5) return 5;
-        if (checkedId == R.id.chip_buffer_10) return 10;
-        if (checkedId == R.id.chip_buffer_15) return 15;
-        return 0;
+        return appliedBuffer;
     }
 
     private void setupNonSupportBand() {

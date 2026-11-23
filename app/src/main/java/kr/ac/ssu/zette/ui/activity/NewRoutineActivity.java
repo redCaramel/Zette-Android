@@ -62,6 +62,11 @@ public class NewRoutineActivity extends NewScheduleActivity {
         renderDefaultNote();
     }
 
+    @Override
+    protected int customBufferMessage() {
+        return R.string.buffer_custom_message_routine;
+    }
+
     // 루틴 화면(15·16)에는 예상 경로 카드가 없다
     @Override
     public void setEstimatedRoute(@Nullable Integer travelMinutes) {

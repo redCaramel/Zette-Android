@@ -2,6 +2,7 @@ package kr.ac.ssu.zette.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,7 +15,7 @@ import kr.ac.ssu.zette.R;
 import kr.ac.ssu.zette.data.local.ZetteData;
 import kr.ac.ssu.zette.dto.Routine;
 
-// 새 루틴 폼을 기존 루틴 값으로 채워 수정한다. 지난 회차는 저장소가 보존한다 (updateRoutine)
+// 새 루틴 폼을 기존 루틴 값으로 채워 수정
 public class EditRoutineActivity extends NewRoutineActivity {
 
     private static final String EXTRA_ROUTINE_ID = "routine_id";
@@ -32,7 +33,9 @@ public class EditRoutineActivity extends NewRoutineActivity {
     protected void onSetupMode() {
         super.onSetupMode();
         binding.tvToolbarTitle.setText(R.string.edit_routine_title);
-        binding.tvRouteNote.setText(R.string.new_schedule_route_note);   // 기본값 안내는 새 루틴에만 맞다
+        binding.btnSave.setText(R.string.edit_routine_save);
+        binding.tvEditBanner.setText(R.string.edit_routine_banner);
+        binding.layoutEditBanner.setVisibility(View.VISIBLE);
 
         routineId = getIntent().getLongExtra(EXTRA_ROUTINE_ID, -1);
         if (routineId < 0) {
@@ -40,7 +43,6 @@ public class EditRoutineActivity extends NewRoutineActivity {
             return;
         }
 
-        // 처음 한 번만 폼을 채운다 (편집 중에 저장소가 바뀌어도 입력을 덮어쓰지 않는다)
         binding.btnSave.setEnabled(false);
         LiveData<List<Routine>> source = ZetteData.get(this).schedules.observeRoutines();
         source.observe(this, new Observer<List<Routine>>() {

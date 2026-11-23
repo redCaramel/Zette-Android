@@ -402,7 +402,7 @@
                             android:layout_height="wrap_content"
                             android:ellipsize="end"
                             android:maxLines="1"
-                            android:text="@string/setting_permission_sample"
+                            tools:text="@string/setting_permission_sample"
                             android:textAppearance="@style/TextAppearance.Zette.Body"
                             android:textColor="@color/text_secondary" />
                     </LinearLayout>
