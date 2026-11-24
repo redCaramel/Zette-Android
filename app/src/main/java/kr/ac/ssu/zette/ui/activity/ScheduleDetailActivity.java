@@ -30,6 +30,7 @@ import kr.ac.ssu.zette.dto.ScheduleKey;
 import kr.ac.ssu.zette.ui.DeleteConfirmDialog;
 import kr.ac.ssu.zette.ui.KakaoMap;
 import kr.ac.ssu.zette.ui.Loading;
+import kr.ac.ssu.zette.ui.Network;
 import kr.ac.ssu.zette.ui.item.ScheduleCardItem;
 
 // 일정 상세 (Figma 06). 승차 정보 카드와 경로가 계산되지 않은 값은 아직 샘플로 보여준다
@@ -47,13 +48,15 @@ public class ScheduleDetailActivity extends AppCompatActivity {
     private ActivityScheduleDetailBinding binding;
     // 06-L: 경로 계산이 끝나기 전엔 이동 시간·출발 알림 "계산 중…", 승차 정보·지도는 스피너
     private boolean routeLoading = true;
+    // 06-E: 경로를 못 받으면 이동 시간 "불러오지 못했어요", 출발 알림은 마지막 계산값, 승차 카드 자리에 영역 오류
+    private boolean routeError;
     @Nullable
     private Schedule lastSchedule;
     private final Runnable routeLoaded = () -> {
         routeLoading = false;
-        binding.layoutBoardingLoading.getRoot().setVisibility(View.GONE);
-        binding.layoutBoarding.setVisibility(View.VISIBLE);
-        binding.pbMap.setVisibility(View.GONE);
+        // TODO - api연결 구현: 실제 응답 실패(10초 초과·5xx)도 오류로 처리
+        routeError = !Network.get(this).isOnline();
+        renderRouteState();
         if (lastSchedule != null) bind(lastSchedule);
     };
 
@@ -84,8 +87,10 @@ public class ScheduleDetailActivity extends AppCompatActivity {
         binding.btnBack.setOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
 
         binding.layoutBoardingLoading.tvLoading.setText(R.string.detail_boarding_loading);
-        // TODO - api연결 구현: 경로·승차 정보 응답 대신 3초 대기. 승차 카드 높이는 invisible 로 유지
-        binding.getRoot().postDelayed(routeLoaded, Loading.FAKE_DELAY_MS);
+        binding.boardingError.tvErrorTitle.setText(R.string.detail_route_error_title);
+        binding.boardingError.tvErrorBody.setText(R.string.detail_route_error_body);
+        binding.boardingError.btnRetry.setOnClickListener(v -> loadRoute());
+        loadRoute();
 
         binding.btnEdit.setOnClickListener(v -> EditScheduleActivity.open(this, key));
         // 삭제되면 아래 observeSchedule 이 null 을 받아 화면을 닫는다
@@ -99,6 +104,24 @@ public class ScheduleDetailActivity extends AppCompatActivity {
             }
             bind(schedule);
         });
+    }
+
+    private void loadRoute() {
+        binding.getRoot().removeCallbacks(routeLoaded);
+        routeLoading = true;
+        routeError = false;
+        renderRouteState();
+        if (lastSchedule != null) bind(lastSchedule);
+        // TODO - api연결 구현: 경로·승차 정보 응답 대신 3초 대기. 승차 카드 높이는 invisible 로 유지
+        binding.getRoot().postDelayed(routeLoaded, Loading.FAKE_DELAY_MS);
+    }
+
+    private void renderRouteState() {
+        binding.cardBoarding.setVisibility(routeError ? View.GONE : View.VISIBLE);
+        binding.boardingError.getRoot().setVisibility(routeError ? View.VISIBLE : View.GONE);
+        binding.layoutBoardingLoading.getRoot().setVisibility(routeLoading ? View.VISIBLE : View.GONE);
+        binding.layoutBoarding.setVisibility(routeLoading ? View.INVISIBLE : View.VISIBLE);
+        binding.pbMap.setVisibility(routeLoading ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -124,11 +147,17 @@ public class ScheduleDetailActivity extends AppCompatActivity {
             binding.tvDeparture.setText(R.string.detail_calculating);
             return;
         }
-        binding.tvTravel.setText(formatTravel(s));
         LocalDateTime departure = s.computed != null ? s.computed.expectedDeparture : null;
-        binding.tvDeparture.setText(departure != null
+        String departureText = departure != null
                 ? departure.toLocalTime().format(TIME_FORMAT)
-                : getString(R.string.detail_sample_departure));
+                : getString(R.string.detail_sample_departure);
+        if (routeError) {
+            binding.tvTravel.setText(R.string.detail_load_failed);
+            binding.tvDeparture.setText(getString(R.string.detail_last_computed, departureText));
+            return;
+        }
+        binding.tvTravel.setText(formatTravel(s));
+        binding.tvDeparture.setText(departureText);
     }
 
     @NonNull

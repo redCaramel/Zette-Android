@@ -24,6 +24,7 @@ import kr.ac.ssu.zette.dto.Schedule;
 import kr.ac.ssu.zette.dto.ScheduleKey;
 import kr.ac.ssu.zette.ui.KakaoMap;
 import kr.ac.ssu.zette.ui.Loading;
+import kr.ac.ssu.zette.ui.Network;
 
 // 실시간 도착 (Figma 07). 홈 Hero 에서 들어온다.
 // shortcut: 버스 도착 정보(도착 카드·도착 예정 목록·승차 정류장)는 샘플 문자열이다. 실시간 API 연결 시 교체
@@ -63,8 +64,15 @@ public class RealtimeArrivalActivity extends AppCompatActivity {
         binding.btnBack.setOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
         binding.arrivalSkeleton.layoutSkeletonChips.setVisibility(View.GONE);
         binding.layoutArrivalLoading.tvLoading.setText(R.string.realtime_loading);
-        Loading.pulse(binding.layoutLoading);
         binding.btnRefresh.setOnClickListener(v -> loadArrivals());
+        binding.btnOfflineRetry.setOnClickListener(v -> loadArrivals());
+        binding.networkBanner.btnRetry.setOnClickListener(v -> loadArrivals());
+        // 연결되면 배너·오류 화면은 스스로 다시 불러온다
+        Network.get(this).observe(this, online -> {
+            boolean showingError = binding.networkBanner.getRoot().getVisibility() == View.VISIBLE
+                    || binding.layoutOffline.getVisibility() == View.VISIBLE;
+            if (online && showingError) loadArrivals();
+        });
         loadArrivals();
 
         // 삭제되었거나 찾을 수 없는 일정이면 닫는다
@@ -91,16 +99,41 @@ public class RealtimeArrivalActivity extends AppCompatActivity {
     private void loadArrivals() {
         binding.getRoot().removeCallbacks(arrivalsLoaded);
         binding.btnRefresh.setEnabled(false);
+        if (!hasContent) {
+            binding.layoutOffline.setVisibility(View.GONE);
+            binding.scrollContent.setVisibility(View.VISIBLE);
+            binding.layoutLoading.setVisibility(View.VISIBLE);
+            Loading.pulse(binding.layoutLoading);
+        }
         // TODO - api연결 구현: 실시간 버스 도착 응답 대신 3초 대기
         binding.getRoot().postDelayed(arrivalsLoaded, Loading.FAKE_DELAY_MS);
     }
 
+    // 07-E: 보여줄 값이 없으면 전체 화면 오류, 이미 보여주던 값이 있으면 "몇 시 기준" 배너만 띄운다
+    private boolean hasContent;
+    private LocalTime lastUpdated;
     private final Runnable arrivalsLoaded = () -> {
+        binding.btnRefresh.setEnabled(true);
+        // TODO - api연결 구현: 실제 응답 실패(10초 초과·5xx)도 오류로 처리
+        if (!Network.get(this).isOnline()) {
+            if (hasContent) {
+                binding.networkBanner.tvBanner.setText(
+                        getString(R.string.network_unstable, lastUpdated.format(TIME_FORMAT)));
+                binding.networkBanner.getRoot().setVisibility(View.VISIBLE);
+            } else {
+                Loading.stopPulse(binding.layoutLoading);
+                binding.scrollContent.setVisibility(View.GONE);
+                binding.layoutOffline.setVisibility(View.VISIBLE);
+            }
+            return;
+        }
+        hasContent = true;
+        lastUpdated = LocalTime.now();
         Loading.stopPulse(binding.layoutLoading);
+        binding.networkBanner.getRoot().setVisibility(View.GONE);
         binding.layoutLoading.setVisibility(View.GONE);
         binding.layoutContent.setVisibility(View.VISIBLE);
-        binding.btnRefresh.setEnabled(true);
-        binding.tvUpdated.setText(getString(R.string.realtime_updated, LocalTime.now().format(TIME_FORMAT)));
+        binding.tvUpdated.setText(getString(R.string.realtime_updated, lastUpdated.format(TIME_FORMAT)));
     };
 
     @Override

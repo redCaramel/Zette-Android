@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_round_lg"
+    android:backgroundTint="@color/green_deep"
+    android:minHeight="248dp"
+    android:orientation="vertical"
+    android:padding="@dimen/space_4">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:importantForAccessibility="no"
+            app:srcCompat="@drawable/ic_cloud_off"
+            app:tint="@color/static_mint" />
+
+        <TextView
+            android:id="@+id/tv_error_eyebrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:textAppearance="@style/TextAppearance.Zette.Label"
+            android:textColor="@color/text_on_dark_soft" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:accessibilityLiveRegion="polite"
+        android:text="@string/hero_error_title"
+        android:textAppearance="@style/TextAppearance.Zette.H2"
+        android:textColor="@color/text_on_dark" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/hero_error_body"
+        android:textAppearance="@style/TextAppearance.Zette.Body"
+        android:textColor="@color/text_on_dark_soft" />
+
+    <Space
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_retry"
+        style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:minHeight="40dp"
+        android:paddingStart="@dimen/space_3"
+        android:paddingEnd="@dimen/space_3"
+        android:text="@string/network_retry"
+        android:textAppearance="@style/TextAppearance.Zette.ButtonSmall"
+        android:textColor="@color/text_on_dark"
+        app:cornerRadius="@dimen/radius_full"
+        app:icon="@drawable/ic_refresh"
+        app:iconPadding="6dp"
+        app:iconSize="18dp"
+        app:iconTint="@color/text_on_dark"
+        app:strokeColor="@color/text_on_dark" />
+</LinearLayout>

@@ -51,6 +51,7 @@ import kr.ac.ssu.zette.dto.Place;
 import kr.ac.ssu.zette.dto.Schedule;
 import kr.ac.ssu.zette.ui.BufferDialogs;
 import kr.ac.ssu.zette.ui.Loading;
+import kr.ac.ssu.zette.ui.Network;
 import kr.ac.ssu.zette.ui.adapter.PlaceSearchAdapter;
 
 public class NewScheduleActivity extends AppCompatActivity {
@@ -117,6 +118,11 @@ public class NewScheduleActivity extends AppCompatActivity {
 
         onSetupMode();
         binding.btnSave.setOnClickListener(v -> save());
+
+        // 04-E: 작성 중 연결이 끊기면 화면 전체 비활성 + 맨 위 배너. 다시 연결되면 풀린다
+        binding.networkBanner.tvBanner.setText(offlineMessage());
+        binding.networkBanner.btnRetry.setOnClickListener(v -> Network.get(this).recheck());
+        Network.get(this).observe(this, this::renderOnline);
     }
 
     // 하위 화면(새 루틴)이 같은 폼을 자기 모드로 바꾸는 자리
@@ -459,6 +465,19 @@ public class NewScheduleActivity extends AppCompatActivity {
         binding.tvEstimatedLabel.setText(DEBUG_IS_NONSUPPORT
                 ? R.string.new_schedule_estimate_label_reference
                 : R.string.new_schedule_estimate_label);
+    }
+
+    @StringRes
+    protected int offlineMessage() {
+        return R.string.network_no_create_schedule;
+    }
+
+    private void renderOnline(boolean online) {
+        binding.networkBanner.getRoot().setVisibility(online ? View.GONE : View.VISIBLE);
+        binding.offlineBlock.setVisibility(online ? View.GONE : View.VISIBLE);
+        binding.scrollContent.setAlpha(online ? 1f : 0.38f);
+        binding.btnSave.setEnabled(online);
+        if (!online) hideKeyboard();
     }
 
     // 예상 경로 카드에 "불러오는 중…"을 띄우고 소요 시간을 받아온다

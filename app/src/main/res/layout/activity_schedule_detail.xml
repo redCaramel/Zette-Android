@@ -338,7 +338,16 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <include
+                android:id="@+id/boarding_error"
+                layout="@layout/view_inline_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_3"
+                android:visibility="gone" />
+
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_boarding"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_3"

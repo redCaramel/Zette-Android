@@ -62,6 +62,13 @@
                 android:layout_height="248dp"
                 android:visibility="gone" />
 
+            <include
+                android:id="@+id/hero_error"
+                layout="@layout/view_hero_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
             <LinearLayout
                 android:id="@+id/next_departure_hero"
                 android:layout_width="match_parent"

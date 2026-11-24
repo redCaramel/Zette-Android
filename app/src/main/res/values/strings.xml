@@ -233,6 +233,23 @@
     <string name="detail_sample_arrival_bus">472번 도착 예정</string>
 
     <string name="loading_label">불러오는 중…</string>
+    <string name="network_retry">다시 시도</string>
+    <string name="network_error_title">불러오지 못했어요</string>
+    <string name="network_error_body">연결을 확인하고 다시 시도해 주세요</string>
+    <string name="network_unstable">연결이 불안정해요 · %1$s 기준 정보예요</string>
+    <string name="network_no_add_schedule">인터넷 연결이 없어 일정을 추가할 수 없어요</string>
+    <string name="network_no_add_routine">인터넷 연결이 없어 루틴을 추가할 수 없어요</string>
+    <string name="network_no_create_schedule">인터넷 연결이 없어 일정을 만들 수 없어요</string>
+    <string name="network_no_create_routine">인터넷 연결이 없어 루틴을 만들 수 없어요</string>
+    <string name="hero_error_eyebrow">가장 가까운 일정 · %1$s %2$s</string>
+    <string name="hero_error_title">출발 시각을 불러오지 못했어요</string>
+    <string name="hero_error_body">일정과 알림 예약은 그대로예요.\n연결되면 자동으로 다시 계산해요.</string>
+    <string name="detail_load_failed">불러오지 못했어요</string>
+    <string name="detail_last_computed">%1$s (마지막 계산)</string>
+    <string name="detail_route_error_title">경로를 불러오지 못했어요</string>
+    <string name="detail_route_error_body">출발 알림은 마지막으로 계산한 시각으로 유지돼요</string>
+    <string name="realtime_offline_title">인터넷에 연결되어 있지 않아요</string>
+    <string name="realtime_offline_body">실시간 도착 정보를 불러오지 못했어요.\n연결을 확인한 뒤 다시 시도해 주세요.</string>
     <string name="home_hero_calculating">출발 시각 계산 중…</string>
     <string name="home_hero_departure_calculating">출발 계산 중</string>
     <string name="detail_calculating">계산 중…</string>

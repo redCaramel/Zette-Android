@@ -67,6 +67,11 @@ public class NewRoutineActivity extends NewScheduleActivity {
         return R.string.buffer_custom_message_routine;
     }
 
+    @Override
+    protected int offlineMessage() {
+        return R.string.network_no_create_routine;
+    }
+
     // 루틴 화면(15·16)에는 예상 경로 카드가 없다
     @Override
     protected void loadEstimatedRoute() {

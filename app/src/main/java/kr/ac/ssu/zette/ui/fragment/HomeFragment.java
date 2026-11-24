@@ -26,6 +26,7 @@ import kr.ac.ssu.zette.databinding.FragmentHomeBinding;
 import kr.ac.ssu.zette.dto.Schedule;
 import kr.ac.ssu.zette.dto.ScheduleStatus;
 import kr.ac.ssu.zette.ui.Loading;
+import kr.ac.ssu.zette.ui.Network;
 import kr.ac.ssu.zette.ui.activity.RealtimeArrivalActivity;
 import kr.ac.ssu.zette.ui.activity.ScheduleDetailActivity;
 import kr.ac.ssu.zette.ui.adapter.ScheduleAdapter;
@@ -49,8 +50,12 @@ public class HomeFragment extends Fragment {
     private Loading.Gate firstLoad;
     // 02-L2: 출발 시각을 서버에서 받아오는 동안 Hero 남은 시간 자리에 "출발 시각 계산 중…"
     private boolean heroLoading;
+    // 02-E: 출발 시각을 못 받으면 Hero 자리에 오류 카드. 연결되면 자동으로 다시 계산한다
+    private boolean heroError;
     private final Runnable heroLoaded = () -> {
         heroLoading = false;
+        // TODO - api연결 구현: 실제 응답 실패(10초 초과·5xx)도 오류로 처리
+        heroError = !Network.get(requireContext()).isOnline();
         if (binding != null) renderHero(latestSchedules);
     };
 
@@ -102,8 +107,19 @@ public class HomeFragment extends Fragment {
         binding.layoutHeroCalculating.tvLoading.setText(R.string.home_hero_calculating);
         binding.layoutHeroCalculating.tvLoading.setTextColor(
                 ContextCompat.getColor(requireContext(), R.color.text_on_dark_soft));
-        // TODO - api연결 구현: 출발 시각 계산 응답 대신 3초 대기
+        binding.heroError.btnRetry.setOnClickListener(v -> loadHero());
+        Network.get(requireContext()).observe(getViewLifecycleOwner(), online -> {
+            if (online && heroError) loadHero();
+        });
+        loadHero();
+    }
+
+    private void loadHero() {
+        binding.getRoot().removeCallbacks(heroLoaded);
         heroLoading = true;
+        heroError = false;
+        renderHero(latestSchedules);
+        // TODO - api연결 구현: 출발 시각 계산 응답 대신 3초 대기
         binding.getRoot().postDelayed(heroLoaded, Loading.FAKE_DELAY_MS);
     }
 
@@ -141,8 +157,13 @@ public class HomeFragment extends Fragment {
     // Hero = 오늘 아직 도착 시각이 지나지 않은 일정 중 가장 가까운 것. 없으면 숨긴다
     private void renderHero(@Nullable List<Schedule> schedules) {
         heroSchedule = findNearest(schedules, LocalDateTime.now());
-        if (heroSchedule == null) {
+        binding.heroError.getRoot().setVisibility(heroSchedule != null && heroError ? View.VISIBLE : View.GONE);
+        if (heroSchedule == null || heroError) {
             binding.nextDepartureHero.setVisibility(View.GONE);
+            if (heroSchedule != null) {
+                binding.heroError.tvErrorEyebrow.setText(getString(R.string.hero_error_eyebrow,
+                        heroSchedule.arrivalTime.format(TIME_FORMAT), heroSchedule.name));
+            }
             return;
         }
         binding.nextDepartureHero.setVisibility(View.VISIBLE);

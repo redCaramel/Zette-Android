@@ -14,10 +14,15 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+
 import com.google.android.material.transition.platform.MaterialFadeThrough;
 
 import kr.ac.ssu.zette.R;
 import kr.ac.ssu.zette.databinding.ActivityMainBinding;
+import kr.ac.ssu.zette.ui.Network;
 import kr.ac.ssu.zette.ui.fragment.CalendarFragment;
 import kr.ac.ssu.zette.ui.fragment.HomeFragment;
 import kr.ac.ssu.zette.ui.fragment.RoutineFragment;
@@ -27,6 +32,12 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private boolean routineFabMode = false;
+    // 네트워크 오류 표시 규칙: 연결이 없으면 맨 위 배너 + 일정·루틴 추가 버튼 비활성 (12-E·14-E, 홈은 03-E 배너)
+    private int currentTab;
+    private boolean online = true;
+    private LocalTime offlineSince = LocalTime.now();
+    private static final DateTimeFormatter TIME_FORMAT =
+            DateTimeFormatter.ofPattern("a h:mm", Locale.KOREAN);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
         // BottomNavigationView를 눌렀을 때 Fragment 변경하기
         binding.bottomNav.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
+            currentTab = itemId;
+            renderNetwork();
 
             if (itemId == R.id.homeFragment) {
                 replaceFragment(new HomeFragment());
@@ -85,6 +98,14 @@ public class MainActivity extends AppCompatActivity {
                 .findFragmentById(R.id.main_fragment_container) instanceof RoutineFragment);
         hideFab(getSupportFragmentManager()
                 .findFragmentById(R.id.main_fragment_container) instanceof SettingFragment);
+        currentTab = binding.bottomNav.getSelectedItemId();
+        binding.networkBanner.btnRetry.setOnClickListener(v -> Network.get(this).recheck());
+        Network.get(this).observe(this, isOnline -> {
+            if (online && !isOnline) offlineSince = LocalTime.now();
+            online = isOnline;
+            renderNetwork();
+        });
+
         binding.btnNewSchedule.setOnClickListener(v -> {
             if (routineFabMode) {
                 onNewRoutineClick();
@@ -92,6 +113,19 @@ public class MainActivity extends AppCompatActivity {
                 onNewScheduleClick();
             }
         });
+    }
+
+    private void renderNetwork() {
+        binding.btnNewSchedule.setEnabled(online);
+        boolean showBanner = !online && currentTab != R.id.settingFragment;
+        binding.networkBanner.getRoot().setVisibility(showBanner ? VISIBLE : GONE);
+        if (!showBanner) return;
+        if (currentTab == R.id.homeFragment) {
+            binding.networkBanner.tvBanner.setText(getString(R.string.network_unstable, offlineSince.format(TIME_FORMAT)));
+        } else {
+            binding.networkBanner.tvBanner.setText(currentTab == R.id.routineFragment
+                    ? R.string.network_no_add_routine : R.string.network_no_add_schedule);
+        }
     }
 
     private void setRoutineFabMode(boolean routine) {

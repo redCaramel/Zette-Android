@@ -130,6 +130,20 @@
         <item name="cornerRadius">@dimen/radius_full</item>
     </style>
 
+    <style name="Widget.Zette.Button.Retry" parent="Widget.Material3.Button.TextButton.Icon">
+        <item name="android:minHeight">48dp</item>
+        <item name="android:paddingStart">@dimen/space_2</item>
+        <item name="android:paddingEnd">@dimen/space_2</item>
+        <item name="android:text">@string/network_retry</item>
+        <item name="android:textColor">@color/green_brand</item>
+        <item name="android:textAppearance">@style/TextAppearance.Zette.ButtonSmall</item>
+        <item name="icon">@drawable/ic_refresh</item>
+        <item name="iconSize">18dp</item>
+        <item name="iconPadding">@dimen/space_1</item>
+        <item name="iconTint">@color/green_brand</item>
+        <item name="rippleColor">@color/green_mint</item>
+    </style>
+
     <style name="ShapeAppearance.Zette.Dialog" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">@dimen/radius_lg</item>
