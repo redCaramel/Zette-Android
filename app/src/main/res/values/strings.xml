@@ -241,6 +241,16 @@
     <string name="network_no_add_routine">인터넷 연결이 없어 루틴을 추가할 수 없어요</string>
     <string name="network_no_create_schedule">인터넷 연결이 없어 일정을 만들 수 없어요</string>
     <string name="network_no_create_routine">인터넷 연결이 없어 루틴을 만들 수 없어요</string>
+    <string name="hero_empty_title">오늘 남은 일정이 없어요</string>
+    <string name="hero_empty_body_none">쉬고, 재충전하기 좋은 날이에요.</string>
+    <string name="hero_empty_body_done">오늘 일정을 모두 마쳤어요. 수고했어요!</string>
+    <string name="hero_departing_eyebrow">출발 시간이에요</string>
+    <string name="hero_departing_title">%1$s번 버스가\n%2$d분 후 도착해요!</string>
+    <string name="hero_departing_now">지금 출발하세요</string>
+    <string name="hero_departing_arrival">%1$d분 후</string>
+    <string name="hero_departing_walk">도보 %1$d분</string>
+    <string name="hero_departing_loading_title">곧 출발할 시간이에요\n타야 할 버스를 확인하고 있어요</string>
+    <string name="hero_departing_loading">버스 도착 정보 불러오는 중…</string>
     <string name="hero_error_eyebrow">가장 가까운 일정 · %1$s %2$s</string>
     <string name="hero_error_title">출발 시각을 불러오지 못했어요</string>
     <string name="hero_error_body">일정과 알림 예약은 그대로예요.\n연결되면 자동으로 다시 계산해요.</string>

@@ -63,6 +63,20 @@
                 android:visibility="gone" />
 
             <include
+                android:id="@+id/hero_empty"
+                layout="@layout/view_hero_empty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+            <include
+                android:id="@+id/hero_departing"
+                layout="@layout/view_hero_departing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+            <include
                 android:id="@+id/hero_error"
                 layout="@layout/view_hero_error"
                 android:layout_width="match_parent"
