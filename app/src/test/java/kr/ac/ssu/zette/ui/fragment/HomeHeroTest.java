@@ -34,6 +34,16 @@ public class HomeHeroTest {
     }
 
     @Test
+    public void skipsUnreserved() {
+        Schedule unreserved = at(1, 14);
+        unreserved.activated = false;
+        Schedule reserved = at(2, 16);
+
+        assertEquals(2, HomeFragment.findNearest(Arrays.asList(unreserved, reserved), NOW).id);
+        assertNull(HomeFragment.findNearest(Arrays.asList(unreserved), NOW));
+    }
+
+    @Test
     public void noneLeft_returnsNull() {
         assertNull(HomeFragment.findNearest(Arrays.asList(at(1, 9), at(2, 12)), NOW));
         assertNull(HomeFragment.findNearest(null, NOW));

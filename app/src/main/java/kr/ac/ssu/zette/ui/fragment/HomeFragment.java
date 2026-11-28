@@ -329,7 +329,8 @@ public class HomeFragment extends Fragment {
         Schedule nearest = null;
         LocalDateTime nearestAt = null;
         for (Schedule s : schedules) {
-            if (s.status == ScheduleStatus.DONE || s.arrivalTime == null) continue;
+            // 예약하지 않은 일정은 Hero·위젯에 띄우지 않는다
+            if (!s.activated || s.status == ScheduleStatus.DONE || s.arrivalTime == null) continue;
             LocalDateTime at = LocalDateTime.of(s.date, s.arrivalTime);
             if (at.isBefore(now)) continue;
             if (nearestAt == null || at.isBefore(nearestAt)) {
