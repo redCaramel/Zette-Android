@@ -47,6 +47,8 @@
     <color name="static_white">#FFFFFF</color>
     <color name="static_accent">#00754A</color>
     <color name="static_mint">#D4E9E2</color>
+    <color name="static_green_deep">#1E3932</color>
+    <color name="static_green_light">#3DBF8E</color>
 
     <!-- logo -->
     <color name="logo_wordmark">#FFFFFF</color>

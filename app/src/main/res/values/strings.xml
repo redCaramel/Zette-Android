@@ -255,6 +255,8 @@
     <string name="received_save">일정에 추가하기</string>
     <string name="received_invalid">열 수 없는 공유 링크예요</string>
     <string name="share_kakao_button_routine">제때에서 루틴 추가하기</string>
+    <string name="share_card_schedule">일정이 도착했어요</string>
+    <string name="share_card_routine">루틴이 도착했어요</string>
     <string name="received_routine_title">받은 루틴 추가</string>
     <string name="received_routine_banner">친구가 카카오톡으로 보낸 루틴이에요.
 장소·시간·이름이 자동으로 채워졌어요.</string>

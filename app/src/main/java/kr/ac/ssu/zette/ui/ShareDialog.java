@@ -6,6 +6,8 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Build;
 import android.view.LayoutInflater;
@@ -24,11 +26,18 @@ import com.google.android.material.bottomsheet.BottomSheetDragHandleView;
 import com.kakao.sdk.share.ShareClient;
 import com.kakao.sdk.share.WebSharerClient;
 import com.kakao.sdk.template.model.Button;
+import com.kakao.sdk.template.model.Content;
+import com.kakao.sdk.template.model.DefaultTemplate;
+import com.kakao.sdk.template.model.FeedTemplate;
 import com.kakao.sdk.template.model.Link;
 import com.kakao.sdk.template.model.TextTemplate;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -36,6 +45,7 @@ import kotlin.Unit;
 import kr.ac.ssu.zette.BuildConfig;
 import kr.ac.ssu.zette.R;
 import kr.ac.ssu.zette.databinding.DialogShareBinding;
+import kr.ac.ssu.zette.databinding.ViewShareCardHeaderBinding;
 import kr.ac.ssu.zette.dto.Routine;
 import kr.ac.ssu.zette.dto.Schedule;
 
@@ -46,6 +56,9 @@ public final class ShareDialog {
             DateTimeFormatter.ofPattern("M월 d일 (E)", Locale.KOREAN);
     private static final DateTimeFormatter TIME_FORMAT =
             DateTimeFormatter.ofPattern("a h:mm", Locale.KOREAN);
+
+    private static final int HEADER_WIDTH_DP = 320;
+    private static final int HEADER_HEIGHT_DP = 160;
 
     private ShareDialog() {
     }
@@ -65,13 +78,15 @@ public final class ShareDialog {
         Map<String, String> params = ShareLink.toParams(s);
         String link = ShareLink.toUri(ShareLink.HOST_SCHEDULE, params).toString();
         String message = s.name + "\n" + when + (place != null ? "\n" + place : "");
+        String description = when + (place != null ? " · " + place : "");
 
         show(context, sheet,
                 sheet ? R.string.send_schedule_title : R.string.share_schedule_title,
                 sheet ? R.string.send_schedule_label : R.string.share_schedule_label, s.name,
                 R.drawable.ic_schedule, when, place, R.string.share_schedule_note,
                 sheet ? R.string.send_kakao : R.string.share_kakao,
-                () -> shareToKakao(context, message, params, link, R.string.share_kakao_button),
+                () -> shareToKakao(context, s.name, description, message, params, link,
+                        R.string.share_kakao_button, R.string.share_card_schedule),
                 () -> copyLink(context, link));
     }
 
@@ -82,10 +97,12 @@ public final class ShareDialog {
         Map<String, String> params = ShareLink.toParams(r);
         String link = ShareLink.toUri(ShareLink.HOST_ROUTINE, params).toString();
         String message = r.name + "\n" + when + (place != null ? "\n" + place : "");
+        String description = when + (place != null ? " · " + place : "");
 
         show(context, false, R.string.share_routine_title, R.string.share_routine_label, r.name,
                 R.drawable.ic_bottom_nav_routine, when, place, R.string.share_routine_note, R.string.share_kakao,
-                () -> shareToKakao(context, message, params, link, R.string.share_kakao_button_routine),
+                () -> shareToKakao(context, r.name, description, message, params, link,
+                        R.string.share_kakao_button_routine, R.string.share_card_routine),
                 () -> copyLink(context, link));
     }
 
@@ -130,17 +147,39 @@ public final class ShareDialog {
     }
 
     // 버튼을 누르면 kakao{앱키}://kakaolink?params 로 앱이 열린다 (ShareLinkActivity)
-    private static void shareToKakao(@NonNull Context context, @NonNull String message,
-                                     @NonNull Map<String, String> params, @NonNull String link,
-                                     @StringRes int buttonText) {
+    private static void shareToKakao(@NonNull Context context, @NonNull String title, @NonNull String description,
+                                     @NonNull String message, @NonNull Map<String, String> params,
+                                     @NonNull String link, @StringRes int buttonText, @StringRes int eyebrow) {
         if (BuildConfig.KAKAO_NATIVE_APP_KEY.isEmpty()) {
             shareAsText(context, message + "\n" + link);    // 앱 키 전: 기본 공유 시트
             return;
         }
         Link appLink = new Link(null, null, params, null);
-        TextTemplate template = new TextTemplate(message, appLink,
-                Collections.singletonList(new Button(context.getString(buttonText), appLink)), null);
+        List<Button> buttons = Collections.singletonList(new Button(context.getString(buttonText), appLink));
+        TextTemplate textOnly = new TextTemplate(message, appLink, buttons, null);
 
+        // 머리 이미지(Figma 27)를 카카오 서버에 올려 피드 메시지로 보낸다. 실패하면 글자 메시지
+        float density = context.getResources().getDisplayMetrics().density;
+        int width = Math.round(HEADER_WIDTH_DP * density);
+        int height = Math.round(HEADER_HEIGHT_DP * density);
+        File header;
+        try {
+            header = renderHeader(context, eyebrow, width, height);
+        } catch (IOException e) {
+            sendToKakao(context, textOnly);
+            return;
+        }
+        // shortcut: 공유할 때마다 머리 이미지를 올린다. 느리면 올린 URL 을 저장해 재사용
+        ShareClient.getInstance().uploadImage(header, (result, error) -> {
+            DefaultTemplate template = result == null ? textOnly : new FeedTemplate(
+                    new Content(title, result.getInfos().getOriginal().getUrl(), appLink, description, width, height),
+                    null, null, buttons);
+            sendToKakao(context, template);
+            return Unit.INSTANCE;
+        });
+    }
+
+    private static void sendToKakao(@NonNull Context context, @NonNull DefaultTemplate template) {
         if (ShareClient.getInstance().isKakaoTalkSharingAvailable(context)) {
             ShareClient.getInstance().shareDefault(context, template, (result, error) -> {
                 if (error != null || result == null) {
@@ -154,6 +193,27 @@ public final class ShareDialog {
         }
         // 카카오톡이 없으면 웹 공유
         openUri(context, WebSharerClient.getInstance().makeDefaultUrl(template));
+    }
+
+    // 카드 머리 (2:1, 카카오 피드 이미지 비율 안쪽)
+    @NonNull
+    private static File renderHeader(@NonNull Context context, @StringRes int eyebrow, int width, int height)
+            throws IOException {
+        ViewShareCardHeaderBinding header = ViewShareCardHeaderBinding.inflate(LayoutInflater.from(context));
+        header.tvEyebrow.setText(eyebrow);
+        View view = header.getRoot();
+        view.measure(View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY));
+        view.layout(0, 0, width, height);
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        view.draw(new Canvas(bitmap));
+        File file = new File(context.getCacheDir(), "share_header.png");
+        try (FileOutputStream out = new FileOutputStream(file)) {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+        } finally {
+            bitmap.recycle();
+        }
+        return file;
     }
 
     private static void shareAsText(@NonNull Context context, @NonNull String text) {

@@ -19,7 +19,7 @@ import kr.ac.ssu.zette.data.local.entity.ScheduleEntity;
 @Database(
         entities = {ScheduleEntity.class, RoutineEntity.class},
         version = 1,
-        exportSchema = false
+        exportSchema = true     // app/schemas 에 버전별 구조 저장 (Migration 작성용)
 )
 @TypeConverters(Converters.class)
 public abstract class ZetteDatabase extends RoomDatabase {
@@ -33,11 +33,10 @@ public abstract class ZetteDatabase extends RoomDatabase {
 
     public abstract RoutineDao routineDao();
 
-    // TODO - 시연용 빌드 전 fallbackToDestructiveMigration 제거하고 Migration 작성
+    // version 을 올리면 Migration 을 만들어 addMigrations 에 넣는다 (없으면 앱이 데이터를 지우지 않고 멈춘다)
     @NonNull
     static ZetteDatabase create(@NonNull Context context) {
         return Room.databaseBuilder(context.getApplicationContext(), ZetteDatabase.class, DB_NAME)
-                .fallbackToDestructiveMigration(true)
                 .build();
     }
 
