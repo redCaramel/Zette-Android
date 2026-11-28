@@ -1,5 +1,6 @@
 package kr.ac.ssu.zette.ui;
 
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -8,13 +9,17 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
-import androidx.appcompat.app.AlertDialog;
+
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.bottomsheet.BottomSheetDragHandleView;
 
 import com.kakao.sdk.share.ShareClient;
 import com.kakao.sdk.share.WebSharerClient;
@@ -34,7 +39,7 @@ import kr.ac.ssu.zette.databinding.DialogShareBinding;
 import kr.ac.ssu.zette.dto.Routine;
 import kr.ac.ssu.zette.dto.Schedule;
 
-// 일정·루틴 공유 (Figma 12-1, 14-2)
+// 일정·루틴 공유 (Figma 12-1, 14-2, 26)
 public final class ShareDialog {
 
     private static final DateTimeFormatter DATE_FORMAT =
@@ -46,14 +51,26 @@ public final class ShareDialog {
     }
 
     public static void showSchedule(@NonNull Context context, @NonNull Schedule s) {
+        showSchedule(context, s, false);
+    }
+
+    // 일정 상세에서 여는 하단 시트 (26)
+    public static void showScheduleSheet(@NonNull Context context, @NonNull Schedule s) {
+        showSchedule(context, s, true);
+    }
+
+    private static void showSchedule(@NonNull Context context, @NonNull Schedule s, boolean sheet) {
         String when = context.getString(R.string.share_until, s.date.format(DATE_FORMAT), s.arrivalTime.format(TIME_FORMAT));
         String place = s.place != null ? s.place.name : null;
         Map<String, String> params = ShareLink.toParams(s);
         String link = ShareLink.toUri(ShareLink.HOST_SCHEDULE, params).toString();
         String message = s.name + "\n" + when + (place != null ? "\n" + place : "");
 
-        show(context, R.string.share_schedule_title, R.string.share_schedule_label, s.name,
+        show(context, sheet,
+                sheet ? R.string.send_schedule_title : R.string.share_schedule_title,
+                sheet ? R.string.send_schedule_label : R.string.share_schedule_label, s.name,
                 R.drawable.ic_schedule, when, place, R.string.share_schedule_note,
+                sheet ? R.string.send_kakao : R.string.share_kakao,
                 () -> shareToKakao(context, message, params, link, R.string.share_kakao_button),
                 () -> copyLink(context, link));
     }
@@ -66,15 +83,16 @@ public final class ShareDialog {
         String link = ShareLink.toUri(ShareLink.HOST_ROUTINE, params).toString();
         String message = r.name + "\n" + when + (place != null ? "\n" + place : "");
 
-        show(context, R.string.share_routine_title, R.string.share_routine_label, r.name,
-                R.drawable.ic_bottom_nav_routine, when, place, R.string.share_routine_note,
+        show(context, false, R.string.share_routine_title, R.string.share_routine_label, r.name,
+                R.drawable.ic_bottom_nav_routine, when, place, R.string.share_routine_note, R.string.share_kakao,
                 () -> shareToKakao(context, message, params, link, R.string.share_kakao_button_routine),
                 () -> copyLink(context, link));
     }
 
-    private static void show(@NonNull Context context, @StringRes int title, @StringRes int label,
+    // sheet = 하단 시트(닫기 버튼 없음), 아니면 카드 다이얼로그
+    private static void show(@NonNull Context context, boolean sheet, @StringRes int title, @StringRes int label,
                              @NonNull String name, @DrawableRes int whenIcon, @NonNull String when,
-                             @Nullable String place, @StringRes int note,
+                             @Nullable String place, @StringRes int note, @StringRes int kakaoLabel,
                              @NonNull Runnable onKakao, @NonNull Runnable onCopyLink) {
         DialogShareBinding binding = DialogShareBinding.inflate(LayoutInflater.from(context));
         binding.tvTitle.setText(title);
@@ -84,8 +102,21 @@ public final class ShareDialog {
         binding.tvWhen.setText(when);
         binding.tvPlace.setText(place);
         binding.tvNote.setText(note);
+        binding.btnKakao.setText(kakaoLabel);
 
-        AlertDialog dialog = DeleteConfirmDialog.cardDialog(context, binding.getRoot());
+        Dialog dialog;
+        if (sheet) {
+            LinearLayout root = binding.getRoot();
+            root.setBackground(null);
+            root.setPadding(root.getPaddingLeft(), 0, root.getPaddingRight(), root.getPaddingBottom());
+            root.addView(new BottomSheetDragHandleView(context), 0);
+            binding.btnClose.setVisibility(View.GONE);
+            BottomSheetDialog bottomSheet = new BottomSheetDialog(context);
+            bottomSheet.setContentView(root);
+            dialog = bottomSheet;
+        } else {
+            dialog = DeleteConfirmDialog.cardDialog(context, binding.getRoot());
+        }
         binding.btnKakao.setOnClickListener(v -> {
             dialog.dismiss();
             onKakao.run();

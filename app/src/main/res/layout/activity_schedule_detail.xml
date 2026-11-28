@@ -35,6 +35,15 @@
             android:textAppearance="@style/TextAppearance.Zette.Title"
             android:textColor="@color/text_primary" />
 
+        <ImageButton
+            android:id="@+id/btn_share"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/send_schedule_title"
+            app:srcCompat="@drawable/ic_share"
+            app:tint="@color/text_primary" />
+
     </LinearLayout>
 
     <androidx.core.widget.NestedScrollView

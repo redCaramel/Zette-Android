@@ -31,6 +31,7 @@ import kr.ac.ssu.zette.ui.DeleteConfirmDialog;
 import kr.ac.ssu.zette.ui.KakaoMap;
 import kr.ac.ssu.zette.ui.Loading;
 import kr.ac.ssu.zette.ui.Network;
+import kr.ac.ssu.zette.ui.ShareDialog;
 import kr.ac.ssu.zette.ui.item.ScheduleCardItem;
 
 // 일정 상세 (Figma 06). 승차 정보 카드와 경로가 계산되지 않은 값은 아직 샘플로 보여준다
@@ -85,6 +86,9 @@ public class ScheduleDetailActivity extends AppCompatActivity {
         ScheduleKey key = ScheduleKey.decode(encodedKey);
 
         binding.btnBack.setOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
+        binding.btnShare.setOnClickListener(v -> {
+            if (lastSchedule != null) ShareDialog.showScheduleSheet(this, lastSchedule);
+        });
 
         binding.layoutBoardingLoading.tvLoading.setText(R.string.detail_boarding_loading);
         binding.boardingError.tvErrorTitle.setText(R.string.detail_route_error_title);
