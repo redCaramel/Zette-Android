@@ -23,9 +23,10 @@ import kr.ac.ssu.zette.dto.Schedule;
 // 공유 링크의 값
 public final class ShareLink {
 
-    public static final String SCHEME = "zette";
-    public static final String HOST_SCHEDULE = "schedule";
-    public static final String HOST_ROUTINE = "routine";
+    // GitHub Pages (assetlinks.json·안내 페이지). 매니페스트 App Links 와 같아야 한다
+    public static final String WEB_HOST = "zette-app.github.io";
+    public static final String PATH_SCHEDULE = "schedule";
+    public static final String PATH_ROUTINE = "routine";
 
     public static final String KIND = "k";
     public static final String KIND_SCHEDULE = "s";
@@ -111,8 +112,8 @@ public final class ShareLink {
     }
 
     @NonNull
-    public static Uri toUri(@NonNull String host, @NonNull Map<String, String> params) {
-        Uri.Builder b = new Uri.Builder().scheme(SCHEME).authority(host);
+    public static Uri toUri(@NonNull String path, @NonNull Map<String, String> params) {
+        Uri.Builder b = new Uri.Builder().scheme("https").authority(WEB_HOST).appendPath(path);
         for (Map.Entry<String, String> e : params.entrySet()) b.appendQueryParameter(e.getKey(), e.getValue());
         return b.build();
     }

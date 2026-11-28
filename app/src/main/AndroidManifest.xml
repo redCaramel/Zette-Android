@@ -84,13 +84,14 @@
                     android:host="kakaolink"
                     android:scheme="kakao${KAKAO_NATIVE_APP_KEY}" />
             </intent-filter>
-            <intent-filter>
+            <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="zette" />
-                <data android:host="schedule" />
-                <data android:host="routine" />
+                <data android:scheme="https" />
+                <data android:host="zette-app.github.io" />
+                <data android:path="/schedule" />
+                <data android:path="/routine" />
             </intent-filter>
         </activity>
 

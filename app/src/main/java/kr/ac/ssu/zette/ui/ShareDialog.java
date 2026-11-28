@@ -76,7 +76,7 @@ public final class ShareDialog {
         String when = context.getString(R.string.share_until, s.date.format(DATE_FORMAT), s.arrivalTime.format(TIME_FORMAT));
         String place = s.place != null ? s.place.name : null;
         Map<String, String> params = ShareLink.toParams(s);
-        String link = ShareLink.toUri(ShareLink.HOST_SCHEDULE, params).toString();
+        String link = ShareLink.toUri(ShareLink.PATH_SCHEDULE, params).toString();
         String message = s.name + "\n" + when + (place != null ? "\n" + place : "");
         String description = when + (place != null ? " · " + place : "");
 
@@ -95,7 +95,7 @@ public final class ShareDialog {
         String when = context.getString(R.string.share_until, repeat, r.arrivalTime.format(TIME_FORMAT));
         String place = r.place != null ? r.place.name : null;
         Map<String, String> params = ShareLink.toParams(r);
-        String link = ShareLink.toUri(ShareLink.HOST_ROUTINE, params).toString();
+        String link = ShareLink.toUri(ShareLink.PATH_ROUTINE, params).toString();
         String message = r.name + "\n" + when + (place != null ? "\n" + place : "");
         String description = when + (place != null ? " · " + place : "");
 
