@@ -89,6 +89,7 @@ public class RoutineFragment extends Fragment {
         }
         latestRoutines = routines;
         routineAdapter.submitList(items);
+        binding.tvEmpty.setVisibility(items.isEmpty() ? View.VISIBLE : View.GONE);
         binding.tvRoutineCount.setText(getString(R.string.routine_count, items.size()));
     }
 

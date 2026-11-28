@@ -309,6 +309,8 @@
     <string name="network_no_create_routine">인터넷 연결이 없어 루틴을 만들 수 없어요</string>
     <string name="widget_description">가장 가까운 일정의 출발 시각을 보여줘요</string>
     <string name="widget_nearest">가장 가까운 일정</string>
+    <string name="list_empty_schedule">생성된 일정이 없어요.\n새 일정 버튼을 눌러 일정을 추가해요.</string>
+    <string name="list_empty_routine">생성된 루틴이 없어요.\n새 루틴 버튼을 눌러 루틴을 추가해요.</string>
     <string name="hero_empty_title">오늘 남은 일정이 없어요</string>
     <string name="hero_empty_body_none">쉬고, 재충전하기 좋은 날이에요.</string>
     <string name="hero_empty_body_done">오늘 일정을 모두 마쳤어요. 수고했어요!</string>

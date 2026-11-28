@@ -196,6 +196,7 @@ public class HomeFragment extends Fragment {
             for (Schedule s : schedules) items.add(ScheduleCardItem.from(s));
         }
         scheduleAdapter.submitList(items);
+        binding.tvEmpty.setVisibility(items.isEmpty() ? View.VISIBLE : View.GONE);
         binding.tvScheduleCount.setText(getString(R.string.calendar_event_count, items.size()));
         latestSchedules = schedules;
         renderHero(schedules);

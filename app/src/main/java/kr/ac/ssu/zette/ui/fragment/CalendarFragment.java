@@ -203,6 +203,7 @@ public class CalendarFragment extends Fragment {
             for (Schedule s : schedules) items.add(CalendarEventItem.from(s, routineLabel));
         }
         eventAdapter.submitList(items);
+        binding.tvEmpty.setVisibility(items.isEmpty() ? View.VISIBLE : View.GONE);
         binding.tvEventCount.setText(getString(R.string.calendar_event_count, items.size()));
     }
 

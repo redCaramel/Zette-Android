@@ -163,6 +163,18 @@
             tools:itemCount="4"
             tools:listitem="@layout/item_calendar_event" />
 
+        <TextView
+            android:id="@+id/tv_empty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="@dimen/space_4"
+            android:paddingBottom="@dimen/space_4"
+            android:text="@string/list_empty_schedule"
+            android:textAppearance="@style/TextAppearance.Zette.Caption"
+            android:textColor="@color/text_secondary"
+            android:visibility="gone" />
+
         <LinearLayout
             android:id="@+id/layout_skeleton"
             android:layout_width="match_parent"
