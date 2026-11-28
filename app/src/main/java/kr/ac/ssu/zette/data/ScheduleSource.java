@@ -26,11 +26,13 @@ public interface ScheduleSource {
     @NonNull
     List<Schedule> getReservedBetween(@NonNull LocalDate from, @NonNull LocalDate to);
 
+    // TODO - 위젯 연결: 저장 후 ZetteWidget.update(context) 호출
     @WorkerThread
     void updateStatus(@NonNull ScheduleKey key, @NonNull ScheduleStatus status,
                       @Nullable LocalDateTime expectedArrival);
 
     // 예상 출발 시각, 이동 시간, 경로 요약, 조회 시각
+    // TODO - 위젯 연결: 저장 후 ZetteWidget.update(context) 호출
     @WorkerThread
     void updateComputed(@NonNull ScheduleKey key, @NonNull ComputedRoute computed);
 
