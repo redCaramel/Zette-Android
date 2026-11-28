@@ -221,6 +221,11 @@
     <string name="detail_route_value">%1$s · %2$s</string>
     <string name="detail_departure_label">출발 알림 (예상)</string>
     <string name="detail_open_kakao_map">카카오맵에서 경로 보기</string>
+    <string name="map_missing_title">카카오맵을 열 수 없어요</string>
+    <string name="map_missing_body">카카오맵 앱이 설치되어 있지 않아요. 모바일 웹으로 길찾기를 열거나 앱을 설치할 수 있어요.</string>
+    <string name="map_missing_web">웹으로 열기</string>
+    <string name="map_missing_install">앱 설치하기</string>
+    <string name="map_open_failed">열 수 있는 앱이 없어요</string>
     <string name="detail_edit">수정하기</string>
     <string name="detail_delete">삭제하기</string>
 
