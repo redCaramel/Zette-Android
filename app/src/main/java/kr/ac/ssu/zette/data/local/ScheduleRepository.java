@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.WorkerThread;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 
@@ -18,6 +19,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
@@ -46,6 +48,8 @@ public final class ScheduleRepository {
     private final Executor main;
     @Nullable
     private volatile ScheduleChangeListener changeListener;
+    // 위젯 등 화면 쪽 갱신용 (백그라운드 리스너와 별개)
+    private final List<Runnable> dataChangedListeners = new CopyOnWriteArrayList<>();
 
     private final Map<LocalDate, LiveData<List<Schedule>>> dayCache = new HashMap<>();
     private final Map<LocalDate, LiveData<List<Schedule>>> activeDayCache = new HashMap<>();
@@ -66,7 +70,19 @@ public final class ScheduleRepository {
         changeListener = listener;
     }
 
+    // 저장·삭제가 끝날 때마다 작업 스레드에서 호출된다
+    public void addOnDataChangedListener(@NonNull Runnable listener) {
+        dataChangedListeners.add(listener);
+    }
+
     // ===== 읽기 =====
+
+    // 그날 전체, 시간순 (위젯 등 화면 밖 동기 조회)
+    @WorkerThread
+    @NonNull
+    public List<Schedule> getSchedulesOn(@NonNull LocalDate date) {
+        return dayOf(core.expand(date, date), date);
+    }
 
     // 그날 전체 (activated true/false 모두), 시간순
     @MainThread
@@ -291,6 +307,13 @@ public final class ScheduleRepository {
     }
 
     private void notify(@NonNull java.util.function.Consumer<ScheduleChangeListener> call) {
+        for (Runnable r : dataChangedListeners) {
+            try {
+                r.run();
+            } catch (RuntimeException e) {
+                Log.e(TAG, "변경 알림 실패", e);
+            }
+        }
         ScheduleChangeListener listener = changeListener;
         if (listener == null) return;
         try {

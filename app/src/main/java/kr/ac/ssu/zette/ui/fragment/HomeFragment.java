@@ -196,10 +196,10 @@ public class HomeFragment extends Fragment {
         renderHero(schedules);
     }
 
-    enum HeroState { UPCOMING, DEPARTING, EMPTY_NONE, EMPTY_DONE }
+    public enum HeroState { UPCOMING, DEPARTING, EMPTY_NONE, EMPTY_DONE }
 
     @NonNull
-    static HeroState heroStateOf(@NonNull List<Schedule> schedules, @Nullable Schedule nearest,
+    public static HeroState heroStateOf(@NonNull List<Schedule> schedules, @Nullable Schedule nearest,
                                  @NonNull LocalDateTime now) {
         if (nearest == null) return schedules.isEmpty() ? HeroState.EMPTY_NONE : HeroState.EMPTY_DONE;
         // TODO - 출발할 때 판정 연결
@@ -319,7 +319,7 @@ public class HomeFragment extends Fragment {
     }
 
     @Nullable
-    static Schedule findNearest(@Nullable List<Schedule> schedules, @NonNull LocalDateTime now) {
+    public static Schedule findNearest(@Nullable List<Schedule> schedules, @NonNull LocalDateTime now) {
         if (schedules == null) return null;
         Schedule nearest = null;
         LocalDateTime nearestAt = null;
@@ -345,7 +345,7 @@ public class HomeFragment extends Fragment {
 
     // 받침이 있으면 "이", 없으면 "가" (한글이 아니면 "가")
     @NonNull
-    static String subjectParticle(@Nullable String word) {
+    public static String subjectParticle(@Nullable String word) {
         if (word == null || word.isEmpty()) return "가";
         char last = word.charAt(word.length() - 1);
         if (last < 0xAC00 || last > 0xD7A3) return "가";

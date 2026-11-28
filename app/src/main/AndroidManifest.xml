@@ -103,6 +103,19 @@
             android:name=".ui.activity.ReceivedRoutineActivity"
             android:exported="false" />
 
+        <receiver
+            android:name=".widget.ZetteWidget"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/zette_widget_info" />
+        </receiver>
+
         <activity
             android:name=".ui.activity.ThemeSettingActivity"
             android:exported="false" />
