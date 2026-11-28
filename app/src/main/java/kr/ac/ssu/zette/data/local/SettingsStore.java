@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.WorkerThread;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -24,6 +25,7 @@ public final class SettingsStore implements SettingsSource {
     public static final String KEY_DEFAULT_ROUTE_PREF = "default_route_pref";
     public static final String KEY_DEFAULT_BUFFER_MIN = "default_buffer_min";
     public static final String KEY_THEME_MODE = "theme_mode";
+    public static final String KEY_ONBOARDING_DONE = "onboarding_done";
 
     public static final boolean DEFAULT_ALERT_VIBRATION = true;
     public static final boolean DEFAULT_ALERT_SCREEN = true;
@@ -133,6 +135,21 @@ public final class SettingsStore implements SettingsSource {
     public void setDefaultArrivalBufferMinutes(int minutes) {
         prefs.edit().putInt(KEY_DEFAULT_BUFFER_MIN, minutes).apply();
         notifyDefaultsChanged();
+    }
+
+    // 온보딩(튜토리얼·권한 설정)을 마쳤는지
+    public boolean isOnboardingDone() {
+        return prefs.getBoolean(KEY_ONBOARDING_DONE, false);
+    }
+
+    public void setOnboardingDone(boolean done) {
+        prefs.edit().putBoolean(KEY_ONBOARDING_DONE, done).apply();
+    }
+
+    // 데이터 초기화: 모든 설정을 기본값으로 (온보딩 완료 표시도 지운다)
+    @WorkerThread
+    void clearAll() {
+        prefs.edit().clear().commit();
     }
 
     // 저장 후 즉시 앱 전체에 적용한다.

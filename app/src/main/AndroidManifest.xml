@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -115,6 +116,14 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/zette_widget_info" />
         </receiver>
+
+        <activity
+            android:name=".ui.activity.OnboardingActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.activity.OnboardingPermissionActivity"
+            android:exported="false" />
 
         <activity
             android:name=".ui.activity.ThemeSettingActivity"

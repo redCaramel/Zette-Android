@@ -59,6 +59,14 @@ public final class ZetteData {
         return local;
     }
 
+    // 데이터 초기화 (17-3): 일정·루틴·설정을 모두 지운다. 화면 캐시는 호출한 쪽이 메인에서 비운다
+    @WorkerThread
+    public void resetAll() {
+        database.clearAllTables();
+        settings.clearAll();
+        // TODO - 알림 모듈 연결: 예약된 출발 알림 모두 취소
+    }
+
     // Splash용 이름. get()과 같다.
     @NonNull
     public static ZetteData init(@NonNull Context context) {

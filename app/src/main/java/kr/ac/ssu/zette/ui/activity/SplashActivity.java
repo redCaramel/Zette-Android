@@ -94,7 +94,9 @@ public class SplashActivity extends AppCompatActivity {
         if (navigated || isFinishing()) return;
         navigated = true;
         handler.removeCallbacksAndMessages(null);
-        startActivity(new Intent(this, MainActivity.class));
+        // 처음 실행(또는 데이터 초기화 후)이면 온보딩부터
+        boolean onboarded = SettingsStore.getInstance(this).isOnboardingDone();
+        startActivity(new Intent(this, onboarded ? MainActivity.class : OnboardingActivity.class));
         finish();
     }
 

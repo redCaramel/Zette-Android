@@ -49,9 +49,16 @@ public final class DeleteConfirmDialog {
     // 문구에 이름 등을 넣어야 할 때 (예: 루틴 삭제 '출근 준비')
     public static void show(@NonNull Context context, @NonNull CharSequence title, @NonNull CharSequence message,
                             @NonNull Runnable onDelete) {
+        show(context, title, message, R.string.detail_delete, onDelete);
+    }
+
+    // 빨간 버튼 문구를 바꿀 때 (예: 데이터 초기화 [초기화])
+    public static void show(@NonNull Context context, @NonNull CharSequence title, @NonNull CharSequence message,
+                            @StringRes int confirm, @NonNull Runnable onDelete) {
         DialogDeleteConfirmBinding binding = DialogDeleteConfirmBinding.inflate(LayoutInflater.from(context));
         binding.tvTitle.setText(title);
         binding.tvMessage.setText(message);
+        binding.btnDelete.setText(confirm);
 
         AlertDialog dialog = cardDialog(context, binding.getRoot());
 
@@ -65,7 +72,7 @@ public final class DeleteConfirmDialog {
 
     // 카드 모양은 레이아웃이 그리므로 다이얼로그 배경은 비운다. 좌우 24dp 여백은 시안 그대로 (앱의 카드형 다이얼로그 공통)
     @NonNull
-    static AlertDialog cardDialog(@NonNull Context context, @NonNull View content) {
+    public static AlertDialog cardDialog(@NonNull Context context, @NonNull View content) {
         int inset = context.getResources().getDimensionPixelSize(R.dimen.space_4);
         return new MaterialAlertDialogBuilder(context)
                 .setView(content)

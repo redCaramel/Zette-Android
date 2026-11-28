@@ -1,7 +1,10 @@
 package kr.ac.ssu.zette.ui.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +19,16 @@ import com.google.android.material.materialswitch.MaterialSwitch;
 import kr.ac.ssu.zette.R;
 import kr.ac.ssu.zette.data.local.Settings;
 import kr.ac.ssu.zette.data.local.SettingsStore;
+import kr.ac.ssu.zette.data.local.ZetteData;
+import kr.ac.ssu.zette.data.local.ZetteDatabase;
 import kr.ac.ssu.zette.databinding.FragmentSettingBinding;
 import kr.ac.ssu.zette.dto.Schedule;
 import kr.ac.ssu.zette.ui.BufferDialogs;
+import kr.ac.ssu.zette.ui.DeleteConfirmDialog;
 import kr.ac.ssu.zette.ui.activity.PermissionStatusActivity;
+import kr.ac.ssu.zette.ui.activity.SplashActivity;
 import kr.ac.ssu.zette.ui.activity.ThemeSettingActivity;
+import kr.ac.ssu.zette.widget.ZetteWidget;
 
 public class SettingFragment extends Fragment {
 
@@ -57,6 +65,25 @@ public class SettingFragment extends Fragment {
                 startActivity(new Intent(requireContext(), PermissionStatusActivity.class)));
         binding.gotoTheme.setOnClickListener(v ->
                 startActivity(new Intent(requireContext(), ThemeSettingActivity.class)));
+        binding.gotoReset.setOnClickListener(v -> DeleteConfirmDialog.show(requireContext(),
+                getString(R.string.reset_title), getString(R.string.reset_message), R.string.reset_confirm,
+                this::resetAll));
+    }
+
+    // 17-3: 모두 지우고 Splash 부터 다시 시작한다 (온보딩 완료 표시도 지워져 온보딩으로 간다)
+    private void resetAll() {
+        Context app = requireContext().getApplicationContext();
+        ZetteData data = ZetteData.get(app);
+        ZetteDatabase.IO.execute(() -> {
+            data.resetAll();
+            ZetteWidget.update(app);
+            new Handler(Looper.getMainLooper()).post(() -> {
+                data.schedules.clearCache();
+                data.settings.applySavedThemeMode();
+                app.startActivity(new Intent(app, SplashActivity.class)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+            });
+        });
     }
 
     // 권한은 Android 설정에서 바뀌므로 화면에 돌아올 때마다 요약을 다시 읽는다
