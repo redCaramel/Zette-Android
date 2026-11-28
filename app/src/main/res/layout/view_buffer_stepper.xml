@@ -28,12 +28,22 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <TextView
+        <EditText
             android:id="@+id/tv_value"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:gravity="center"
+            android:hint="@string/buffer_input_hint"
+            android:imeOptions="actionDone"
+            android:importantForAutofill="no"
+            android:inputType="number"
+            android:maxLength="2"
+            android:minWidth="32dp"
+            android:selectAllOnFocus="true"
             android:textAppearance="@style/TextAppearance.Zette.H2"
             android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_disabled"
             tools:text="15" />
 
         <TextView

@@ -35,6 +35,7 @@ import kr.ac.ssu.zette.ui.DeleteConfirmDialog;
 import kr.ac.ssu.zette.ui.Loading;
 import kr.ac.ssu.zette.ui.ShareDialog;
 import kr.ac.ssu.zette.ui.activity.EditScheduleActivity;
+import kr.ac.ssu.zette.ui.activity.ScheduleDetailActivity;
 import kr.ac.ssu.zette.ui.adapter.CalendarEventAdapter;
 import kr.ac.ssu.zette.ui.adapter.DateCellAdapter;
 import kr.ac.ssu.zette.ui.item.CalendarEventItem;
@@ -145,6 +146,11 @@ public class CalendarFragment extends Fragment {
 
     private void setupEventList() {
         eventAdapter = new CalendarEventAdapter(new CalendarEventAdapter.OnEventActionListener() {
+            @Override
+            public void onItemClick(@NonNull CalendarEventItem item) {
+                startActivity(ScheduleDetailActivity.intent(requireContext(), item.key));
+            }
+
             @Override
             public void onShareClick(@NonNull CalendarEventItem item) {
                 List<Schedule> shown = daySchedules != null ? daySchedules.getValue() : null;

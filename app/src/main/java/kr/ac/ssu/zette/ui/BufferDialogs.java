@@ -1,9 +1,13 @@
 package kr.ac.ssu.zette.ui;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
@@ -117,19 +121,63 @@ public final class BufferDialogs {
         radio.setChecked(on);
     }
 
-    // [-] 값 [+] 스테퍼. 1~60분 사이로만 움직이고, 끝에 닿으면 그쪽 버튼을 끈다. 현재 값은 배열 [0]
+    // [-] 값 [+] 스테퍼. 값 칸은 키보드로도 입력한다. 1~60분 사이로만 움직이고,
+    // 끝에 닿으면 그쪽 버튼을 끈다. 현재 값은 배열 [0]
     @NonNull
     private static int[] bindStepper(@NonNull ViewBufferStepperBinding s, int initial) {
         int[] value = {clamp(initial)};
-        Runnable render = () -> {
-            s.tvValue.setText(String.valueOf(value[0]));
+        boolean[] writing = {false};   // 코드가 칸을 고칠 때 입력 감시가 다시 반응하지 않게
+        Runnable renderButtons = () -> {
             s.btnMinus.setEnabled(value[0] > MIN_MINUTES);
             s.btnMinus.setAlpha(value[0] > MIN_MINUTES ? 1f : 0.38f);
             s.btnPlus.setEnabled(value[0] < MAX_MINUTES);
             s.btnPlus.setAlpha(value[0] < MAX_MINUTES ? 1f : 0.38f);
         };
+        Runnable render = () -> {
+            writing[0] = true;
+            s.tvValue.setText(String.valueOf(value[0]));
+            s.tvValue.setSelection(s.tvValue.length());
+            writing[0] = false;
+            renderButtons.run();
+        };
         s.btnMinus.setOnClickListener(v -> { value[0] = clamp(value[0] - 1); render.run(); });
         s.btnPlus.setOnClickListener(v -> { value[0] = clamp(value[0] + 1); render.run(); });
+
+        // 입력 중: 숫자가 있으면 바로 반영. 60 을 넘으면 60 으로 바꾼다 (지우는 중인 빈칸·0 은 그대로 둔다)
+        s.tvValue.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence t, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence t, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable t) {
+                if (writing[0] || t.length() == 0) return;
+                int typed = Integer.parseInt(t.toString());   // inputType=number, 최대 2자리
+                if (typed > MAX_MINUTES) {
+                    value[0] = MAX_MINUTES;
+                    render.run();
+                    return;
+                }
+                if (typed >= MIN_MINUTES) value[0] = typed;
+                renderButtons.run();
+            }
+        });
+        // 입력을 마치면(완료 키·다른 곳 터치) 빈칸·0 을 마지막 올바른 값으로 되돌린다
+        s.tvValue.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                render.run();
+                v.clearFocus();
+                v.getContext().getSystemService(InputMethodManager.class).hideSoftInputFromWindow(v.getWindowToken(), 0);
+            }
+            return false;
+        });
+        s.tvValue.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) render.run();
+        });
         render.run();
         return value;
     }

@@ -23,7 +23,7 @@
         android:layout_marginTop="@dimen/space_3"
         android:textAppearance="@style/TextAppearance.Zette.Body"
         android:textColor="@color/text_secondary"
-        tools:text="도착 시각보다 몇 분 일찍 도착할지 정해 주세요.\n이 루틴에만 적용돼요." />
+        tools:text="도착 시각보다 몇 분 일찍 도착할지 정해 주세요." />
 
     <include
         android:id="@+id/stepper"
@@ -31,17 +31,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="24dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/space_2"
-        android:layout_marginBottom="@dimen/space_2"
-        android:text="@string/buffer_range_hint"
-        android:textAppearance="@style/TextAppearance.Zette.Caption"
-        android:textColor="@color/text_secondary" />
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="12dp"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_apply"

@@ -5,6 +5,7 @@
         <item name="android:fontFamily">@font/pretendard_bold</item>
         <item name="android:textSize">@dimen/text_display</item>
         <item name="lineHeight">42sp</item>
+        <item name="android:lineHeight">42sp</item>
         <item name="android:letterSpacing">-0.02</item>
     </style>
 
@@ -13,6 +14,7 @@
         <item name="android:fontFamily">@font/pretendard_bold</item>
         <item name="android:textSize">@dimen/text_h1</item>
         <item name="lineHeight">34sp</item>
+        <item name="android:lineHeight">34sp</item>
         <item name="android:letterSpacing">-0.02</item>
     </style>
 
@@ -21,6 +23,7 @@
         <item name="android:fontFamily">@font/pretendard_bold</item>
         <item name="android:textSize">@dimen/text_h2</item>
         <item name="lineHeight">28sp</item>
+        <item name="android:lineHeight">28sp</item>
         <item name="android:letterSpacing">-0.01</item>
     </style>
 
@@ -29,6 +32,7 @@
         <item name="android:fontFamily">@font/pretendard_medium</item>
         <item name="android:textSize">@dimen/text_title</item>
         <item name="lineHeight">26sp</item>
+        <item name="android:lineHeight">26sp</item>
         <item name="android:letterSpacing">-0.01</item>
     </style>
 
@@ -37,6 +41,7 @@
         <item name="android:fontFamily">@font/pretendard_medium</item>
         <item name="android:textSize">@dimen/text_subtitle</item>
         <item name="lineHeight">24sp</item>
+        <item name="android:lineHeight">24sp</item>
         <item name="android:letterSpacing">-0.01</item>
     </style>
 
@@ -45,6 +50,7 @@
         <item name="android:fontFamily">@font/pretendard_light</item>
         <item name="android:textSize">@dimen/text_body_lg</item>
         <item name="lineHeight">26sp</item>
+        <item name="android:lineHeight">26sp</item>
         <item name="android:letterSpacing">-0.01</item>
     </style>
 
@@ -53,6 +59,7 @@
         <item name="android:fontFamily">@font/pretendard_light</item>
         <item name="android:textSize">@dimen/text_body</item>
         <item name="lineHeight">22sp</item>
+        <item name="android:lineHeight">22sp</item>
         <item name="android:letterSpacing">-0.01</item>
     </style>
 
@@ -61,6 +68,7 @@
         <item name="android:fontFamily">@font/pretendard_light</item>
         <item name="android:textSize">@dimen/text_caption</item>
         <item name="lineHeight">18sp</item>
+        <item name="android:lineHeight">18sp</item>
         <item name="android:letterSpacing">0</item>
     </style>
 
@@ -69,6 +77,7 @@
         <item name="android:fontFamily">@font/pretendard_medium</item>
         <item name="android:textSize">@dimen/text_label</item>
         <item name="lineHeight">18sp</item>
+        <item name="android:lineHeight">18sp</item>
         <item name="android:letterSpacing">0</item>
     </style>
 
@@ -77,6 +86,7 @@
         <item name="android:fontFamily">@font/pretendard_medium</item>
         <item name="android:textSize">@dimen/text_label_sm</item>
         <item name="lineHeight">14sp</item>
+        <item name="android:lineHeight">14sp</item>
         <item name="android:letterSpacing">0</item>
     </style>
 
@@ -85,6 +95,7 @@
         <item name="android:fontFamily">@font/pretendard_bold</item>
         <item name="android:textSize">@dimen/text_button</item>
         <item name="lineHeight">20sp</item>
+        <item name="android:lineHeight">20sp</item>
         <item name="android:letterSpacing">-0.01</item>
     </style>
 
@@ -93,6 +104,7 @@
         <item name="android:fontFamily">@font/pretendard_medium</item>
         <item name="android:textSize">@dimen/text_button</item>
         <item name="lineHeight">20sp</item>
+        <item name="android:lineHeight">20sp</item>
         <item name="android:letterSpacing">-0.01</item>
     </style>
 
@@ -101,6 +113,7 @@
         <item name="android:fontFamily">@font/pretendard_bold</item>
         <item name="android:textSize">@dimen/text_button_sm</item>
         <item name="lineHeight">18sp</item>
+        <item name="android:lineHeight">18sp</item>
         <item name="android:letterSpacing">-0.01</item>
     </style>
 
@@ -109,6 +122,7 @@
         <item name="android:fontFamily">@font/pretendard_medium</item>
         <item name="android:textSize">@dimen/text_button_sm</item>
         <item name="lineHeight">18sp</item>
+        <item name="android:lineHeight">18sp</item>
         <item name="android:letterSpacing">-0.01</item>
     </style>
 </resources>

@@ -169,6 +169,7 @@
     <string name="route_desc_min_transfer">갈아타는 횟수가 가장 적은 경로</string>
 
     <string name="buffer_unit">분</string>
+    <string name="buffer_input_hint">1~60</string>
     <string name="buffer_minus">1분 줄이기</string>
     <string name="buffer_plus">1분 늘리기</string>
     <string name="buffer_range_hint">1분부터 60분까지 정할 수 있어요</string>

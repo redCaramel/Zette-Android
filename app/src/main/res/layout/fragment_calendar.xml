@@ -85,8 +85,9 @@
 
                     <ImageView
                         android:id="@+id/btn_prev_month"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:padding="12dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:contentDescription="@string/calendar_prev_month"
                         app:srcCompat="@drawable/ic_chevron_left"
@@ -94,9 +95,10 @@
 
                     <ImageView
                         android:id="@+id/btn_next_month"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_marginStart="@dimen/space_2"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_marginEnd="-12dp"
+                        android:padding="12dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:contentDescription="@string/calendar_next_month"
                         app:srcCompat="@drawable/ic_chevron_right"

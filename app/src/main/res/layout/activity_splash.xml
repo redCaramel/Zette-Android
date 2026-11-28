@@ -10,9 +10,12 @@
 
     <TextView
         android:id="@+id/text_splash"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_4"
+        android:layout_marginEnd="@dimen/space_4"
         android:layout_marginBottom="17dp"
+        android:gravity="center"
         android:text="늦지 않게, 여유 있게."
         android:textAppearance="@style/TextAppearance.Zette.Display"
         android:textColor="@color/text_primary"

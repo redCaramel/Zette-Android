@@ -21,6 +21,9 @@ import kr.ac.ssu.zette.ui.item.CalendarEventItem;
 public class CalendarEventAdapter extends ListAdapter<CalendarEventItem, CalendarEventAdapter.ViewHolder> {
 
     public interface OnEventActionListener {
+        // 버튼·스위치가 아닌 빈 곳을 눌렀을 때
+        void onItemClick(@NonNull CalendarEventItem item);
+
         void onShareClick(@NonNull CalendarEventItem item);
 
         void onEditClick(@NonNull CalendarEventItem item);
@@ -93,11 +96,15 @@ public class CalendarEventAdapter extends ListAdapter<CalendarEventItem, Calenda
             binding.switchAlarm.setChecked(item.alarmOn);
 
             if (listener == null) {
+                binding.getRoot().setOnClickListener(null);
+                binding.cardEvent.setOnClickListener(null);
                 binding.btnShare.setOnClickListener(null);
                 binding.btnEdit.setOnClickListener(null);
                 binding.btnDelete.setOnClickListener(null);
                 return;
             }
+            binding.getRoot().setOnClickListener(v -> listener.onItemClick(item));
+            binding.cardEvent.setOnClickListener(v -> listener.onItemClick(item));
             binding.btnShare.setOnClickListener(v -> listener.onShareClick(item));
             binding.btnEdit.setOnClickListener(v -> listener.onEditClick(item));
             binding.btnDelete.setOnClickListener(v -> listener.onDeleteClick(item));
