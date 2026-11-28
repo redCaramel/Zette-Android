@@ -1,7 +1,14 @@
 package kr.ac.ssu.zette.ui;
 
+import android.content.ActivityNotFoundException;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.view.LayoutInflater;
+import android.widget.Toast;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
@@ -9,14 +16,23 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
+import com.kakao.sdk.share.ShareClient;
+import com.kakao.sdk.share.WebSharerClient;
+import com.kakao.sdk.template.model.Button;
+import com.kakao.sdk.template.model.Link;
+import com.kakao.sdk.template.model.TextTemplate;
 
+import java.time.format.DateTimeFormatter;
+import java.util.Collections;
+import java.util.Locale;
+import java.util.Map;
+
+import kotlin.Unit;
+import kr.ac.ssu.zette.BuildConfig;
 import kr.ac.ssu.zette.R;
 import kr.ac.ssu.zette.databinding.DialogShareBinding;
-import kr.ac.ssu.zette.dto.ScheduleKey;
+import kr.ac.ssu.zette.dto.Routine;
+import kr.ac.ssu.zette.dto.Schedule;
 
 // 일정·루틴 공유 (Figma 12-1, 14-2)
 public final class ShareDialog {
@@ -29,25 +45,37 @@ public final class ShareDialog {
     private ShareDialog() {
     }
 
-    public static void showSchedule(@NonNull Context context, @NonNull ScheduleKey key, @NonNull String name,
-                                    @NonNull LocalDate date, @NonNull LocalTime time, @Nullable String place) {
-        String when = context.getString(R.string.share_until, date.format(DATE_FORMAT), time.format(TIME_FORMAT));
-        // TODO - 공유 구현: key 로 일정 링크 생성
-        show(context, R.string.share_schedule_title, R.string.share_schedule_label, name,
-                R.drawable.ic_schedule, when, place, R.string.share_schedule_note);
+    public static void showSchedule(@NonNull Context context, @NonNull Schedule s) {
+        String when = context.getString(R.string.share_until, s.date.format(DATE_FORMAT), s.arrivalTime.format(TIME_FORMAT));
+        String place = s.place != null ? s.place.name : null;
+        Map<String, String> params = ShareLink.toParams(s);
+        String link = ShareLink.toUri(ShareLink.HOST_SCHEDULE, params).toString();
+        String message = s.name + "\n" + when + (place != null ? "\n" + place : "");
+
+        show(context, R.string.share_schedule_title, R.string.share_schedule_label, s.name,
+                R.drawable.ic_schedule, when, place, R.string.share_schedule_note,
+                () -> shareToKakao(context, message, params, link, R.string.share_kakao_button),
+                () -> copyLink(context, link));
     }
 
-    public static void showRoutine(@NonNull Context context, long routineId, @NonNull String name,
-                                   @NonNull String repeat, @NonNull LocalTime time, @Nullable String place) {
-        String when = context.getString(R.string.share_until, repeat, time.format(TIME_FORMAT));
-        // TODO - 공유 구현: routineId 로 루틴 링크 생성
-        show(context, R.string.share_routine_title, R.string.share_routine_label, name,
-                R.drawable.ic_bottom_nav_routine, when, place, R.string.share_routine_note);
+    // repeat = "매주 월 · 수 · 금"
+    public static void showRoutine(@NonNull Context context, @NonNull Routine r, @NonNull String repeat) {
+        String when = context.getString(R.string.share_until, repeat, r.arrivalTime.format(TIME_FORMAT));
+        String place = r.place != null ? r.place.name : null;
+        Map<String, String> params = ShareLink.toParams(r);
+        String link = ShareLink.toUri(ShareLink.HOST_ROUTINE, params).toString();
+        String message = r.name + "\n" + when + (place != null ? "\n" + place : "");
+
+        show(context, R.string.share_routine_title, R.string.share_routine_label, r.name,
+                R.drawable.ic_bottom_nav_routine, when, place, R.string.share_routine_note,
+                () -> shareToKakao(context, message, params, link, R.string.share_kakao_button_routine),
+                () -> copyLink(context, link));
     }
 
     private static void show(@NonNull Context context, @StringRes int title, @StringRes int label,
                              @NonNull String name, @DrawableRes int whenIcon, @NonNull String when,
-                             @Nullable String place, @StringRes int note) {
+                             @Nullable String place, @StringRes int note,
+                             @NonNull Runnable onKakao, @NonNull Runnable onCopyLink) {
         DialogShareBinding binding = DialogShareBinding.inflate(LayoutInflater.from(context));
         binding.tvTitle.setText(title);
         binding.tvLabel.setText(label);
@@ -59,14 +87,63 @@ public final class ShareDialog {
 
         AlertDialog dialog = DeleteConfirmDialog.cardDialog(context, binding.getRoot());
         binding.btnKakao.setOnClickListener(v -> {
-            // TODO - 공유 구현: 카카오톡 공유
             dialog.dismiss();
+            onKakao.run();
         });
         binding.btnCopyLink.setOnClickListener(v -> {
-            // TODO - 공유 구현: 링크 클립보드 복사
             dialog.dismiss();
+            onCopyLink.run();
         });
         binding.btnClose.setOnClickListener(v -> dialog.dismiss());
         dialog.show();
+    }
+
+    // 버튼을 누르면 kakao{앱키}://kakaolink?params 로 앱이 열린다 (ShareLinkActivity)
+    private static void shareToKakao(@NonNull Context context, @NonNull String message,
+                                     @NonNull Map<String, String> params, @NonNull String link,
+                                     @StringRes int buttonText) {
+        if (BuildConfig.KAKAO_NATIVE_APP_KEY.isEmpty()) {
+            shareAsText(context, message + "\n" + link);    // 앱 키 전: 기본 공유 시트
+            return;
+        }
+        Link appLink = new Link(null, null, params, null);
+        TextTemplate template = new TextTemplate(message, appLink,
+                Collections.singletonList(new Button(context.getString(buttonText), appLink)), null);
+
+        if (ShareClient.getInstance().isKakaoTalkSharingAvailable(context)) {
+            ShareClient.getInstance().shareDefault(context, template, (result, error) -> {
+                if (error != null || result == null) {
+                    Toast.makeText(context, R.string.share_failed, Toast.LENGTH_SHORT).show();
+                } else {
+                    context.startActivity(result.getIntent());
+                }
+                return Unit.INSTANCE;
+            });
+            return;
+        }
+        // 카카오톡이 없으면 웹 공유
+        openUri(context, WebSharerClient.getInstance().makeDefaultUrl(template));
+    }
+
+    private static void shareAsText(@NonNull Context context, @NonNull String text) {
+        Intent send = new Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT, text);
+        context.startActivity(Intent.createChooser(send, null));
+    }
+
+    private static void copyLink(@NonNull Context context, @NonNull String link) {
+        ClipboardManager clipboard = context.getSystemService(ClipboardManager.class);
+        clipboard.setPrimaryClip(ClipData.newPlainText("zette", link));
+        // Android 13+ 는 시스템이 복사 알림을 띄운다
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            Toast.makeText(context, R.string.share_link_copied, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private static void openUri(@NonNull Context context, @NonNull Uri uri) {
+        try {
+            context.startActivity(new Intent(Intent.ACTION_VIEW, uri));
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(context, R.string.share_failed, Toast.LENGTH_SHORT).show();
+        }
     }
 }

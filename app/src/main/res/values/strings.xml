@@ -243,6 +243,19 @@
     <string name="share_kakao">카카오톡으로 공유</string>
     <string name="share_copy_link">링크 복사</string>
     <string name="share_close">닫기</string>
+    <string name="share_kakao_button">제때에서 일정 추가하기</string>
+    <string name="share_link_copied">링크를 복사했어요</string>
+    <string name="share_failed">공유하지 못했어요</string>
+    <string name="received_title">받은 일정 추가</string>
+    <string name="received_banner">친구가 카카오톡으로 보낸 일정이에요.
+장소·시간·이름이 자동으로 채워졌어요.</string>
+    <string name="received_save">일정에 추가하기</string>
+    <string name="received_invalid">열 수 없는 공유 링크예요</string>
+    <string name="share_kakao_button_routine">제때에서 루틴 추가하기</string>
+    <string name="received_routine_title">받은 루틴 추가</string>
+    <string name="received_routine_banner">친구가 카카오톡으로 보낸 루틴이에요.
+장소·시간·이름이 자동으로 채워졌어요.</string>
+    <string name="received_routine_save">루틴에 추가하기</string>
     <string name="network_retry">다시 시도</string>
     <string name="network_error_title">불러오지 못했어요</string>
     <string name="network_error_body">연결을 확인하고 다시 시도해 주세요</string>

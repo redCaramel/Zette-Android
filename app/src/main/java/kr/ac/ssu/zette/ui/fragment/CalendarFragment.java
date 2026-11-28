@@ -147,7 +147,11 @@ public class CalendarFragment extends Fragment {
         eventAdapter = new CalendarEventAdapter(new CalendarEventAdapter.OnEventActionListener() {
             @Override
             public void onShareClick(@NonNull CalendarEventItem item) {
-                ShareDialog.showSchedule(requireContext(), item.key, item.title, selectedDate, item.time, item.placeName);
+                List<Schedule> shown = daySchedules != null ? daySchedules.getValue() : null;
+                if (shown == null) return;
+                for (Schedule s : shown) {
+                    if (s.key().equals(item.key)) ShareDialog.showSchedule(requireContext(), s);
+                }
             }
 
             @Override

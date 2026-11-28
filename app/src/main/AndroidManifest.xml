@@ -72,6 +72,37 @@
             android:exported="false" />
 
         <activity
+            android:name=".ui.activity.ShareLinkActivity"
+            android:exported="true"
+            android:noHistory="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="kakaolink"
+                    android:scheme="kakao${KAKAO_NATIVE_APP_KEY}" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="zette" />
+                <data android:host="schedule" />
+                <data android:host="routine" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.activity.ReceivedScheduleActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.activity.ReceivedRoutineActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".ui.activity.ThemeSettingActivity"
             android:exported="false" />
 

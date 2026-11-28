@@ -28,6 +28,8 @@ public class RoutineFragment extends Fragment {
 
     private FragmentRoutineBinding binding;
     private RoutineAdapter routineAdapter;
+    @Nullable
+    private List<Routine> latestRoutines;
     private Loading.Gate firstLoad;
     private ScheduleRepository repository;
 
@@ -47,8 +49,12 @@ public class RoutineFragment extends Fragment {
         routineAdapter = new RoutineAdapter(new RoutineAdapter.OnRoutineActionListener() {
             @Override
             public void onShareClick(@NonNull RoutineItem item) {
-                ShareDialog.showRoutine(requireContext(), item.id, item.name,
-                        RoutineAdapter.formatRepeat(requireContext(), item), item.time, item.placeName);
+                if (latestRoutines == null) return;
+                for (Routine r : latestRoutines) {
+                    if (r.id == item.id) {
+                        ShareDialog.showRoutine(requireContext(), r, RoutineAdapter.formatRepeat(requireContext(), item));
+                    }
+                }
             }
 
             @Override
@@ -81,6 +87,7 @@ public class RoutineFragment extends Fragment {
         if (routines != null) {
             for (Routine r : routines) items.add(RoutineItem.from(r));
         }
+        latestRoutines = routines;
         routineAdapter.submitList(items);
         binding.tvRoutineCount.setText(getString(R.string.routine_count, items.size()));
     }
