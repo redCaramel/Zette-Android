@@ -1,0 +1,261 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "a0e3617f0f10b94dd4936b31b561a16d",
+    "entities": [
+      {
+        "tableName": "schedule",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `date` INTEGER, `arrival_time` INTEGER, `place_id` TEXT, `place_name` TEXT, `place_address` TEXT, `place_lat` REAL, `place_lng` REAL, `route_type` TEXT, `arrival_buffer` INTEGER NOT NULL, `activated` INTEGER NOT NULL, `status` TEXT, `completed_at` TEXT, `expected_arrival` TEXT, `expected_departure` TEXT, `travel_minutes` INTEGER, `route_summary` TEXT, `computed_at` TEXT, `routine_id` INTEGER, `occurrence_date` INTEGER, `content_overridden` INTEGER NOT NULL, `skipped` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "arrivalTime",
+            "columnName": "arrival_time",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "placeId",
+            "columnName": "place_id",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "placeName",
+            "columnName": "place_name",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "placeAddress",
+            "columnName": "place_address",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "placeLat",
+            "columnName": "place_lat",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "placeLng",
+            "columnName": "place_lng",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "routeType",
+            "columnName": "route_type",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "arrivalBuffer",
+            "columnName": "arrival_buffer",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "activated",
+            "columnName": "activated",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "completedAt",
+            "columnName": "completed_at",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "expectedArrival",
+            "columnName": "expected_arrival",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "expectedDeparture",
+            "columnName": "expected_departure",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "travelMinutes",
+            "columnName": "travel_minutes",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "routeSummary",
+            "columnName": "route_summary",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "computedAt",
+            "columnName": "computed_at",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "routineId",
+            "columnName": "routine_id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "occurrenceDate",
+            "columnName": "occurrence_date",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "contentOverridden",
+            "columnName": "content_overridden",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "skipped",
+            "columnName": "skipped",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_schedule_date",
+            "unique": false,
+            "columnNames": [
+              "date"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_schedule_date` ON `${TABLE_NAME}` (`date`)"
+          },
+          {
+            "name": "index_schedule_routine_id_occurrence_date",
+            "unique": true,
+            "columnNames": [
+              "routine_id",
+              "occurrence_date"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_schedule_routine_id_occurrence_date` ON `${TABLE_NAME}` (`routine_id`, `occurrence_date`)"
+          }
+        ]
+      },
+      {
+        "tableName": "routine",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `repeat_type` TEXT, `arrival_time` INTEGER, `place_id` TEXT, `place_name` TEXT, `place_address` TEXT, `place_lat` REAL, `place_lng` REAL, `route_type` TEXT, `arrival_buffer` INTEGER NOT NULL, `activated` INTEGER NOT NULL, `created_at` TEXT, `weekdays` TEXT, `repeat_date` TEXT, `deleted_at` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "repeatType",
+            "columnName": "repeat_type",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "arrivalTime",
+            "columnName": "arrival_time",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "placeId",
+            "columnName": "place_id",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "placeName",
+            "columnName": "place_name",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "placeAddress",
+            "columnName": "place_address",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "placeLat",
+            "columnName": "place_lat",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "placeLng",
+            "columnName": "place_lng",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "routeType",
+            "columnName": "route_type",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "arrivalBuffer",
+            "columnName": "arrival_buffer",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "activated",
+            "columnName": "activated",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "created_at",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "weekdays",
+            "columnName": "weekdays",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "repeatDate",
+            "columnName": "repeat_date",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "deletedAt",
+            "columnName": "deleted_at",
+            "affinity": "INTEGER"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a0e3617f0f10b94dd4936b31b561a16d')"
+    ]
+  }
+}
