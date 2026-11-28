@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Looper;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,11 +68,14 @@ public class HomeFragment extends Fragment {
     @Nullable
     private String departingStop;
     private int departingWalkMinutes;
+    // View.postDelayed 는 화면 전환 애니메이션으로 View 가 먼저 떨어지면 취소되지 않아 Handler 에 예약한다
+    private final Handler handler = new Handler(Looper.getMainLooper());
     private final Runnable heroLoaded = () -> {
+        if (binding == null) return;
         heroLoading = false;
         // TODO - api연결 구현: 실제 응답 실패(10초 초과·5xx)도 오류로 처리
         heroError = !Network.get(requireContext()).isOnline();
-        if (binding != null) renderHero(latestSchedules);
+        renderHero(latestSchedules);
     };
 
     private static final DateTimeFormatter HERO_TIME_FORMAT =
@@ -134,14 +139,14 @@ public class HomeFragment extends Fragment {
     }
 
     private void loadHero() {
-        binding.getRoot().removeCallbacks(heroLoaded);
-        binding.getRoot().removeCallbacks(departingLoaded);
+        handler.removeCallbacks(heroLoaded);
+        handler.removeCallbacks(departingLoaded);
         heroLoading = true;
         heroError = false;
         departingFor = null;
         renderHero(latestSchedules);
         // TODO - api연결 구현
-        binding.getRoot().postDelayed(heroLoaded, Loading.FAKE_DELAY_MS);
+        handler.postDelayed(heroLoaded, Loading.FAKE_DELAY_MS);
     }
 
     // 매 분 정각(시스템 시계와 같은 순간)에 Hero 를 다시 그린다. 화면이 보일 때만 받는다
@@ -290,11 +295,11 @@ public class HomeFragment extends Fragment {
 
     // 03-L: 출발할 때 Hero 에 타야 할 버스 도착 정보를 불러온다
     private void loadDeparting() {
-        binding.getRoot().removeCallbacks(departingLoaded);
+        handler.removeCallbacks(departingLoaded);
         departingBus = null;
         renderHero(latestSchedules);
         // TODO - api연결 구현: 실시간 버스 도착 API 로 바꾸고 결과를 applyDeparting 으로 넘긴다. 지금은 3초 뒤 샘플
-        binding.getRoot().postDelayed(departingLoaded, Loading.FAKE_DELAY_MS);
+        handler.postDelayed(departingLoaded, Loading.FAKE_DELAY_MS);
     }
 
     private final Runnable departingLoaded = () -> {
@@ -355,8 +360,8 @@ public class HomeFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding.getRoot().removeCallbacks(heroLoaded);
-        binding.getRoot().removeCallbacks(departingLoaded);
+        handler.removeCallbacks(heroLoaded);
+        handler.removeCallbacks(departingLoaded);
         departingFor = null;
         firstLoad.cancel();
         heroLoading = false;

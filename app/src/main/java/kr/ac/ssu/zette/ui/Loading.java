@@ -3,6 +3,8 @@ package kr.ac.ssu.zette.ui;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.SystemClock;
 import android.view.View;
 
@@ -41,6 +43,8 @@ public final class Loading {
         private static final long MIN_SHOWN_MS = 500;
 
         private final View[] skeletons;
+        // View.postDelayed 는 View 가 떨어진 뒤 취소되지 않아 Handler 에 예약한다
+        private final Handler handler = new Handler(Looper.getMainLooper());
         private boolean waiting;
         private long shownAt = -1;
         @Nullable
@@ -61,7 +65,7 @@ public final class Loading {
         public void start() {
             cancel();
             waiting = true;
-            skeletons[0].postDelayed(show, SHOW_AFTER_MS);
+            handler.postDelayed(show, SHOW_AFTER_MS);
         }
 
         public void finish(@NonNull Runnable onDone) {
@@ -74,18 +78,18 @@ public final class Loading {
                 return;
             }
             waiting = false;
-            skeletons[0].removeCallbacks(show);
+            handler.removeCallbacks(show);
             if (shownAt < 0) {
                 onDone.run();
                 return;
             }
             pendingDone = onDone;
-            skeletons[0].postDelayed(hide, Math.max(0, shownAt + MIN_SHOWN_MS - SystemClock.uptimeMillis()));
+            handler.postDelayed(hide, Math.max(0, shownAt + MIN_SHOWN_MS - SystemClock.uptimeMillis()));
         }
 
         public void cancel() {
-            skeletons[0].removeCallbacks(show);
-            skeletons[0].removeCallbacks(hide);
+            handler.removeCallbacks(show);
+            handler.removeCallbacks(hide);
             pendingDone = null;
             waiting = false;
             hideNow();
