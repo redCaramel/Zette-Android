@@ -1,5 +1,9 @@
 package kr.ac.ssu.zette.ui.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -140,14 +144,35 @@ public class HomeFragment extends Fragment {
         binding.getRoot().postDelayed(heroLoaded, Loading.FAKE_DELAY_MS);
     }
 
+    // 매 분 정각(시스템 시계와 같은 순간)에 Hero 를 다시 그린다. 화면이 보일 때만 받는다
+    private final BroadcastReceiver minuteTick = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            refreshForNow();
+        }
+    };
+
     @Override
     public void onResume() {
         super.onResume();
+        refreshForNow();
+        ContextCompat.registerReceiver(requireContext(), minuteTick,
+                new IntentFilter(Intent.ACTION_TIME_TICK), ContextCompat.RECEIVER_NOT_EXPORTED);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        requireContext().unregisterReceiver(minuteTick);
+    }
+
+    // 날짜가 바뀌었으면 오늘 일정을 다시 불러오고, 아니면 남은 시간·Hero 상태만 갱신
+    private void refreshForNow() {
         LocalDate today = LocalDate.now();
         if (!today.equals(observedDate)) {
             observeDay(today);
         } else {
-            renderHero(latestSchedules);   // 남은 시간과 '가장 가까운 일정'은 시간이 지나면 바뀐다
+            renderHero(latestSchedules);
         }
     }
 
