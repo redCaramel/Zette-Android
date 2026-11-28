@@ -19,6 +19,7 @@ import kr.ac.ssu.zette.databinding.FragmentRoutineBinding;
 import kr.ac.ssu.zette.dto.Routine;
 import kr.ac.ssu.zette.ui.DeleteConfirmDialog;
 import kr.ac.ssu.zette.ui.Loading;
+import kr.ac.ssu.zette.ui.ShareDialog;
 import kr.ac.ssu.zette.ui.activity.EditRoutineActivity;
 import kr.ac.ssu.zette.ui.adapter.RoutineAdapter;
 import kr.ac.ssu.zette.ui.item.RoutineItem;
@@ -44,6 +45,12 @@ public class RoutineFragment extends Fragment {
         repository = ZetteData.get(requireContext()).schedules;
 
         routineAdapter = new RoutineAdapter(new RoutineAdapter.OnRoutineActionListener() {
+            @Override
+            public void onShareClick(@NonNull RoutineItem item) {
+                ShareDialog.showRoutine(requireContext(), item.id, item.name,
+                        RoutineAdapter.formatRepeat(requireContext(), item), item.time, item.placeName);
+            }
+
             @Override
             public void onEditClick(@NonNull RoutineItem item) {
                 startActivity(EditRoutineActivity.intent(requireContext(), item.id));

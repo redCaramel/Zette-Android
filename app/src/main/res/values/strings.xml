@@ -233,6 +233,16 @@
     <string name="detail_sample_arrival_bus">472번 도착 예정</string>
 
     <string name="loading_label">불러오는 중…</string>
+    <string name="share_schedule_title">일정 공유</string>
+    <string name="share_routine_title">루틴 공유</string>
+    <string name="share_schedule_label">공유할 일정</string>
+    <string name="share_routine_label">공유할 루틴</string>
+    <string name="share_until">%1$s %2$s까지</string>
+    <string name="share_schedule_note">출발지는 보내지 않아요.\n받는 사람의 현재 위치로 경로를 계산해요.</string>
+    <string name="share_routine_note">받는 사람은 같은 반복 일정을 루틴으로 추가할 수 있어요.</string>
+    <string name="share_kakao">카카오톡으로 공유</string>
+    <string name="share_copy_link">링크 복사</string>
+    <string name="share_close">닫기</string>
     <string name="network_retry">다시 시도</string>
     <string name="network_error_title">불러오지 못했어요</string>
     <string name="network_error_body">연결을 확인하고 다시 시도해 주세요</string>

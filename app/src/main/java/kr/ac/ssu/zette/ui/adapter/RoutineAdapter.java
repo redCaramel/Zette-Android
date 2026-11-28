@@ -24,6 +24,8 @@ import kr.ac.ssu.zette.ui.item.RoutineItem;
 public class RoutineAdapter extends ListAdapter<RoutineItem, RoutineAdapter.ViewHolder> {
 
     public interface OnRoutineActionListener {
+        void onShareClick(@NonNull RoutineItem item);
+
         void onEditClick(@NonNull RoutineItem item);
 
         void onDeleteClick(@NonNull RoutineItem item);
@@ -56,6 +58,23 @@ public class RoutineAdapter extends ListAdapter<RoutineItem, RoutineAdapter.View
         holder.bind(getItem(position), listener);
     }
 
+    // "매주 월 · 수 · 금" / "매월 15일"
+    @NonNull
+    public static String formatRepeat(@NonNull Context context, @NonNull RoutineItem item) {
+        if (item.repeatType == RoutineItem.RepeatType.MONTHLY) {
+            List<String> monthDays = new ArrayList<>();
+            for (Integer day : item.monthDays) {
+                monthDays.add(String.valueOf(day));
+            }
+            return context.getString(R.string.routine_repeat_monthly, String.join(DAY_SEPARATOR, monthDays));
+        }
+        List<String> days = new ArrayList<>();
+        for (DayOfWeek day : item.weekDays) {
+            days.add(day.getDisplayName(TextStyle.SHORT, Locale.KOREAN));
+        }
+        return context.getString(R.string.routine_repeat_weekly, String.join(DAY_SEPARATOR, days));
+    }
+
     static class ViewHolder extends RecyclerView.ViewHolder {
 
         private final ItemRoutineCardBinding binding;
@@ -77,30 +96,16 @@ public class RoutineAdapter extends ListAdapter<RoutineItem, RoutineAdapter.View
             binding.switchRoutine.setChecked(item.enabled);
 
             if (listener == null) {
+                binding.btnShare.setOnClickListener(null);
                 binding.btnEdit.setOnClickListener(null);
                 binding.btnDelete.setOnClickListener(null);
                 return;
             }
+            binding.btnShare.setOnClickListener(v -> listener.onShareClick(item));
             binding.btnEdit.setOnClickListener(v -> listener.onEditClick(item));
             binding.btnDelete.setOnClickListener(v -> listener.onDeleteClick(item));
             binding.switchRoutine.setOnCheckedChangeListener(
                     (button, checked) -> listener.onRoutineToggle(item, checked));
-        }
-
-        @NonNull
-        private static String formatRepeat(@NonNull Context context, @NonNull RoutineItem item) {
-            if (item.repeatType == RoutineItem.RepeatType.MONTHLY) {
-                List<String> monthDays = new ArrayList<>();
-                for (Integer day : item.monthDays) {
-                    monthDays.add(String.valueOf(day));
-                }
-                return context.getString(R.string.routine_repeat_monthly, String.join(DAY_SEPARATOR, monthDays));
-            }
-            List<String> days = new ArrayList<>();
-            for (DayOfWeek day : item.weekDays) {
-                days.add(day.getDisplayName(TextStyle.SHORT, Locale.KOREAN));
-            }
-            return context.getString(R.string.routine_repeat_weekly, String.join(DAY_SEPARATOR, days));
         }
     }
 
